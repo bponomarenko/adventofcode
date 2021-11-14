@@ -1,0 +1,47 @@
+[
+  {
+    "input": "1122",
+    "answer": "3",
+    "part": 1
+  },
+  {
+    "input": "1111",
+    "answer": "4",
+    "part": 1
+  },
+  {
+    "input": "1234",
+    "answer": "0",
+    "part": 1
+  },
+  {
+    "input": "91212129",
+    "answer": "9",
+    "part": 1
+  },
+  {
+    "input": "1212",
+    "answer": "6",
+    "part": 2
+  },
+  {
+    "input": "1221",
+    "answer": "0",
+    "part": 2
+  },
+  {
+    "input": "123425",
+    "answer": "4",
+    "part": 2
+  },
+  {
+    "input": "123123",
+    "answer": "12",
+    "part": 2
+  },
+  {
+    "input": "12131415",
+    "answer": "4",
+    "part": 2
+  }
+]
