@@ -1,0 +1,31 @@
+{
+  "env": {
+    "node": true,
+    "es2021": true
+  },
+  "extends": [
+    "airbnb-base",
+    "plugin:node/recommended"
+  ],
+  "rules": {
+    "no-console": "off",
+    "global-require": "off",
+    "arrow-parens": [
+      "error",
+      "as-needed"
+    ],
+    "import/no-dynamic-require": "off",
+    "max-len": [
+      "error",
+      100,
+      2,
+      {
+        "ignoreUrls": true,
+        "ignoreComments": true,
+        "ignoreRegExpLiterals": true,
+        "ignoreStrings": true,
+        "ignoreTemplateLiterals": true
+      }
+    ]
+  }
+}
