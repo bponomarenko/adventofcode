@@ -3,6 +3,9 @@
     "node": true,
     "es2021": true
   },
+  "parserOptions": {
+    "ecmaVersion": 2021
+  },
   "extends": [
     "airbnb-base",
     "plugin:node/recommended"
@@ -17,7 +20,7 @@
     "import/no-dynamic-require": "off",
     "max-len": [
       "error",
-      100,
+      150,
       2,
       {
         "ignoreUrls": true,
