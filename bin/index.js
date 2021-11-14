@@ -3,7 +3,7 @@
 const { program } = require('commander');
 const chalk = require('chalk');
 const nodemon = require('nodemon');
-const readline = require('readline');
+const { readInput } = require('../lib/utils');
 require('dotenv').config();
 
 const withDayAndYear = command => command
@@ -27,21 +27,6 @@ const runCommand = async (name, args, watch) => {
     await command(...args);
   }
 };
-
-const readInput = async () => new Promise(resolve => {
-  const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
-  const lines = [];
-  rl.write('Enter test input data:\n');
-  rl.prompt();
-  rl.on('line', line => {
-    if (line.trim()) {
-      lines.push(line.trim());
-    } else {
-      rl.close();
-    }
-  });
-  rl.on('close', () => resolve(lines.join('\n')));
-});
 
 withDayAndYear(program.command('init'))
   .description('Scaffolds necessary files for a specific puzzle of the day and year')
