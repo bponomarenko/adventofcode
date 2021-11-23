@@ -7,14 +7,18 @@ const { readInput } = require('../lib/utils');
 require('dotenv').config();
 
 const withDayAndYear = command => command
-  .option('-y, --year <year>', 'Year of the puzzle to scaffold', Number, process.env.YEAR || new Date().getFullYear())
+  .option('-y, --year <year>', 'Year of the puzzle to scaffold', Number, process.env.YEAR ? +process.env.YEAR : new Date().getFullYear())
   .option('-d, --day <day>', 'Day of the puzzle to scaffold', Number, new Date().getDate());
 
 const runCommand = async (name, args, watch) => {
-  if (watch) {
-    await new Promise(resolve => {
-      const argStr = program.args.filter(arg => arg !== '-w' && arg !== '--watch').join(' ');
-      nodemon({ exec: `bin/index.js ${argStr}`, ext: 'js,json' })
+  if (watch && !process.env.STATIC) {
+    return new Promise(resolve => {
+      nodemon({
+        script: 'bin/index.js',
+        args: program.args,
+        env: { STATIC: true },
+        ext: 'js,json',
+      })
         .on('start', () => console.log(chalk.gray('Restarting')))
         .on('quit', () => resolve())
         .on('exit', () => resolve());
@@ -22,10 +26,9 @@ const runCommand = async (name, args, watch) => {
       // eslint-disable-next-line no-process-exit -- make sure nodemon is stopped on the first Ctrl+C
       process.on('SIGINT', () => process.exit());
     });
-  } else {
-    const command = require(`../lib/${name}`);
-    await command(...args);
   }
+  const command = require(`../lib/${name}`);
+  return command(...args);
 };
 
 withDayAndYear(program.command('init'))
@@ -37,7 +40,8 @@ withDayAndYear(program.command('solve'))
   .description('Runs puzzle solution code with specified input and prints the answer')
   .option('-s, --submit', 'Would try to submit found answer')
   .option('-w, --watch', 'Runs solution in a watch mode. Helpful for development')
-  .action((part, args) => runCommand('solve', [args.year, args.day, part, args.submit], args.watch));
+  .option('-v, --validate', 'Also run validation test cases, and then solve a solution if cases are valid')
+  .action((part, args) => runCommand('solve', [args.year, args.day, part, args.submit, args.validate], args.watch));
 
 withDayAndYear(program.command('add-test'))
   .argument('<part>', 'Defines which part of the solution to run – part 1 or part 2', Number)
@@ -51,10 +55,7 @@ withDayAndYear(program.command('add-test'))
 withDayAndYear(program.command('validate'))
   .argument('<part>', 'Defines which part of the solution to run – part 1 or part 2', Number)
   .option('-w, --watch', 'Runs solution in a watch mode. Helpful for development')
-  .option('-a, --all', 'Runs test cases for both parts but with one solution')
-  .action((part, {
-    year, day, watch, all,
-  }) => runCommand('validate', [year, day, part, all], watch));
+  .action((part, { year, day, watch }) => runCommand('validate', [year, day, part], watch));
 
 (async function main() {
   try {
