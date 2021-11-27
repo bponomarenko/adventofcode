@@ -19,7 +19,11 @@ const runCommand = async (name, args, watch) => {
         env: { STATIC: true },
         ext: 'js,json',
       })
-        .on('start', () => console.log(chalk.gray('Restarting')))
+        .on('start', () => {
+          // eslint-disable-next-line no-octal-escape
+          console.clear();
+          console.log(chalk.gray('Restarting'));
+        })
         .on('quit', () => resolve())
         .on('exit', () => resolve());
 
@@ -39,8 +43,8 @@ withDayAndYear(program.command('solve'))
   .argument('<part>', 'Defines which part of the solution to run – part 1 or part 2', Number)
   .description('Runs puzzle solution code with specified input and prints the answer')
   .option('-s, --submit', 'Would try to submit found answer')
-  .option('-w, --watch', 'Runs solution in a watch mode. Helpful for development')
-  .option('-v, --validate', 'Also run validation test cases, and then solve a solution if cases are valid')
+  .option('--no-watch', 'Do not run solution in a watch mode')
+  .option('--no-validate', 'Do not run validation test cases prior to solving a solution')
   .action((part, args) => runCommand('solve', [args.year, args.day, part, args.submit, args.validate], args.watch));
 
 withDayAndYear(program.command('add-test'))
@@ -56,6 +60,10 @@ withDayAndYear(program.command('validate'))
   .argument('<part>', 'Defines which part of the solution to run – part 1 or part 2', Number)
   .option('-w, --watch', 'Runs solution in a watch mode. Helpful for development')
   .action((part, { year, day, watch }) => runCommand('validate', [year, day, part], watch));
+
+withDayAndYear(program.command('easter-eggs'))
+  .description('Tries to find easter-eggs on the puzzle page (words with additional info on them), and prints links to them')
+  .action(({ year, day }) => runCommand('easter-eggs', [year, day]));
 
 (async function main() {
   try {
