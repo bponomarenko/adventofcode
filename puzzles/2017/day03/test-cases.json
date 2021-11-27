@@ -1,0 +1,22 @@
+[
+  {
+    "input": "1",
+    "answer": "0",
+    "part": 1
+  },
+  {
+    "input": "12",
+    "answer": "3",
+    "part": 1
+  },
+  {
+    "input": "23",
+    "answer": "2",
+    "part": 1
+  },
+  {
+    "input": "1024",
+    "answer": "31",
+    "part": 1
+  }
+]

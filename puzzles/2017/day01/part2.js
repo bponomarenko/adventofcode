@@ -5,6 +5,7 @@ const main = input => {
 
   return nums.reduce((acc, num, index) => {
     const compareIndex = index + half;
+    // Find next number with a shift
     const nextNum = nums[compareIndex >= count ? compareIndex - count : compareIndex];
     return acc + (num === nextNum ? num : 0);
   }, 0);

@@ -1,0 +1,12 @@
+[
+  {
+    "input": "0\n3\n0\n1\n-3",
+    "answer": "5",
+    "part": 1
+  },
+  {
+    "input": "0\n3\n0\n1\n-3",
+    "answer": "10",
+    "part": 2
+  }
+]
