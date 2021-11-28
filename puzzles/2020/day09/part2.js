@@ -11,6 +11,7 @@ const findEncryptionWeakness = (sequence, num) => {
       }
     }
   }
+  return null;
 };
 
 const main = input => {
@@ -20,6 +21,7 @@ const main = input => {
       return findEncryptionWeakness(sequence.slice(0, i), sequence[i]);
     }
   }
+  return null;
 };
 
 module.exports = { main };

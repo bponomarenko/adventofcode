@@ -104,7 +104,7 @@ const findCorrectField = (tiles, field, y = 0, x = 0) => {
 
   const fieldOptions = tiles
     .flatMap(([tile, count, ids]) => {
-      if (matchingSidesCount != count) {
+      if (matchingSidesCount !== count) {
         return null;
       }
 
@@ -138,6 +138,7 @@ const findCorrectField = (tiles, field, y = 0, x = 0) => {
       return correctField;
     }
   }
+  return null;
 };
 
 const mergeTiles = field => {

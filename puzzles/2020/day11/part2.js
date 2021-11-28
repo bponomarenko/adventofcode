@@ -39,13 +39,11 @@ const doRound = seats => {
 
       if (seats[row][i] === 'L') {
         if (countVisibleSeats(prevSeats, row, i) === 0) {
-          // eslint-disable-next-line no-param-reassign
           seats[row][i] = '#';
           res = false;
         }
       } else if (seats[row][i] === '#') {
         if (countVisibleSeats(prevSeats, row, i) >= 5) {
-          // eslint-disable-next-line no-param-reassign
           seats[row][i] = 'L';
           res = false;
         }

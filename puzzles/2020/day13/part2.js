@@ -10,7 +10,7 @@ const mulInv = (a, b) => {
 
   while (a > 1) {
     const q = Math.floor(a / b);
-    // eslint-disable-next-line no-param-reassign -- use them to re-arrange values in array
+
     [a, b] = [b, a % b];
     [x0, x1] = [x1 - q * x0, x0];
   }

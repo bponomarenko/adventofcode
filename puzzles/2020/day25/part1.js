@@ -7,7 +7,7 @@ const findLoopSize = publicKey => {
   const subjectNumber = 7;
   let value = 1;
   let loopSize = 0;
-  while (value != publicKey) {
+  while (value !== publicKey) {
     value *= subjectNumber;
     value %= 20201227;
     loopSize += 1;

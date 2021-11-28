@@ -17,6 +17,7 @@ const main = input => {
       return sequence[i];
     }
   }
+  return null;
 };
 
 module.exports = { main, preamble, sums };

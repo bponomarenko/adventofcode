@@ -16,7 +16,7 @@ const main = input => {
     ingridients.forEach(ingridient => {
       usageCount.set(ingridient, (usageCount.get(ingridient) ?? 0) + 1);
 
-      const probability = 1 / ingridients.length * 1 / allergens.length;
+      const probability = (1 / ingridients.length) * (1 / allergens.length);
       const probs = probabilities.get(ingridient) ?? new Map();
       allergens.forEach(allergen => {
         probs.set(allergen, Math.max(probability, probs.get(allergen) ?? 0));

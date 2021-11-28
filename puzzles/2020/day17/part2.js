@@ -23,23 +23,19 @@ const countActiveNeighbours = (dim, w, z, y, x) => countActive(dim, [[w - 1, w +
 const setValue = (dim, w, z, y, x, value) => {
   if (value) {
     if (!dim[w]) {
-      // eslint-disable-next-line no-param-reassign
       dim[w] = new Array(z + 1).fill(0).map(() => new Array(y + 1).fill(0).map(() => new Array(x + 1).fill(false)));
     }
 
     if (!dim[w][z]) {
-      // eslint-disable-next-line no-param-reassign
       dim[w][z] = new Array(y + 1).fill(0).map(() => new Array(x + 1).fill(false));
     }
 
     if (!dim[w][z][y]) {
-      // eslint-disable-next-line no-param-reassign
       dim[w][z][y] = new Array(x + 1).fill(false);
     }
   }
 
   if (dim[w]?.[z]?.[y]) {
-    // eslint-disable-next-line no-param-reassign
     dim[w][z][y][x] = value;
   }
 };
