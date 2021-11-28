@@ -20,7 +20,6 @@ const runCommand = async (name, args, watch) => {
         ext: 'js,json',
       })
         .on('start', () => {
-          // eslint-disable-next-line no-octal-escape
           console.clear();
           console.log(chalk.gray('Restarting'));
         })
