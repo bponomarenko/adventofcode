@@ -1,10 +1,14 @@
 const withFormattedInput = cb => input => cb(+input);
 
-const main = withFormattedInput(input => {
+const getSquareSize = input => {
   // Get size of the grid square
-  let sideSize = Math.ceil(Math.sqrt(input));
+  const sideSize = Math.ceil(Math.sqrt(input));
   // Make sure it is odd number
-  sideSize = sideSize % 2 === 1 ? sideSize : sideSize + 1;
+  return sideSize % 2 === 1 ? sideSize : sideSize + 1;
+};
+
+const main = withFormattedInput(input => {
+  const sideSize = getSquareSize(input);
   // Calculate amount of steps from the center to the outer side
   const distance = (sideSize - 1) / 2;
 
@@ -18,4 +22,4 @@ const main = withFormattedInput(input => {
   return distance + travel;
 });
 
-module.exports = { main, withFormattedInput };
+module.exports = { main, withFormattedInput, getSquareSize };

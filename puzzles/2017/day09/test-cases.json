@@ -1,0 +1,82 @@
+[
+  {
+    "input": "{}",
+    "answer": "1",
+    "part": 1
+  },
+  {
+    "input": "{{{}}}",
+    "answer": "6",
+    "part": 1
+  },
+  {
+    "input": "{{},{}}",
+    "answer": "5",
+    "part": 1
+  },
+  {
+    "input": "{<a>,<a>,<a>,<a>}",
+    "answer": "1",
+    "part": 1
+  },
+  {
+    "input": "{{{},{},{{}}}}",
+    "answer": "16",
+    "part": 1
+  },
+  {
+    "input": "{<{},{},{{}}>}",
+    "answer": "1",
+    "part": 1
+  },
+  {
+    "input": "{{<ab>},{<ab>},{<ab>},{<ab>}}",
+    "answer": "9",
+    "part": 1
+  },
+  {
+    "input": "{{<!!>},{<!!>},{<!!>},{<!!>}}",
+    "answer": "9",
+    "part": 1
+  },
+  {
+    "input": "{{<a!>},{<a!>},{<a!>},{<ab>}}",
+    "answer": "3",
+    "part": 1
+  },
+  {
+    "input": "<>",
+    "answer": "0",
+    "part": 2
+  },
+  {
+    "input": "<random characters>",
+    "answer": "17",
+    "part": 2
+  },
+  {
+    "input": "<<<<>",
+    "answer": "3",
+    "part": 2
+  },
+  {
+    "input": "<{!>}>",
+    "answer": "2",
+    "part": 2
+  },
+  {
+    "input": "<!!>",
+    "answer": "0",
+    "part": 2
+  },
+  {
+    "input": "<!!!>>",
+    "answer": "0",
+    "part": 2
+  },
+  {
+    "input": "<{o\"i!a,<{i<a>",
+    "answer": "10",
+    "part": 2
+  }
+]

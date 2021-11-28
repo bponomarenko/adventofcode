@@ -1,0 +1,12 @@
+[
+  {
+    "input": "Generator A starts with 65\nGenerator B starts with 8921",
+    "answer": "588",
+    "part": 1
+  },
+  {
+    "input": "Generator A starts with 65\nGenerator B starts with 8921",
+    "answer": "309",
+    "part": 2
+  }
+]

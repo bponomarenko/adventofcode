@@ -30,6 +30,7 @@
         "ignoreTemplateLiterals": true
       }
     ],
-    "no-param-reassign": "off"
+    "no-param-reassign": "off",
+    "no-bitwise": "off"
   }
 }

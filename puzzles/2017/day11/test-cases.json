@@ -1,0 +1,22 @@
+[
+  {
+    "input": "ne,ne,ne",
+    "answer": "3",
+    "part": 1
+  },
+  {
+    "input": "ne,ne,sw,sw",
+    "answer": "0",
+    "part": 1
+  },
+  {
+    "input": "ne,ne,s,s",
+    "answer": "2",
+    "part": 1
+  },
+  {
+    "input": "se,sw,se,sw,sw",
+    "answer": "3",
+    "part": 1
+  }
+]
