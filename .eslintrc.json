@@ -29,6 +29,7 @@
         "ignoreStrings": true,
         "ignoreTemplateLiterals": true
       }
-    ]
+    ],
+    "no-param-reassign": "off"
   }
 }
