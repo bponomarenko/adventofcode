@@ -18,10 +18,11 @@ const runCommand = async (name, args, watch) => {
         args: program.args,
         env: { STATIC: true },
         ext: 'js,json',
+        ignore: ['invalid-answers.json'],
       })
         .on('start', () => {
           console.clear();
-          console.log(chalk.gray('Restarting'));
+          console.log(chalk.gray.dim('Restarting'));
         })
         .on('quit', () => resolve())
         .on('exit', () => resolve());
