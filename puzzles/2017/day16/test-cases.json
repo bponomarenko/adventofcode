@@ -1,0 +1,17 @@
+[
+  {
+    "input": "abcde\ns1",
+    "answer": "eabcd",
+    "part": 1
+  },
+  {
+    "input": "abcde\ns1,x3/4",
+    "answer": "eabdc",
+    "part": 1
+  },
+  {
+    "input": "abcde\ns1,x3/4,pe/b",
+    "answer": "baedc",
+    "part": 1
+  }
+]

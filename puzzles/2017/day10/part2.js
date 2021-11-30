@@ -10,7 +10,6 @@ const formatInput = input => {
 const xor = values => {
   let res = values[0];
   for (let i = 1; i < values.length; i += 1) {
-    // eslint-disable-next-line no-bitwise
     res ^= values[i];
   }
   return res;

@@ -9,7 +9,7 @@ const main = input => {
         min: +min, max: +max, char, password,
       };
     })
-    // eslint-disable-next-line no-bitwise
+
     .filter(rule => rule.password[rule.min - 1] === rule.char ^ rule.password[rule.max - 1] === rule.char);
 
   return rules.length;

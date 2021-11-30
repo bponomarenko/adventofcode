@@ -190,7 +190,6 @@ const main = input => {
 
     for (let dy = 0; dy <= image.length - monster.length; dy += 1) {
       for (let dx = 0; dx <= image[0].length - monster[0].length; dx += 1) {
-        // eslint-disable-next-line no-bitwise
         if ([0, 1, 2].every(j => (row2num(image[dy + j].slice(dx, dx + monster[0].length)) & monsterNums[j]) === monsterNums[j])) {
           countMonsters += 1;
         }
