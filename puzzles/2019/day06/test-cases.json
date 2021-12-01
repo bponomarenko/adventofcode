@@ -1,0 +1,12 @@
+[
+  {
+    "input": "COM)B\nB)C\nC)D\nD)E\nE)F\nB)G\nG)H\nD)I\nE)J\nJ)K\nK)L",
+    "answer": "42",
+    "part": 1
+  },
+  {
+    "input": "COM)B\nB)C\nC)D\nD)E\nE)F\nB)G\nG)H\nD)I\nE)J\nJ)K\nK)L\nK)YOU\nI)SAN",
+    "answer": "4",
+    "part": 2
+  }
+]

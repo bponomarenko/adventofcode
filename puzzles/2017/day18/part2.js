@@ -24,6 +24,7 @@ class Program {
 
   addToQueue(value) {
     this.queue.unshift(value);
+    // Queue is not empty, so not waiting anymore
     this.isWaiting = false;
   }
 
@@ -51,6 +52,7 @@ class Program {
           break;
         case 'rcv':
           if (this.queue.length === 0) {
+            // Indicate that we are waiting for a new input now
             this.isWaiting = true;
             return;
           }
@@ -68,6 +70,7 @@ class Program {
 const main = input => {
   const p0 = new Program(0, input);
   const p1 = new Program(1, input);
+
   p0.setPartner(p1);
   p1.setPartner(p0);
 
@@ -80,6 +83,7 @@ const main = input => {
       // Switch!
       [nextProgram, program] = [program, nextProgram];
     }
+    // Let both programs run until both of them has empty queue
   } while (!program.isWaiting);
   return p1.counter;
 };
