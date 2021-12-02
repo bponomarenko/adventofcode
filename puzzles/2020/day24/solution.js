@@ -9,7 +9,6 @@ const part1 = input => {
     const matches = direction.matchAll(directionRe);
     let pos = [0, 0, 0];
 
-    // eslint-disable-next-line no-restricted-syntax
     for (const match of matches) {
       switch (match[0]) {
         case 'se':
@@ -75,7 +74,6 @@ const part2 = input => {
     const matches = direction.matchAll(directionRe);
     let pos = [0, 0, 0];
 
-    // eslint-disable-next-line no-restricted-syntax
     for (const match of matches) {
       pos = getPos(pos, match[0]);
     }

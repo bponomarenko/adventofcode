@@ -189,7 +189,6 @@ const findCorrectField = (tiles, field, y = 0, x = 0) => {
     return null;
   }
 
-  // eslint-disable-next-line no-restricted-syntax
   for (const fieldOption of fieldOptions) {
     const nextTiles = tiles.filter(([tile]) => tile.id !== fieldOption[y][x][0].id);
     if (!nextTiles.length) {
