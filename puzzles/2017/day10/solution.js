@@ -1,0 +1,79 @@
+const formatInput = input => input.split('\n');
+
+const computeInRounds = (listInput, lengths, listSize, roundsCount) => {
+  const list = Array.from(listInput);
+  let pos = 0;
+  let skipSize = 0;
+
+  for (let i = 0; i < roundsCount; i += 1) {
+    // eslint-disable-next-line no-loop-func -- Do the magic
+    lengths.forEach(length => {
+      // Do the selection
+      const reverseValues = list.slice(pos, pos + length);
+      if (reverseValues.length < length) {
+        reverseValues.push(...list.slice(0, length - reverseValues.length));
+      }
+
+      // Reverse!
+      reverseValues.reverse();
+
+      // Update the list
+      reverseValues.forEach((value, index) => {
+        let fillPos = pos + index;
+        // Make sure to wrap position
+        fillPos = fillPos > listSize - 1 ? fillPos - listSize : fillPos;
+        list[fillPos] = value;
+      });
+
+      pos += length + skipSize;
+      // Wrap around the list if next position is out of range
+      while (pos > listSize) {
+        pos -= listSize;
+      }
+      skipSize += 1;
+    });
+  }
+  return list;
+};
+
+const part1 = ([size, lengths]) => {
+  const listSize = +size;
+  // Array with numbers 0 - listSize
+  const list = new Array(listSize).fill(0).map((_, i) => i);
+  const [first, second] = computeInRounds(list, lengths.split(/,\s?/).map(num => +num), listSize, 1);
+  return first * second;
+};
+
+const stringToHexArray = str => str.split('').map(char => char.charCodeAt(0));
+
+const xor = values => {
+  let res = values[0];
+  for (let i = 1; i < values.length; i += 1) {
+    res ^= values[i];
+  }
+  return res;
+};
+
+const pad = (value, count) => (value.length > count ? value : `${new Array(count - value.length + 1).join('0')}${value}`);
+
+const getKnotHash = input => {
+  // Array with numbers 0 - 255
+  const list = new Array(256).fill(0).map((_, i) => i);
+  const hash = computeInRounds(list, input, 256, 64);
+  const denseHash = new Array(16).fill(0).map((_, index) => xor(hash.slice(index * 16, (index + 1) * 16)));
+  // Get final hex string
+  return denseHash.map(code => pad(code.toString(16), 2)).join('');
+};
+
+const part2 = ([, chars]) => {
+  const input = stringToHexArray(chars).concat(17, 31, 73, 47, 23);
+  return getKnotHash(input);
+};
+
+module.exports = {
+  part1,
+  part2,
+  formatInput,
+  getKnotHash,
+  stringToHexArray,
+};

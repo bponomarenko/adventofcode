@@ -1,0 +1,7 @@
+[
+  {
+    "input": "abcdef\nbababc\nabbcde\nabcccd\naabcdd\nabcdee\nababab",
+    "answer": "12",
+    "part": 1
+  }
+]
