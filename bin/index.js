@@ -11,18 +11,38 @@ const withDayAndYear = command => command
   .option('-d, --day <day>', 'Day of the puzzle to scaffold', Number, new Date().getDate());
 
 const runCommand = async (name, args, watch) => {
-  if (watch && !process.env.STATIC) {
+  if (watch) {
     return new Promise(resolve => {
-      nodemon({
+      const nodemonConfig = {
         script: 'bin/index.js',
-        args: program.args,
-        env: { STATIC: true },
+        args: [name].concat(args).concat('--no-watch'),
         ext: 'js,json',
         ignore: ['invalid-answers.json'],
-      })
-        .on('start', () => {
+      };
+
+      nodemon(nodemonConfig)
+        .once('start', () => {
+          console.log(chalk.gray.dim('Starting in the watch mode'));
+        })
+        .on('restart', () => {
           console.clear();
-          console.log(chalk.gray.dim('Restarting'));
+          console.log(chalk.gray.dim('Restarted'));
+        })
+        .on('message', message => {
+          if (message === 'switch') {
+            console.log(chalk.gray.dim('Switching to the part 2'));
+
+            // Update nodemon config
+            nodemon.config.load({
+              ...nodemonConfig,
+              // Part is always the last argument, which should be replaced with part2!
+              args: [name].concat(args.slice(0, -1)).concat(2, '--no-watch'),
+            }, () => {});
+            nodemon.restart();
+          } else if (message === 'exit') {
+            nodemon.emit('quit');
+            nodemon.reset();
+          }
         })
         .on('quit', () => resolve())
         .on('exit', () => resolve());
@@ -40,12 +60,28 @@ withDayAndYear(program.command('init'))
   .action(({ year, day }) => runCommand('init', [year, day]));
 
 withDayAndYear(program.command('solve'))
-  .argument('<part>', 'Defines which part of the solution to run – part 1 or part 2', Number)
+  .argument('[part]', 'Defines which part of the solution to run – part 1 or part 2', Number, 1)
   .description('Runs puzzle solution code with specified input and prints the answer')
-  .option('-s, --submit', 'Would try to submit found answer')
+  .option('--no-submit', 'Do not ask to submit found answer')
+  .option('--no-init', 'Do not scaffold the solution before')
   .option('--no-watch', 'Do not run solution in a watch mode')
   .option('--no-validate', 'Do not run validation test cases prior to solving a solution')
-  .action((part, args) => runCommand('solve', [args.year, args.day, part, args.submit, args.validate], args.watch));
+  .action(async (part, args) => {
+    if (args.init && args.watch) {
+      // Initialize the project first
+      await runCommand('init', [args.year, args.day]);
+    }
+    const cmdArgs = args.watch
+      ? ['-y', args.year, '-d', args.day, args.submit ? null : '--no-submit', args.validate ? null : '--no-validate', part]
+      : [args.year, args.day, part, args.submit, args.validate];
+    // Try to solve it now
+    const result = await runCommand('solve', cmdArgs.filter(value => value !== null), args.watch);
+
+    if (result?.success && !args.watch) {
+      // This means we just solved part 1, and need to re-start watch server with part 2
+      process.send(part === 1 ? 'switch' : 'exit');
+    }
+  });
 
 withDayAndYear(program.command('add-test'))
   .argument('<part>', 'Defines which part of the solution to run – part 1 or part 2', Number)
@@ -58,8 +94,11 @@ withDayAndYear(program.command('add-test'))
 
 withDayAndYear(program.command('validate'))
   .argument('<part>', 'Defines which part of the solution to run – part 1 or part 2', Number)
-  .option('-w, --watch', 'Runs solution in a watch mode. Helpful for development')
-  .action((part, { year, day, watch }) => runCommand('validate', [year, day, part], watch));
+  .option('--no-watch', 'Do not run solution in a watch mode')
+  .action((part, { year, day, watch }) => {
+    const args = watch ? ['-y', year, '-d', day, part] : [year, day, part];
+    return runCommand('validate', args, watch);
+  });
 
 withDayAndYear(program.command('easter-eggs'))
   .description('Tries to find easter-eggs on the puzzle page (words with additional info on them), and prints links to them')
