@@ -78,8 +78,14 @@ withDayAndYear(program.command('solve'))
     const result = await runCommand('solve', cmdArgs.filter(value => value !== null), args.watch);
 
     if (result?.success && !args.watch) {
-      // This means we just solved part 1, and need to re-start watch server with part 2
-      process.send(part === 1 ? 'switch' : 'exit');
+      if (part === 1) {
+      // If we solved part 1 – restart the watch server with part 2
+        process.send('switch');
+      } else {
+        // Otherwise, find a link to the easter egg and exit
+        await runCommand('easter-eggs', [args.year, args.day]);
+        process.send('exit');
+      }
     }
   });
 
