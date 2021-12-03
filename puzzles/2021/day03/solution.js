@@ -23,37 +23,24 @@ const part1 = input => {
   return gamma * epsilon;
 };
 
-const filterReport = (report, bit, inverse = false) => {
-  const counts = report
-    .reduce(([ones, zeros], num) => (num[bit] === '1' ? [ones + 1, zeros] : [ones, zeros + 1]), [0, 0]);
-  const filterBit = String(counts[0] >= counts[1] ? 1 ^ inverse : 0 ^ inverse);
-  return report.filter(num => num[bit] === filterBit);
+const findRating = (report, bit, inverse = false) => {
+  const countHighBits = report.reduce((acc, num) => (num[bit] === '1' ? acc + 1 : acc), 0);
+  // Find bit value to filter by
+  const filterBit = String(countHighBits >= report.length / 2 ? 1 ^ inverse : 0 ^ inverse);
+  // Get only numbers that match the bit
+  const filteredReport = report.filter(num => num[bit] === filterBit);
+
+  if (filteredReport.length === 1) {
+    // Found it
+    return filteredReport[0];
+  }
+  // Keep looking
+  return findRating(filteredReport, bit + 1, inverse);
 };
 
 const part2 = input => {
-  let oxygenReport = input;
-  let co2Report = input;
-  let bit = 0;
-  let oxygenRating;
-  let co2Rating;
-
-  do {
-    if (!oxygenRating) {
-      oxygenReport = filterReport(oxygenReport, bit);
-      if (oxygenReport.length === 1) {
-        [oxygenRating] = oxygenReport;
-      }
-    }
-
-    if (!co2Rating) {
-      co2Report = filterReport(co2Report, bit, true);
-      if (co2Report.length === 1) {
-        [co2Rating] = co2Report;
-      }
-    }
-
-    bit += 1;
-  } while (!oxygenRating || !co2Rating);
+  const oxygenRating = findRating(input, 0);
+  const co2Rating = findRating(input, 0, true);
 
   return parseInt(oxygenRating, 2) * parseInt(co2Rating, 2);
 };
