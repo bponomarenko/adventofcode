@@ -33,6 +33,8 @@
     "no-param-reassign": "off",
     "no-bitwise": "off",
     "no-restricted-syntax": "off",
-    "default-case": "off"
+    "default-case": "off",
+    // This gets in a way when developing initinally
+    "prefer-const": "off"
   }
 }
