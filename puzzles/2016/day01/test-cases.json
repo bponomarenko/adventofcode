@@ -1,0 +1,22 @@
+[
+  {
+    "input": "R2, L3",
+    "answer": "5",
+    "part": 1
+  },
+  {
+    "input": "R2, R2, R2",
+    "answer": "2",
+    "part": 1
+  },
+  {
+    "input": "R5, L5, R5, R3",
+    "answer": "12",
+    "part": 1
+  },
+  {
+    "input": "R8, R4, R4, R8",
+    "answer": "4",
+    "part": 2
+  }
+]

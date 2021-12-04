@@ -1,0 +1,12 @@
+[
+  {
+    "input": "ULL\nRRDDD\nLURDL\nUUUUD",
+    "answer": "1985",
+    "part": 1
+  },
+  {
+    "input": "ULL\nRRDDD\nLURDL\nUUUUD",
+    "answer": "5DB3",
+    "part": 2
+  }
+]
