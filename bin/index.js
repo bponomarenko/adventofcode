@@ -1,15 +1,17 @@
 #!/usr/bin/env node
 
-import { program } from 'commander';
+// eslint-disable-next-line import/no-unresolved, node/no-missing-import
+import { setTimeout } from 'timers/promises';
 import chalk from 'chalk';
 import prompt from 'prompt';
 import chokidar from 'chokidar';
 import { execaNode } from 'execa';
+import { program } from 'commander';
 import initPuzzle from '../lib/init.js';
 import addTest from '../lib/add-test.js';
 import findEasterEgg from '../lib/easter-egg.js';
 import { submitAnswer } from '../lib/answers.js';
-import { readInput, getYearPath, ManagedError } from '../lib/utils.js';
+import { readInput, getYearPath, logError } from '../lib/utils.js';
 
 // zero-width whitespace character
 const zwws = '​';
@@ -21,10 +23,33 @@ const withDayAndYear = command => command
   .option('-y, --year <year>', 'Year of the puzzle to scaffold', Number, process.env.YEAR ? +process.env.YEAR : new Date().getFullYear())
   .option('-d, --day <day>', 'Day of the puzzle to scaffold', Number, new Date().getDate());
 
-const runCommand = ({ name, args }) => execaNode(`./lib/${name}.js`, args, {
-  stdio: process.stdio,
-  stdout: process.stdout,
-});
+let runningProcess;
+
+const runCommand = async ({ name, args }) => {
+  // Cancel any previously running processes
+  runningProcess?.cancel();
+
+  try {
+    let response;
+    runningProcess = execaNode(`./lib/${name}.js`, args, { stdio: process.stdio, stdout: process.stdout })
+      // Actual respoznse would be sent as a message
+      .on('message', msg => { response = msg; });
+    await runningProcess;
+    return response;
+  } catch (error) {
+    if (error.signal === 'SIGTERM') {
+      // Ignore those, we just cancelled sub-process
+      return null;
+    }
+    if (error.signal === 'SIGINT') {
+      runningProcess?.cancel();
+      // Simply finish parent process on Cmd+C
+      process.emit('SIGINT');
+      return null;
+    }
+    throw new Error(error.message);
+  }
+};
 
 const getLogMeta = (year, day, part) => `${new Date().toLocaleTimeString()} (y:${year} d:${day} p:${part})`;
 
@@ -35,9 +60,15 @@ const watchAndRunCommand = ({ name, onResult, onCommand, args }) => {
   let watcher;
 
   const run = async () => {
-    const result = await runCommand({ name, args });
-    if (onResult) {
-      await onResult(result);
+    try {
+      const result = await runCommand({ name, args });
+      if (onResult) {
+        await onResult(result);
+      }
+    } catch (error) {
+      // Log the error
+      logError(error);
+      // ...but don't stop parent process, so it could be reviwed
     }
     //  Print empty line after messages
     console.log();
@@ -58,15 +89,10 @@ const watchAndRunCommand = ({ name, onResult, onCommand, args }) => {
     try {
     // Read for additional commands from the command line
       const { cmd } = await prompt.get([{ name: 'cmd', message: zwws }]);
-      let doRestart = await onCommand?.(cmd, args);
-      switch (cmd) {
-        case 'r':
-          doRestart = true;
-          break;
-        case 'c':
-          args[2] = args[2] === 1 ? 2 : 1;
-          doRestart = true;
-          break;
+      let doRestart = await onCommand?.(cmd, args) || cmd === 'r' || cmd === 'c';
+
+      if (cmd === 'c') {
+        args[2] = args[2] === 1 ? 2 : 1;
       }
 
       if (doRestart) {
@@ -100,6 +126,7 @@ const watchAndRunCommand = ({ name, onResult, onCommand, args }) => {
 
   process.on('SIGINT', () => {
     prompt.stop();
+    runningProcess?.cancel();
     watcher.close();
   });
 };
@@ -121,33 +148,41 @@ withDayAndYear(program.command('solve'))
     }
 
     const cmdArgs = { name: 'solve', args: [year, day, part, validate] };
-    if (watch) {
-      let latestAnswer;
-
-      const onResult = result => {
-        latestAnswer = result?.answer;
-      };
-
-      const onCommand = async (cmd, currentArgs) => {
-        // "submit" command, which will try to submit last known result
-        if (cmd === 's') {
-          await submitAnswer(latestAnswer, ...currentArgs);
-          if (currentArgs[2] === 1) {
-            // switch to the part 2
-            currentArgs[2] = 2;
-            // ...and request watcher restart
-            return true;
-          }
-          if (currentArgs[2] === 2) {
-            // Done solving of the day. Treat myself with some fun stuff
-            await findEasterEgg(year, day);
-          }
-        }
-        return false;
-      };
-      return watchAndRunCommand({ ...cmdArgs, onResult, onCommand });
+    if (!watch) {
+      return runCommand(cmdArgs);
     }
-    return runCommand(cmdArgs);
+
+    let latestAnswer;
+
+    const onResult = result => {
+      latestAnswer = result?.answer;
+    };
+
+    const onCommand = async (cmd, currentArgs) => {
+      // "submit" command, which will try to submit last known result
+      if (cmd === 's') {
+        if (latestAnswer == null) {
+          console.log(chalk.dim(`Can't submit empty answer: ${latestAnswer}.`));
+          return false;
+        }
+        await submitAnswer(latestAnswer, ...currentArgs);
+        // Small timeout to make sure successful message is visilble
+        await setTimeout(1500);
+
+        if (currentArgs[2] === 1) {
+          // switch to the part 2
+          currentArgs[2] = 2;
+          // ...and request watcher restart
+          return true;
+        }
+        if (currentArgs[2] === 2) {
+          // Done solving of the day. Treat myself with some fun stuff
+          await findEasterEgg(year, day);
+        }
+      }
+      return false;
+    };
+    return watchAndRunCommand({ ...cmdArgs, onResult, onCommand });
   });
 
 withDayAndYear(program.command('add-test'))
@@ -175,11 +210,7 @@ withDayAndYear(program.command('easter-egg'))
   try {
     await program.parseAsync(process.argv);
   } catch (error) {
-    console.error(chalk`{red {inverse Error} ${error.message}}`);
-    if (!(error instanceof ManagedError)) {
-      // Also show error body
-      console.error(error);
-    }
+    logError(error);
     process.exitCode = 1;
   }
 }());
