@@ -1,4 +1,4 @@
-const formatInput = input => {
+export const formatInput = input => {
   const [str, moves] = input.split('\n');
   return {
     programs: str.split(''),
@@ -42,7 +42,7 @@ const doMove = (programs, move) => {
   }
 };
 
-const part1 = input => {
+export const part1 = input => {
   let { programs } = input;
   input.moves.forEach(move => {
     programs = doMove(programs, move);
@@ -50,7 +50,7 @@ const part1 = input => {
   return programs.join('');
 };
 
-const part2 = input => {
+export const part2 = input => {
   const movesCount = input.moves.length;
   let programs = Array.from(input.programs);
   let counter = 1_000;
@@ -62,5 +62,3 @@ const part2 = input => {
   } while (counter > 0);
   return programs.join('');
 };
-
-module.exports = { part1, part2, formatInput };

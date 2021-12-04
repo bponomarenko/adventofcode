@@ -12,7 +12,7 @@ const parseRules = raw => {
   return rules;
 };
 
-const formatInput = input => {
+export const formatInput = input => {
   const [rulesRaw, msgs] = input.split('\n\n');
   return { rules: parseRules(rulesRaw), msgs };
 };
@@ -26,7 +26,7 @@ const assembleRule = (rules, ruleId) => {
   return def;
 };
 
-const part1 = input => {
+export const part1 = input => {
   const mainRule = assembleRule(input.rules, 0);
   const re = new RegExp(`^${mainRule}$`);
   return input.msgs.split('\n').filter(msg => re.test(msg)).length;
@@ -52,10 +52,8 @@ const assembleRule2 = (rules, ruleId) => {
   return def;
 };
 
-const part2 = input => {
+export const part2 = input => {
   const mainRule = assembleRule2(input.rules, 0);
   const re = new RegExp(`^${mainRule}$`);
   return input.msgs.split('\n').filter(msg => re.test(msg)).length;
 };
-
-module.exports = { part1, part2, formatInput };

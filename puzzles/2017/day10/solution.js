@@ -1,4 +1,4 @@
-const formatInput = input => input.split('\n');
+export const formatInput = input => input.split('\n');
 
 const computeInRounds = (listInput, lengths, listSize, roundsCount) => {
   const list = Array.from(listInput);
@@ -6,7 +6,6 @@ const computeInRounds = (listInput, lengths, listSize, roundsCount) => {
   let skipSize = 0;
 
   for (let i = 0; i < roundsCount; i += 1) {
-    // eslint-disable-next-line no-loop-func -- Do the magic
     lengths.forEach(length => {
       // Do the selection
       const reverseValues = list.slice(pos, pos + length);
@@ -36,7 +35,7 @@ const computeInRounds = (listInput, lengths, listSize, roundsCount) => {
   return list;
 };
 
-const part1 = ([size, lengths]) => {
+export const part1 = ([size, lengths]) => {
   const listSize = +size;
   // Array with numbers 0 - listSize
   const list = new Array(listSize).fill(0).map((_, i) => i);
@@ -44,7 +43,7 @@ const part1 = ([size, lengths]) => {
   return first * second;
 };
 
-const stringToHexArray = str => str.split('').map(char => char.charCodeAt(0));
+export const stringToHexArray = str => str.split('').map(char => char.charCodeAt(0));
 
 const xor = values => {
   let res = values[0];
@@ -56,7 +55,7 @@ const xor = values => {
 
 const pad = (value, count) => (value.length > count ? value : `${new Array(count - value.length + 1).join('0')}${value}`);
 
-const getKnotHash = input => {
+export const getKnotHash = input => {
   // Array with numbers 0 - 255
   const list = new Array(256).fill(0).map((_, i) => i);
   const hash = computeInRounds(list, input, 256, 64);
@@ -65,15 +64,7 @@ const getKnotHash = input => {
   return denseHash.map(code => pad(code.toString(16), 2)).join('');
 };
 
-const part2 = ([, chars]) => {
+export const part2 = ([, chars]) => {
   const input = stringToHexArray(chars).concat(17, 31, 73, 47, 23);
   return getKnotHash(input);
-};
-
-module.exports = {
-  part1,
-  part2,
-  formatInput,
-  getKnotHash,
-  stringToHexArray,
 };

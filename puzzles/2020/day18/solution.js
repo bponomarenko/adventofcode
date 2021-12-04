@@ -1,4 +1,4 @@
-const formatInput = input => input.split('\n');
+export const formatInput = input => input.split('\n');
 
 const simpleExprRe = /\d+ [*+] \d+/;
 const groupRe = /\(([^()]+)\)/;
@@ -24,7 +24,7 @@ const evalExpr = expr => {
   return evalSimpleExpr(finalExpr);
 };
 
-const part1 = input => input.map(expr => evalExpr(expr))
+export const part1 = input => input.map(expr => evalExpr(expr))
   .reduce((acc, v) => acc + v, 0);
 
 const sumExprRe = /\d+ \+ \d+/;
@@ -51,7 +51,5 @@ const evalExpr2 = expr => {
   return evalSimpleExpr2(finalExpr);
 };
 
-const part2 = input => input.map(expr => evalExpr2(expr))
+export const part2 = input => input.map(expr => evalExpr2(expr))
   .reduce((acc, v) => acc + v, 0);
-
-module.exports = { part1, part2, formatInput };

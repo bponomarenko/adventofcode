@@ -1,6 +1,6 @@
-const formatInput = input => input.trim().split('').map(Number);
+export const formatInput = input => input.trim().split('').map(Number);
 
-const part1 = nums => {
+export const part1 = nums => {
   const lastIndex = nums.length - 1;
 
   // Pretty trivial
@@ -10,7 +10,7 @@ const part1 = nums => {
   }, 0);
 };
 
-const part2 = nums => {
+export const part2 = nums => {
   const count = nums.length;
   const half = count / 2;
 
@@ -21,5 +21,3 @@ const part2 = nums => {
     return acc + (num === nextNum ? num : 0);
   }, 0);
 };
-
-module.exports = { part1, part2, formatInput };

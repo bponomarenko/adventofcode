@@ -1,4 +1,4 @@
-const formatInput = input => input;
+export const formatInput = input => input;
 
 const getLayers = (input, w, h) => {
   const layerSize = w * h;
@@ -15,14 +15,14 @@ const getLayers = (input, w, h) => {
 
 const countChars = (layer, char) => layer.split('').filter(c => c === char).length;
 
-const part1 = input => {
+export const part1 = input => {
   const layers = getLayers(input, 25, 6);
   const zeroCounts = layers.map(layer => countChars(layer, '0'));
   const index = zeroCounts.indexOf(Math.min(...zeroCounts));
   return countChars(layers[index], '1') * countChars(layers[index], '2');
 };
 
-const part2 = input => {
+export const part2 = input => {
   const width = 25;
   const height = 6;
   const layers = getLayers(input, width, height).map(layer => layer.split(''));
@@ -35,5 +35,3 @@ const part2 = input => {
     console.log(result.substr(i, width).replace(/1/g, '*').replace(/0/g, ' '));
   }
 };
-
-module.exports = { part1, part2, formatInput };

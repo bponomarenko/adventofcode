@@ -1,4 +1,4 @@
-const formatInput = input => {
+export const formatInput = input => {
   const [steps, ...positions] = input.split('\n');
   return {
     steps: +steps,
@@ -48,7 +48,7 @@ const sum = values => values.reduce((acc, value) => acc + Math.abs(value), 0);
 
 const getMoonEnergy = moon => sum(moon.slice(0, 3)) * sum(moon.slice(3));
 
-const part1 = ({ steps, moons }) => {
+export const part1 = ({ steps, moons }) => {
   for (let s = 0; s < steps; s += 1) {
     // 1. Update velocity
     for (let i = 0; i < size - moonSize; i += moonSize) {
@@ -67,9 +67,7 @@ const part1 = ({ steps, moons }) => {
   return totalEnergy;
 };
 
-const part2 = ({ moons }) => {
+export const part2 = ({ moons }) => {
   console.log(moons);
   return null;
 };
-
-module.exports = { part1, part2, formatInput };

@@ -1,4 +1,4 @@
-const formatInput = input => {
+export const formatInput = input => {
   const firewall = [];
   const layers = input.split('\n').map(layer => layer.split(': ').map(num => +num));
   layers.forEach(([depth, range]) => {
@@ -29,7 +29,7 @@ const updateScanners = (indexes, firewall) => {
   });
 };
 
-const part1 = ({ firewall, layers }) => {
+export const part1 = ({ firewall, layers }) => {
   const indexes = layers.map(([depth]) => depth);
 
   let severity = 0;
@@ -46,7 +46,7 @@ const part1 = ({ firewall, layers }) => {
   return severity;
 };
 
-const part2 = ({ firewall, layers }) => {
+export const part2 = ({ firewall, layers }) => {
   const indexes = layers.map(([depth]) => depth);
   const distanceLength = firewall.length;
   let packets = [];
@@ -83,5 +83,3 @@ const part2 = ({ firewall, layers }) => {
   } while (!winner);
   return winner.delay;
 };
-
-module.exports = { part1, part2, formatInput };

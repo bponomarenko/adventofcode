@@ -24,7 +24,7 @@ const lineToVectors = line => {
   });
 };
 
-const formatInput = input => {
+export const formatInput = input => {
   const [line1, line2] = input.split('\n');
   return { line1: lineToVectors(line1), line2: lineToVectors(line2) };
 };
@@ -55,7 +55,7 @@ const getDistance = (line1, line2) => {
   return Math.min(...distances);
 };
 
-const part1 = ({ line1, line2 }) => getDistance(line1, line2);
+export const part1 = ({ line1, line2 }) => getDistance(line1, line2);
 
 const getLineDistance = (line, intersection) => {
   let traveled = 0;
@@ -80,6 +80,4 @@ const getDistance2 = (line1, line2) => {
   return Math.min(...distances);
 };
 
-const part2 = ({ line1, line2 }) => getDistance2(line1, line2);
-
-module.exports = { part1, part2, formatInput };
+export const part2 = ({ line1, line2 }) => getDistance2(line1, line2);

@@ -1,9 +1,9 @@
-const formatInput = input => input.split(/\s/).map(value => +value);
+export const formatInput = input => input.split(/\s/).map(value => +value);
 
 // Calculates kinda unique hash key for the memory banks
 const memoryHash = banks => banks.join('-');
 
-const part1 = input => {
+export const part1 = input => {
   // Get number of memory banks
   const size = input.length;
   const history = new Set();
@@ -38,7 +38,7 @@ const part1 = input => {
   return cyclesCount;
 };
 
-const part2 = input => {
+export const part2 = input => {
   // Get number of memory banks
   const size = input.length;
   const history = new Map();
@@ -72,5 +72,3 @@ const part2 = input => {
   // return amount of loops
   return history.size - history.get(memoryHash(banks));
 };
-
-module.exports = { part1, part2, formatInput };

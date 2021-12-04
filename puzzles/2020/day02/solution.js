@@ -1,5 +1,5 @@
 const regex = /^(\d+)-(\d+)\s(.):\s(\w+)/;
-const formatInput = input => input
+export const formatInput = input => input
   .split('\n')
   .map(line => {
     const [, min, max, char, password] = regex.exec(line);
@@ -8,13 +8,11 @@ const formatInput = input => input
     };
   });
 
-const part1 = input => input
+export const part1 = input => input
   .filter(rule => {
     const length = rule.password.split(rule.char).length - 1;
     return length >= rule.min && length <= rule.max;
   }).length;
 
-const part2 = input => input
+export const part2 = input => input
   .filter(rule => rule.password[rule.min - 1] === rule.char ^ rule.password[rule.max - 1] === rule.char).length;
-
-module.exports = { part1, part2, formatInput };

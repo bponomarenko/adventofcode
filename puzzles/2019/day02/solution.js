@@ -1,8 +1,8 @@
-const Intcode = require('./intcode');
+import Intcode from './intcode.js';
 
-const formatInput = input => input.split(',').map(num => +num);
+export const formatInput = input => input.split(',').map(num => +num);
 
-const part1 = (input, isTest) => {
+export const part1 = (input, isTest) => {
   if (!isTest) {
     input[1] = 12;
     input[2] = 2;
@@ -11,7 +11,7 @@ const part1 = (input, isTest) => {
   return program[0];
 };
 
-const part2 = input => {
+export const part2 = input => {
   const intcode = new Intcode();
 
   for (let noun = 0; noun < 100; noun += 1) {
@@ -25,5 +25,3 @@ const part2 = input => {
   }
   return null;
 };
-
-module.exports = { part1, part2, formatInput };

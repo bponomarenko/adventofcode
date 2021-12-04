@@ -1,4 +1,4 @@
-const formatInput = input => input.split('\n').map(Number);
+export const formatInput = input => input.split('\n').map(Number);
 
 const preamble = 25;
 
@@ -12,7 +12,7 @@ const sums = sequence => {
   return values;
 };
 
-const part1 = sequence => {
+export const part1 = sequence => {
   for (let i = preamble, l = sequence.length; i < l; i += 1) {
     if (!sums(sequence.slice(i - preamble, i)).includes(sequence[i])) {
       return sequence[i];
@@ -35,7 +35,7 @@ const findEncryptionWeakness = (sequence, num) => {
   return null;
 };
 
-const part2 = sequence => {
+export const part2 = sequence => {
   for (let i = preamble, l = sequence.length; i < l; i += 1) {
     if (!sums(sequence.slice(i - preamble, i)).includes(sequence[i])) {
       return findEncryptionWeakness(sequence.slice(0, i), sequence[i]);
@@ -43,5 +43,3 @@ const part2 = sequence => {
   }
   return null;
 };
-
-module.exports = { part1, part2, formatInput };

@@ -1,9 +1,9 @@
-const formatInput = input => input.split('\n').map(str => {
+export const formatInput = input => input.split('\n').map(str => {
   const [instruction, value] = str.split(' ');
   return [instruction, +value];
 });
 
-const part1 = instructions => {
+export const part1 = instructions => {
   let acc = 0;
   let i = 0;
   const visited = new Set();
@@ -64,11 +64,10 @@ const processInstructions = instructions => {
   return acc;
 };
 
-const part2 = instructions => {
+export const part2 = instructions => {
   let indexToSwitch = -1;
 
   do {
-    // eslint-disable-next-line no-loop-func
     indexToSwitch = instructions.findIndex(([instr], i) => i > indexToSwitch && (instr === 'nop' || instr === 'jmp'));
     const instructionsClone = [...instructions];
     const [instr, value] = instructions[indexToSwitch];
@@ -82,5 +81,3 @@ const part2 = instructions => {
   // eslint-disable-next-line no-constant-condition
   } while (true);
 };
-
-module.exports = { part1, part2, formatInput };

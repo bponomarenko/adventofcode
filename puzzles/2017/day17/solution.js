@@ -1,4 +1,4 @@
-const formatInput = input => +input;
+export const formatInput = input => +input;
 
 const fillBuffer = (iterations, steps) => {
   const buffer = [0];
@@ -13,14 +13,12 @@ const fillBuffer = (iterations, steps) => {
   return [buffer, pos];
 };
 
-const part1 = input => {
+export const part1 = input => {
   const [buffer, lastPosition] = fillBuffer(2017, input);
   return buffer[lastPosition + 1];
 };
 
-const part2 = input => {
+export const part2 = input => {
   const result = part1(input);
   return result;
 };
-
-module.exports = { part1, part2, formatInput };

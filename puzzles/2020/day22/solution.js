@@ -1,11 +1,11 @@
-const formatInput = input => {
+export const formatInput = input => {
   const [p1, p2] = input.split('\n\n');
   const player1 = p1.split('\n').slice(1).map(card => +card);
   const player2 = p2.split('\n').slice(1).map(card => +card);
   return { player1, player2 };
 };
 
-const part1 = ({ player1, player2 }) => {
+export const part1 = ({ player1, player2 }) => {
   while (player1.length && player2.length) {
     const c1 = player1.shift();
     const c2 = player2.shift();
@@ -54,9 +54,7 @@ const game = (player1, player2) => {
   return [isPlayer1Wins, isPlayer1Wins ? player1 : player2];
 };
 
-const part2 = ({ player1, player2 }) => {
+export const part2 = ({ player1, player2 }) => {
   const [, winner] = game(player1, player2);
   return winner.reverse().reduce((acc, card, i) => acc + (i + 1) * card, 0);
 };
-
-module.exports = { part1, part2, formatInput };

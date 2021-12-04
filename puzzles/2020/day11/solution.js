@@ -1,4 +1,4 @@
-const formatInput = input => input.split('\n').map(line => line.split(''));
+export const formatInput = input => input.split('\n').map(line => line.split(''));
 
 const countAdjacentSeats = (seats, row, i) => (
   (seats[row - 1]?.[i - 1] === '#' ? 1 : 0)
@@ -40,7 +40,7 @@ const doRound = seats => {
 
 const countOccupiedSeats = seats => seats.reduce((acc, row) => acc + row.reduce((acc2, seat) => acc2 + (seat === '#' ? 1 : 0), 0), 0);
 
-const part1 = input => {
+export const part1 = input => {
   while (!doRound(input)) {
     // Empty body as all the job is in the "doRound" function
   }
@@ -100,11 +100,9 @@ const doRound2 = seats => {
   return res;
 };
 
-const part2 = input => {
+export const part2 = input => {
   while (!doRound2(input)) {
     // Empty body as all the job is in the "doRound" function
   }
   return countOccupiedSeats(input);
 };
-
-module.exports = { part1, part2, formatInput };

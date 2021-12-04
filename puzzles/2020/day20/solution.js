@@ -1,5 +1,5 @@
 // eslint-disable-next-line max-classes-per-file
-const formatInput = input => input.split('\n\n');
+export const formatInput = input => input.split('\n\n');
 
 const row2num = row => parseInt(row.map(pixel => (pixel === '#' ? '1' : '0')).join(''), 2);
 
@@ -49,7 +49,7 @@ class Tile {
   }
 }
 
-const part1 = input => {
+export const part1 = input => {
   const tiles = input.map(rawTile => {
     const [idRow, ...imageRows] = rawTile.split('\n');
     return new Tile(+idRow.slice(4, -1), imageRows.map(row => row.split('')));
@@ -222,7 +222,7 @@ const monster = [
 ];
 const monsterNums = monster.map(row => row2num2(row));
 
-const part2 = input => {
+export const part2 = input => {
   const tiles = input.map(rawTile => {
     const [idRow, ...imageRows] = rawTile.split('\n');
     return new SmallTile(+idRow.slice(4, -1), imageRows.map(row => row.split('')));
@@ -263,5 +263,3 @@ const part2 = input => {
   }
   return 'Sea monsters not found';
 };
-
-module.exports = { part1, part2, formatInput };

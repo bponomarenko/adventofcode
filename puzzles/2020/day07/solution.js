@@ -1,7 +1,7 @@
 const re = /^(?<name>.+) bags contain (no other bags|(?<bags>.+))\.$/;
 const bagRe = /^(?<count>\d+) (?<name>.+) bags?$/;
 
-const formatInput = input => input.split('\n').map(line => {
+export const formatInput = input => input.split('\n').map(line => {
   const { name, bags } = re.exec(line).groups;
   return {
     name,
@@ -9,7 +9,7 @@ const formatInput = input => input.split('\n').map(line => {
   };
 });
 
-const part1 = options => {
+export const part1 = options => {
   const variants = new Set();
   let founds = ['shiny gold'];
 
@@ -34,6 +34,4 @@ const countBags = (options, bag) => {
   return sum;
 };
 
-const part2 = options => countBags(options, 'shiny gold');
-
-module.exports = { part1, part2, formatInput };
+export const part2 = options => countBags(options, 'shiny gold');

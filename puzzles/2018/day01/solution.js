@@ -1,9 +1,9 @@
-const formatInput = input => input.split(/,\s|\n/).map(Number);
+export const formatInput = input => input.split(/,\s|\n/).map(Number);
 
 // Can it be even simpler?
-const part1 = input => input.reduce((acc, num) => acc + num, 0);
+export const part1 = input => input.reduce((acc, num) => acc + num, 0);
 
-const part2 = input => {
+export const part2 = input => {
   const history = new Set();
   const lastIndex = input.length - 1;
   let frequency = 0;
@@ -17,5 +17,3 @@ const part2 = input => {
   }
   return frequency;
 };
-
-module.exports = { part1, part2, formatInput };

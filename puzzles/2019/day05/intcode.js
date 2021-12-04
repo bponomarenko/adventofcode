@@ -135,4 +135,4 @@ class Intcode {
   }
 }
 
-module.exports = Intcode;
+export default Intcode;

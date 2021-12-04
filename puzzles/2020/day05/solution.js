@@ -1,11 +1,11 @@
-const formatInput = input => input.split('\n');
+export const formatInput = input => input.split('\n');
 
-const part1 = input => {
+export const part1 = input => {
   const ids = input.map(line => parseInt(line.replace(/F|L/g, 0).replace(/B|R/g, 1), 2));
   return Math.max(...ids);
 };
 
-const part2 = input => {
+export const part2 = input => {
   const ids = input
     .map(line => parseInt(line.replace(/F|L/g, 0).replace(/B|R/g, 1), 2))
     .sort((a, b) => a - b);
@@ -17,5 +17,3 @@ const part2 = input => {
   }
   return null;
 };
-
-module.exports = { part1, part2, formatInput };

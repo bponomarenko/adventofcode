@@ -1,6 +1,6 @@
-const formatInput = input => input.split('\n').map(value => +value);
+export const formatInput = input => input.split('\n').map(value => +value);
 
-const part1 = input => {
+export const part1 = input => {
   const interrupt = Array.from(input);
   const size = interrupt.length;
   let offset = 0;
@@ -16,7 +16,7 @@ const part1 = input => {
   return jumpsCount;
 };
 
-const part2 = input => {
+export const part2 = input => {
   const interrupt = Array.from(input);
   const size = interrupt.length;
   let offset = 0;
@@ -31,5 +31,3 @@ const part2 = input => {
   }
   return jumpsCount;
 };
-
-module.exports = { part1, part2, formatInput };

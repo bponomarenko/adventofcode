@@ -1,9 +1,7 @@
-const Intcode = require('./intcode');
+import Intcode from './intcode.js';
 
-const formatInput = input => input.split(',').map(num => +num);
+export const formatInput = input => input.split(',').map(num => +num);
 
-const part1 = program => new Intcode(program).run(1).pop();
+export const part1 = program => new Intcode(program).run(1).pop();
 
-const part2 = program => new Intcode(program).run(5).pop();
-
-module.exports = { part1, part2, formatInput };
+export const part2 = program => new Intcode(program).run(5).pop();

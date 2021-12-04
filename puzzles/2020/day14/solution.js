@@ -1,8 +1,8 @@
-const formatInput = input => input.split('\n');
+export const formatInput = input => input.split('\n');
 
 const memRegex = /^mem\[(?<index>\d+)\] = (?<value>\d+)$/;
 
-const part1 = input => {
+export const part1 = input => {
   const memory = new Map();
   let mask;
 
@@ -35,7 +35,7 @@ function* addresses(bitMask) {
   }
 }
 
-const part2 = input => {
+export const part2 = input => {
   const memory = new Map();
   let mask;
 
@@ -58,5 +58,3 @@ const part2 = input => {
   });
   return Array.from(memory.values()).reduce((acc, value) => acc + value, 0);
 };
-
-module.exports = { part1, part2, formatInput };

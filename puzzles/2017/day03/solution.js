@@ -1,4 +1,4 @@
-const formatInput = input => +input;
+export const formatInput = input => +input;
 
 const getSquareSize = input => {
   // Get size of the grid square
@@ -7,7 +7,7 @@ const getSquareSize = input => {
   return sideSize % 2 === 1 ? sideSize : sideSize + 1;
 };
 
-const part1 = input => {
+export const part1 = input => {
   const sideSize = getSquareSize(input);
   // Calculate amount of steps from the center to the outer side
   const distance = (sideSize - 1) / 2;
@@ -81,7 +81,7 @@ const getNextPos = (field, pos) => {
   return nextPos;
 };
 
-const part2 = input => {
+export const part2 = input => {
   const sideSize = getSquareSize(input);
   // Create two-dimensional array
   const field = new Array(sideSize).fill(0).map(() => new Array(sideSize).fill(0));
@@ -103,5 +103,3 @@ const part2 = input => {
 
   return sum;
 };
-
-module.exports = { part1, part2, formatInput };

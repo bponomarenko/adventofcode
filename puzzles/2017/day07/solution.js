@@ -1,13 +1,13 @@
 const towerRegex = /(.+)\s\(([0-9]+)\)/;
 
 // Parse input into object with "name", "weight" and optional towers "towersAbove"
-const formatInput = input => input.split('\n').map(line => {
+export const formatInput = input => input.split('\n').map(line => {
   const [tower, discs] = line.split(' -> ');
   const [, name, weight] = tower.match(towerRegex);
   return { name, weight: +weight, towersAbove: discs?.split(', ') };
 });
 
-const part1 = input => {
+export const part1 = input => {
   // Collection of the referenced nodes
   const refs = new Set();
 
@@ -61,7 +61,7 @@ const findCorrectedWeight = (towers, name) => {
   return null;
 };
 
-const part2 = input => {
+export const part2 = input => {
   // Get root node from the first part
   const rootName = part1(input);
   const towers = new Map(input.map(tower => [tower.name, {
@@ -72,5 +72,3 @@ const part2 = input => {
   // Start recursive function to find corrected weight
   return findCorrectedWeight(towers, rootName);
 };
-
-module.exports = { part1, part2, formatInput };

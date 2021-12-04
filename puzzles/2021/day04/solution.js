@@ -1,4 +1,4 @@
-const formatInput = input => input.split('\n\n').reduce((acc, block, index) => {
+export const formatInput = input => input.split('\n\n').reduce((acc, block, index) => {
   if (index === 0) {
     acc.nums = block.split(',').map(Number);
   } else {
@@ -40,7 +40,7 @@ const isWinningBoard = board => {
 
 const getBoardSum = board => board.flat().reduce((acc, num) => (num === '*' ? acc : acc + num), 0);
 
-const part1 = ({ nums, boards }) => {
+export const part1 = ({ nums, boards }) => {
   let winner;
   let drawNum;
 
@@ -53,7 +53,7 @@ const part1 = ({ nums, boards }) => {
   return drawNum * getBoardSum(winner);
 };
 
-const part2 = ({ nums, boards }) => {
+export const part2 = ({ nums, boards }) => {
   let winner;
   let drawNum;
 
@@ -70,5 +70,3 @@ const part2 = ({ nums, boards }) => {
 
   return drawNum * getBoardSum(winner);
 };
-
-module.exports = { part1, part2, formatInput };

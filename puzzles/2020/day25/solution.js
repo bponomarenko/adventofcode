@@ -1,4 +1,4 @@
-const formatInput = input => {
+export const formatInput = input => {
   const [cardPK, doorPK] = input.split('\n').map(key => +key);
   return { cardPK, doorPK };
 };
@@ -26,12 +26,10 @@ const transformSN = (subjectNumber, loopSize) => {
   return value;
 };
 
-const part1 = ({ cardPK, doorPK }) => {
+export const part1 = ({ cardPK, doorPK }) => {
   const cardLS = findLoopSize(cardPK);
   return transformSN(doorPK, cardLS);
 };
 
 // There is no coding challenge for the part 2, yay :)
-const part2 = input => part1(input);
-
-module.exports = { part1, part2, formatInput };
+export const part2 = input => part1(input);

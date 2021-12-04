@@ -1,6 +1,6 @@
-const formatInput = input => input.split('\n');
+export const formatInput = input => input.split('\n');
 
-const part1 = input => {
+export const part1 = input => {
   const groupAnswers = new Set();
   let totalCount = 0;
 
@@ -18,7 +18,7 @@ const part1 = input => {
 
 const getSize = answers => [...answers.values()].filter(Boolean).length;
 
-const part2 = input => {
+export const part2 = input => {
   const groupAnswers = new Map();
   let totalCount = 0;
 
@@ -44,5 +44,3 @@ const part2 = input => {
   });
   return totalCount + getSize(groupAnswers);
 };
-
-module.exports = { part1, part2, formatInput };

@@ -1,7 +1,7 @@
-const formatInput = input => input.split('\n').map(line => line.split(/\s+/).map(Number));
+export const formatInput = input => input.split('\n').map(line => line.split(/\s+/).map(Number));
 
 // I love spread operator in JS!
-const part1 = input => input.reduce((acc, nums) => acc + Math.max(...nums) - Math.min(...nums), 0);
+export const part1 = input => input.reduce((acc, nums) => acc + Math.max(...nums) - Math.min(...nums), 0);
 
 const findDiv = nums => {
   for (let i = 0, l = nums.length; i < l; i += 1) {
@@ -15,6 +15,4 @@ const findDiv = nums => {
   throw new Error('Div not found, which is not expected');
 };
 
-const part2 = input => input.reduce((acc, nums) => acc + findDiv(nums), 0);
-
-module.exports = { part1, part2, formatInput };
+export const part2 = input => input.reduce((acc, nums) => acc + findDiv(nums), 0);

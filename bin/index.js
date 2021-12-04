@@ -1,12 +1,11 @@
 #!/usr/bin/env node
 
-const { resolve } = require('path');
-const { program } = require('commander');
-const chalk = require('chalk');
-const prompt = require('prompt');
-const chokidar = require('chokidar');
-const { readInput, getYearPath } = require('../lib/utils');
-require('dotenv').config();
+import { program } from 'commander';
+import chalk from 'chalk';
+import prompt from 'prompt';
+import chokidar from 'chokidar';
+import { readInput, getYearPath, ManagedError } from '../lib/utils.js';
+import { submitAnswer } from '../lib/answers.js';
 
 // zero-width whitespace character
 const zwws = '​';
@@ -18,9 +17,9 @@ const withDayAndYear = command => command
   .option('-y, --year <year>', 'Year of the puzzle to scaffold', Number, process.env.YEAR ? +process.env.YEAR : new Date().getFullYear())
   .option('-d, --day <day>', 'Day of the puzzle to scaffold', Number, new Date().getDate());
 
-const runCommand = ({ name, ...args }) => {
-  const path = `../lib/${name}`;
-  return require(path)(args);
+const runCommand = async ({ name, ...args }) => {
+  const module = await import(`../lib/${name}.js`);
+  return module.default(args);
 };
 
 const getLogMeta = args => `${new Date().toLocaleTimeString()} (y:${args.year} d:${args.day} p:${args.part})`;
@@ -44,10 +43,10 @@ const watchAndRunCommand = ({ name, onResult, onCommand, ...args }) => {
     console.clear();
     console.log(chalk.gray.dim(`Restarted ${getLogMeta(args)}`));
 
-    if (path) {
-      // Make sure we always load not cached version
-      delete require.cache[resolve(path)];
-    }
+    // if (path) {
+    //   // Make sure we always load not cached version
+    //   delete require.cache[resolve(path)];
+    // }
     await run();
 
     if (path) {
@@ -58,7 +57,7 @@ const watchAndRunCommand = ({ name, onResult, onCommand, ...args }) => {
 
   const readCmd = async () => {
     try {
-      // Read for additional commands from the command line
+    // Read for additional commands from the command line
       const { cmd } = await prompt.get([{ name: 'cmd', message: zwws }]);
       let doRestart = await onCommand?.(cmd, args);
       switch (cmd) {
@@ -74,10 +73,11 @@ const watchAndRunCommand = ({ name, onResult, onCommand, ...args }) => {
       if (doRestart) {
         await restart();
       }
-      readCmd();
-    } catch {
+    } catch (error) {
       process.emit('SIGINT');
+      return;
     }
+    readCmd();
   };
 
   // Start watching project files
@@ -129,7 +129,7 @@ withDayAndYear(program.command('solve'))
       const onCommand = async (cmd, currentArgs) => {
         // "submit" command, which will try to submit last known result
         if (cmd === 's') {
-          await require('../lib/solve').submitAnswer(latestAnswer, cmdArgs.year, cmdArgs.day, cmdArgs.part);
+          await submitAnswer(latestAnswer, cmdArgs.year, cmdArgs.day, cmdArgs.part);
           if (currentArgs.part === 1) {
             currentArgs.part = currentArgs.part === 1 ? 2 : 1;
             return true;
@@ -152,13 +152,7 @@ withDayAndYear(program.command('add-test'))
   .argument('[input]', 'Test input')
   .action(async (part, answer, inputArg, args) => {
     const input = inputArg || await readInput();
-    return runCommand({
-      name: 'add-test',
-      part,
-      input,
-      answer,
-      ...args,
-    });
+    return runCommand({ name: 'add-test', part, input, answer, ...args });
   });
 
 withDayAndYear(program.command('validate'))
@@ -178,7 +172,7 @@ withDayAndYear(program.command('easter-eggs'))
     await program.parseAsync(process.argv);
   } catch (error) {
     console.error(chalk`{red {inverse Error} ${error.message}}`);
-    if (!error.managed) {
+    if (!(error instanceof ManagedError)) {
       // Also show error body
       console.error(error);
     }

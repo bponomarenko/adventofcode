@@ -3,12 +3,12 @@ const parseValue = value => {
   return Number.isNaN(num) ? value : num;
 };
 
-const formatInput = input => input.split('\n').map(line => {
+export const formatInput = input => input.split('\n').map(line => {
   const [instruction, value1, value2] = line.split(' ');
   return { instruction, value1: parseValue(value1), value2: parseValue(value2) };
 });
 
-const part1 = input => {
+export const part1 = input => {
   const registers = new Map();
   let played;
   let offset = 0;
@@ -118,7 +118,7 @@ class Program {
   }
 }
 
-const part2 = input => {
+export const part2 = input => {
   const p0 = new Program(0, input);
   const p1 = new Program(1, input);
 
@@ -138,5 +138,3 @@ const part2 = input => {
   } while (!program.isWaiting);
   return p1.counter;
 };
-
-module.exports = { part1, part2, formatInput };

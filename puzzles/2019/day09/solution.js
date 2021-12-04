@@ -1,9 +1,7 @@
-const Intcode = require('../day05/intcode');
+import Intcode from '../day05/intcode.js';
 
-const formatInput = input => input.split(',').map(num => +num);
+export const formatInput = input => input.split(',').map(num => +num);
 
-const part1 = input => new Intcode(input).run(1).join(',');
+export const part1 = input => new Intcode(input).run(1).join(',');
 
-const part2 = input => new Intcode(input).run(2).pop();
-
-module.exports = { part1, part2, formatInput };
+export const part2 = input => new Intcode(input).run(2).pop();

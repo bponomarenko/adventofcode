@@ -1,4 +1,4 @@
-const formatInput = input => input.split('\n').reduce((acc, line) => {
+export const formatInput = input => input.split('\n').reduce((acc, line) => {
   const [, generator, , , value] = line.split(' ');
   return { ...acc, [generator]: +value };
 }, {});
@@ -8,7 +8,7 @@ const getGenAValue = value => getGenValue(value, 16807);
 const getGenBValue = value => getGenValue(value, 48271);
 const isEqualInLower16Bits = (a, b) => ((a & 65535) ^ (b & 65535)) === 0;
 
-const part1 = input => {
+export const part1 = input => {
   const iterations = 40_000_000;
   let a = input.A;
   let b = input.B;
@@ -37,7 +37,7 @@ const getGenValueWithDiv = (value, factor, diviser) => {
 const getGenAValue2 = value => getGenValueWithDiv(value, 16807, 4);
 const getGenBValue2 = value => getGenValueWithDiv(value, 48271, 8);
 
-const part2 = input => {
+export const part2 = input => {
   const iterations = 5_000_000;
   let a = input.A;
   let b = input.B;
@@ -54,5 +54,3 @@ const part2 = input => {
   }
   return count;
 };
-
-module.exports = { part1, part2, formatInput };

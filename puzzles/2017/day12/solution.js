@@ -6,7 +6,7 @@ const addValues = (map, key, value) => {
   }
 };
 
-const formatInput = input => {
+export const formatInput = input => {
   const connections = new Map();
   input.split('\n').forEach(line => {
     const [id, targetIds] = line.split(' <-> ');
@@ -34,9 +34,9 @@ const getGroupIds = (connections, firstId) => {
   return connectedPrograms;
 };
 
-const part1 = connections => getGroupIds(connections, 0).size;
+export const part1 = connections => getGroupIds(connections, 0).size;
 
-const part2 = input => {
+export const part2 = input => {
   let remainingIds = Array.from(input.keys());
   let groups = 0;
 
@@ -48,5 +48,3 @@ const part2 = input => {
   } while (remainingIds.length);
   return groups;
 };
-
-module.exports = { part1, part2, formatInput };

@@ -1,6 +1,6 @@
-const formatInput = input => input.split('').map(cup => +cup);
+export const formatInput = input => input.split('').map(cup => +cup);
 
-const part1 = input => {
+export const part1 = input => {
   let cups = input;
   for (let i = 0; i < 100; i += 1) {
     const tail = cups.slice(4);
@@ -19,7 +19,7 @@ const part1 = input => {
   return +[...cups.slice(cups.indexOf(1) + 1), ...cups.slice(0, cups.indexOf(1))].join('');
 };
 
-const part2 = input => {
+export const part2 = input => {
   const cups = new Map();
   const cupsArr = input;
 
@@ -66,5 +66,3 @@ const part2 = input => {
   }
   return cups.get(1) * cups.get(cups.get(1));
 };
-
-module.exports = { part1, part2, formatInput };

@@ -1,9 +1,9 @@
-const formatInput = input => {
+export const formatInput = input => {
   const [timestamp, ids] = input.split('\n');
   return { timestamp: +timestamp, ids: ids.split(',') };
 };
 
-const part1 = input => {
+export const part1 = input => {
   const firstBus = input.ids
     .map(id => (id === 'x' ? null : [+id, id - (input.timestamp % id)]))
     .filter(Boolean)
@@ -43,7 +43,7 @@ const chineseRemainder = congruences => {
   return sum % prod;
 };
 
-const part2 = input => {
+export const part2 = input => {
   const congruences = [];
 
   input.ids.forEach((id, i) => {
@@ -53,5 +53,3 @@ const part2 = input => {
   });
   return chineseRemainder(congruences);
 };
-
-module.exports = { part1, part2, formatInput };

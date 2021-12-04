@@ -1,8 +1,8 @@
-const formatInput = input => input.split('\n');
+export const formatInput = input => input.split('\n');
 
 const isValidPassport = passport => passport.size === 8 || (passport.size === 7 && !passport.has('cid'));
 
-const part1 = input => {
+export const part1 = input => {
   let validPassports = 0;
   let passport = new Set();
 
@@ -41,7 +41,7 @@ const fieldsRe = {
 
 const isValidField = (name, value) => name === 'cid' || fieldsRe[name]?.test(value);
 
-const part2 = input => {
+export const part2 = input => {
   let validPassports = 0;
   let passport = new Set();
 
@@ -69,5 +69,3 @@ const part2 = input => {
   }
   return validPassports;
 };
-
-module.exports = { part1, part2, formatInput };

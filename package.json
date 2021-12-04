@@ -2,9 +2,14 @@
   "name": "adventofcode",
   "version": "1.0.0",
   "description": "Solutions for \"Advent of code\" challenges",
-  "main": "index.js",
+  "type": "module",
+  "files": [
+    "bin",
+    "lib",
+    "puzzles"
+  ],
   "bin": {
-    "aoc": "bin/index.js"
+    "aoc": "./bin/index.js"
   },
   "scripts": {
     "lint": "eslint . --report-unused-disable-directives --fix"
@@ -18,7 +23,7 @@
     "puzzles"
   ],
   "engines": {
-    "node": ">16"
+    "node": ">=16.13"
   },
   "author": "Borys Ponomarenko <bponomarenko@gmail.com>",
   "license": "MIT",
@@ -32,7 +37,7 @@
     "chokidar": "^3.5.2",
     "commander": "^8.3.0",
     "dotenv": "^10.0.0",
-    "execa": "^5.1.1",
+    "execa": "^6.0.0",
     "jsdom": "^18.1.1",
     "prompt": "^1.2.0"
   },

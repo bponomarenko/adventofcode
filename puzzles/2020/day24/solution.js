@@ -1,8 +1,8 @@
-const formatInput = input => input.split('\n');
+export const formatInput = input => input.split('\n');
 
 const directionRe = /se|sw|nw|ne|e|w/g;
 
-const part1 = input => {
+export const part1 = input => {
   const tiles = new Map([]);
 
   input.forEach(direction => {
@@ -65,7 +65,7 @@ const getLimits = (limits, pos) => [
   [Math.min(limits[2][0], pos[2]), Math.max(limits[2][1], pos[2])],
 ];
 
-const part2 = input => {
+export const part2 = input => {
   const tiles = new Map();
   const adjacentTiles = new Map();
   let limits = [[0, 0], [0, 0], [0, 0]];
@@ -122,5 +122,3 @@ const part2 = input => {
   }
   return Array.from(tiles.values()).filter(Boolean).length;
 };
-
-module.exports = { part1, part2, formatInput };

@@ -1,6 +1,6 @@
-const formatInput = input => input.split('\n');
+export const formatInput = input => input.split('\n');
 
-const part1 = input => {
+export const part1 = input => {
   const numLength = input[0].length;
 
   // 1. Calculate bits frequency
@@ -38,11 +38,9 @@ const findRating = (report, bit, inverse = false) => {
   return findRating(filteredReport, bit + 1, inverse);
 };
 
-const part2 = input => {
+export const part2 = input => {
   const oxygenRating = findRating(input, 0);
   const co2Rating = findRating(input, 0, true);
 
   return parseInt(oxygenRating, 2) * parseInt(co2Rating, 2);
 };
-
-module.exports = { part1, part2, formatInput };

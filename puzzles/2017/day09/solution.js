@@ -1,4 +1,4 @@
-const formatInput = input => {
+export const formatInput = input => {
   const groups = [];
   // flag which indicates that next char after "!" should be ignored
   let ignoreNext = false;
@@ -70,11 +70,9 @@ const getSum = (groups, level) => groups
   .filter(({ garbage }) => !garbage)
   .reduce((acc, { children }) => acc + level + getSum(children, level + 1), 0);
 
-const part1 = input => getSum(input, 1);
+export const part1 = input => getSum(input, 1);
 
 // Count amount of the remove garbage characters this time
 const getSum2 = groups => groups.reduce((acc, { garbage, len, children }) => acc + (garbage ? len : getSum2(children)), 0);
 
-const part2 = input => getSum2(input);
-
-module.exports = { part1, part2, formatInput };
+export const part2 = input => getSum2(input);

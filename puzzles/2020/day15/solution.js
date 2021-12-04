@@ -1,6 +1,6 @@
-const formatInput = input => input.split(',').map(n => +n);
+export const formatInput = input => input.split(',').map(n => +n);
 
-const part1 = input => {
+export const part1 = input => {
   const spoken = Array.from(input);
 
   while (spoken.length < 2020) {
@@ -15,7 +15,7 @@ const part1 = input => {
   return spoken.pop();
 };
 
-const part2 = input => {
+export const part2 = input => {
   const indices = new Map();
   let lastNum;
   let turn;
@@ -34,5 +34,3 @@ const part2 = input => {
   }
   return lastNum;
 };
-
-module.exports = { part1, part2, formatInput };

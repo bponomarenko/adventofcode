@@ -1,6 +1,6 @@
-const formatInput = input => input.split('\n');
+export const formatInput = input => input.split('\n');
 
-const part1 = input => {
+export const part1 = input => {
   let twoLetters = 0;
   let threeLetters = 0;
 
@@ -19,9 +19,7 @@ const part1 = input => {
   return twoLetters * threeLetters;
 };
 
-const part2 = input => {
+export const part2 = input => {
   const result = part1(input);
   return result;
 };
-
-module.exports = { part1, part2, formatInput };

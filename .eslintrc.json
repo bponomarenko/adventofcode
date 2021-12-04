@@ -53,6 +53,15 @@
         "ImportDeclaration": "never",
         "ExportDeclaration": "never"
       }
-    ]
+    ],
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "js": "always"
+      }
+    ],
+    // This rule doesn't really work, last update was 2 years ago
+    "node/no-unsupported-features/es-syntax": "off"
   }
 }

@@ -1,4 +1,4 @@
-const formatInput = input => {
+export const formatInput = input => {
   const [rulesRaw, ticketRaw, ticketsRaw] = input.split('\n\n');
   return { rulesRaw: rulesRaw.split('\n'), ticketRaw, ticketsRaw };
 };
@@ -6,7 +6,7 @@ const formatInput = input => {
 const ruleRe = /^(?<field>.+): (?<min1>\d+)-(?<max1>\d+) or (?<min2>\d+)-(?<max2>\d+)$/;
 const isValidValue = (rules, value) => rules.some(rule => (value >= rule.min1 && value <= rule.max1) || (value >= rule.min2 && value <= rule.max2));
 
-const part1 = input => {
+export const part1 = input => {
   const rules = input.rulesRaw.map(line => {
     const entries = Object.entries(ruleRe.exec(line).groups)
       .map(([name, value]) => (name === 'field' ? [name, value] : [name, +value]));
@@ -54,7 +54,7 @@ const sortRules = (rules, tickets, valueIndex = 0) => {
   } while (true);
 };
 
-const part2 = input => {
+export const part2 = input => {
   const rules = input.rulesRaw.map(line => {
     const entries = Object.entries(ruleRe.exec(line).groups)
       .map(([name, value]) => (name === 'field' ? [name, value] : [name, +value]));
@@ -71,5 +71,3 @@ const part2 = input => {
   const myTicket = input.ticketRaw.replace('your ticket:\n', '').split(',').map(value => +value);
   return sortedRules.reduce((acc, { field }, i) => (field.startsWith('departure ') ? acc * myTicket[i] : acc), 1);
 };
-
-module.exports = { part1, part2, formatInput };

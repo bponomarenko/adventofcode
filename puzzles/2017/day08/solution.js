@@ -1,6 +1,6 @@
 const instructionRegexp = /(.+)\s(inc|dec)\s(.+)\sif\s(.+)/;
 
-const formatInput = input => {
+export const formatInput = input => {
   const instructions = input.split('\n').map(line => {
     const [, register, operator, amount, condition] = line.match(instructionRegexp);
     return {
@@ -22,7 +22,7 @@ const formatInput = input => {
 // Defines all registers as variables and appends condition
 const createExpression = (registers, condition) => Object.entries(registers).map(([reg, value]) => `const ${reg} = ${value}`).concat(condition).join(';');
 
-const part1 = input => {
+export const part1 = input => {
   const registers = { ...input.registers };
   input.instructions.forEach(({ register, getValue, condition }) => {
     // Prepare condition expression and evaluate it
@@ -35,7 +35,7 @@ const part1 = input => {
   return Math.max(...Object.values(registers));
 };
 
-const part2 = input => {
+export const part2 = input => {
   const registers = { ...input.registers };
   let max = 0;
   input.instructions.forEach(({ register, getValue, condition }) => {
@@ -50,5 +50,3 @@ const part2 = input => {
   });
   return max;
 };
-
-module.exports = { part1, part2, formatInput };

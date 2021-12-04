@@ -1,4 +1,4 @@
-const formatInput = input => input.split(',');
+export const formatInput = input => input.split(',');
 
 const getNextPos = (dir, pos) => {
   switch (dir) {
@@ -21,7 +21,7 @@ const getNextPos = (dir, pos) => {
 
 const getDistance = pos => (Math.abs(pos[0]) + Math.abs(pos[1]) + Math.abs(pos[2])) / 2;
 
-const part1 = input => {
+export const part1 = input => {
   let pos = [0, 0, 0];
   input.forEach(dir => {
     pos = getNextPos(dir, pos);
@@ -29,7 +29,7 @@ const part1 = input => {
   return getDistance(pos);
 };
 
-const part2 = input => {
+export const part2 = input => {
   let pos = [0, 0, 0];
   let max = 0;
   input.forEach(dir => {
@@ -38,5 +38,3 @@ const part2 = input => {
   });
   return max;
 };
-
-module.exports = { part1, part2, formatInput };

@@ -1,6 +1,6 @@
 const productRe = /^(?<ingridients>.*) \(contains (?<allergens>.*)\)$/;
 
-const formatInput = input => input.split('\n').map(food => {
+export const formatInput = input => input.split('\n').map(food => {
   const { ingridients, allergens } = productRe.exec(food).groups;
   return {
     ingridients: ingridients.split(' '),
@@ -8,7 +8,7 @@ const formatInput = input => input.split('\n').map(food => {
   };
 });
 
-const part1 = input => {
+export const part1 = input => {
   const probabilities = new Map();
   const usageCount = new Map();
 
@@ -46,7 +46,7 @@ const part1 = input => {
   return count;
 };
 
-const part2 = input => {
+export const part2 = input => {
   const possibleAllergens = new Map();
 
   input.forEach(({ ingridients, allergens }) => {
@@ -76,5 +76,3 @@ const part2 = input => {
     .map(([ingridient]) => ingridient)
     .join(',');
 };
-
-module.exports = { part1, part2, formatInput };

@@ -1,6 +1,6 @@
-const Intcode = require('../day05/intcode');
+import Intcode from '../day05/intcode.js';
 
-const formatInput = input => input.split(',').map(num => +num);
+export const formatInput = input => input.split(',').map(num => +num);
 
 function* combinations(values = [0, 1, 2, 3, 4]) {
   for (let i = 0, l = values.length; i < l; i += 1) {
@@ -19,7 +19,7 @@ function* combinations(values = [0, 1, 2, 3, 4]) {
 const runSetting = (sequence, phaseSetting) => phaseSetting
   .reduce((acc, setting) => new Intcode(sequence).run(setting, acc).pop(), 0);
 
-const part1 = input => {
+export const part1 = input => {
   let maxSignal = 0;
   for (const combo of combinations()) {
     maxSignal = Math.max(runSetting(input, combo), maxSignal);
@@ -50,7 +50,7 @@ const runLoop = (amplifiers, firstInput) => amplifiers.reduce((input, amplifier)
   return amplifier.lastOutput;
 }, firstInput);
 
-const part2 = input => {
+export const part2 = input => {
   let maxSignal = 0;
   for (const combo of combinations2()) {
     let loopInput = 0;
@@ -62,5 +62,3 @@ const part2 = input => {
   }
   return maxSignal;
 };
-
-module.exports = { part1, part2, formatInput };

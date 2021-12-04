@@ -1,4 +1,4 @@
-const formatInput = input => input.split('\n');
+export const formatInput = input => input.split('\n');
 
 const getNewDirection = (directions, shipDirection, degrees) => {
   let index = directions.indexOf(shipDirection) + (degrees / 90);
@@ -11,7 +11,7 @@ const getNewDirection = (directions, shipDirection, degrees) => {
   return directions[index];
 };
 
-const part1 = input => {
+export const part1 = input => {
   const coord = [0, 0];
   let shipDirection = 'E';
 
@@ -71,7 +71,7 @@ const rotate = (direction, degrees, [x, y]) => {
   }
 };
 
-const part2 = input => {
+export const part2 = input => {
   const ship = [0, 0];
   let waypoint = [10, 1];
 
@@ -115,5 +115,3 @@ const part2 = input => {
 
   return Math.abs(ship[0]) + Math.abs(ship[1]);
 };
-
-module.exports = { part1, part2, formatInput };

@@ -1,4 +1,4 @@
-const formatInput = input => input.split('\n').map(row => row.split('').map(cube => cube === '#'));
+export const formatInput = input => input.split('\n').map(row => row.split('').map(cube => cube === '#'));
 
 const countActive = (dim, limits) => {
   let count = 0;
@@ -32,7 +32,7 @@ const setValue = (dim, z, y, x, value) => {
   }
 };
 
-const part1 = input => {
+export const part1 = input => {
   const cycles = 6;
   const shift = 10;
 
@@ -132,7 +132,7 @@ const setValue2 = (dim, w, z, y, x, value) => {
   }
 };
 
-const part2 = input => {
+export const part2 = input => {
   const cycles = 6;
   const shift = 10;
 
@@ -203,5 +203,3 @@ const part2 = input => {
   }
   return countActive2(dim);
 };
-
-module.exports = { part1, part2, formatInput };
