@@ -162,7 +162,7 @@ withDayAndYear(program.command('add-test'))
   });
 
 withDayAndYear(program.command('validate'))
-  .argument('<part>', 'Defines which part of the solution to run – part 1 or part 2', Number)
+  .argument('[part]', 'Defines which part of the solution to run – part 1 or part 2', Number, 1)
   .option('--no-watch', 'Do not run solution in a watch mode')
   .action((part, { watch, ...args }) => {
     const cmdArgs = { name: 'validate', part, ...args };
