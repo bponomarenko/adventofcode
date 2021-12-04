@@ -1,120 +1,187 @@
 #!/usr/bin/env node
 
+const { resolve } = require('path');
 const { program } = require('commander');
 const chalk = require('chalk');
-const nodemon = require('nodemon');
-const { readInput } = require('../lib/utils');
+const prompt = require('prompt');
+const chokidar = require('chokidar');
+const { readInput, getYearPath } = require('../lib/utils');
 require('dotenv').config();
+
+// zero-width whitespace character
+const zwws = '​';
+
+prompt.delimiter = zwws;
+prompt.message = chalk.gray.dim('>');
 
 const withDayAndYear = command => command
   .option('-y, --year <year>', 'Year of the puzzle to scaffold', Number, process.env.YEAR ? +process.env.YEAR : new Date().getFullYear())
   .option('-d, --day <day>', 'Day of the puzzle to scaffold', Number, new Date().getDate());
 
-const runCommand = async (name, args, watch) => {
-  if (watch) {
-    return new Promise(resolve => {
-      const nodemonConfig = {
-        script: 'bin/index.js',
-        args: [name].concat(args).concat('--no-watch'),
-        ext: 'js,json',
-        ignore: ['invalid-answers.json'],
-      };
+const runCommand = ({ name, ...args }) => {
+  const path = `../lib/${name}`;
+  return require(path)(args);
+};
 
-      nodemon(nodemonConfig)
-        .once('start', () => {
-          console.log(chalk.gray.dim('Starting in the watch mode'));
-        })
-        .on('restart', () => {
-          console.clear();
-          console.log(chalk.gray.dim('Restarted'));
-        })
-        .on('message', message => {
-          if (message === 'switch') {
-            console.log(chalk.gray.dim('Switching to the part 2'));
+const getLogMeta = args => `${new Date().toLocaleTimeString()} (y:${args.year} d:${args.day} p:${args.part})`;
 
-            // Update nodemon config
-            nodemon.config.load({
-              ...nodemonConfig,
-              // Part is always the last argument, which should be replaced with part2!
-              args: [name].concat(args.slice(0, -1)).concat(2, '--no-watch'),
-            }, () => {});
-            nodemon.restart();
-          } else if (message === 'exit') {
-            nodemon.emit('quit');
-            nodemon.reset();
-          }
-        })
-        .on('quit', () => resolve())
-        .on('exit', () => resolve());
+const watchAndRunCommand = ({ name, onResult, onCommand, ...args }) => {
+  console.clear();
+  console.log(chalk.gray.dim(`Starting in the watch mode ${getLogMeta(args)}`));
 
-      // eslint-disable-next-line no-process-exit -- make sure nodemon is stopped on the first Ctrl+C
-      process.on('SIGINT', () => process.exit());
+  let watcher;
+
+  const run = async () => {
+    const result = await runCommand({ name, ...args });
+    if (onResult) {
+      await onResult(result);
+    }
+    //  Print empty line after messages
+    console.log();
+  };
+
+  const restart = async path => {
+    console.clear();
+    console.log(chalk.gray.dim(`Restarted ${getLogMeta(args)}`));
+
+    if (path) {
+      // Make sure we always load not cached version
+      delete require.cache[resolve(path)];
+    }
+    await run();
+
+    if (path) {
+      // Bring back command prompt after console being cleared
+      process.stdout.write(`${prompt.message} `);
+    }
+  };
+
+  const readCmd = async () => {
+    try {
+      // Read for additional commands from the command line
+      const { cmd } = await prompt.get([{ name: 'cmd', message: zwws }]);
+      let doRestart = await onCommand?.(cmd, args);
+      switch (cmd) {
+        case 'r':
+          doRestart = true;
+          break;
+        case 'c':
+          args.part = args.part === 1 ? 2 : 1;
+          doRestart = true;
+          break;
+      }
+
+      if (doRestart) {
+        await restart();
+      }
+      readCmd();
+    } catch {
+      process.emit('SIGINT');
+    }
+  };
+
+  // Start watching project files
+  watcher = chokidar
+    .watch(['lib/', getYearPath(args.year)], { ignoreInitial: true })
+    .on('add', restart)
+    .on('change', restart)
+    .on('unlink', restart)
+    .on('addDir', restart)
+    .on('unlinkDir', restart)
+    .on('ready', async () => {
+      await run();
+
+      // And start reading for additional commands
+      prompt.start({ noHandleSIGINT: true });
+      readCmd();
     });
-  }
-  const command = require(`../lib/${name}`);
-  return command(...args);
+
+  process.on('SIGINT', () => {
+    prompt.stop();
+    watcher.close();
+  });
 };
 
 withDayAndYear(program.command('init'))
   .description('Scaffolds necessary files for a specific puzzle of the day and year')
-  .action(({ year, day }) => runCommand('init', [year, day]));
+  .action(args => runCommand({ name: 'init', ...args }));
 
 withDayAndYear(program.command('solve'))
   .argument('[part]', 'Defines which part of the solution to run – part 1 or part 2', Number, 1)
   .description('Runs puzzle solution code with specified input and prints the answer')
-  .option('--no-submit', 'Do not ask to submit found answer')
-  .option('--no-init', 'Do not scaffold the solution before')
+  .option('--no-init', 'Do not scaffold the solution before solving it')
   .option('--no-watch', 'Do not run solution in a watch mode')
   .option('--no-validate', 'Do not run validation test cases prior to solving a solution')
-  .action(async (part, args) => {
-    if (args.init && args.watch) {
+  .action(async (part, { watch, init, ...args }) => {
+    if (init) {
       // Initialize the project first
-      await runCommand('init', [args.year, args.day]);
+      await runCommand({ name: 'init', ...args });
     }
-    const cmdArgs = args.watch
-      ? ['-y', args.year, '-d', args.day, args.submit ? null : '--no-submit', args.validate ? null : '--no-validate', part]
-      : [args.year, args.day, part, args.submit, args.validate];
-    // Try to solve it now
-    const result = await runCommand('solve', cmdArgs.filter(value => value !== null), args.watch);
 
-    if (result?.success && !args.watch) {
-      if (part === 1) {
-      // If we solved part 1 – restart the watch server with part 2
-        process.send('switch');
-      } else {
-        // Otherwise, find a link to the easter egg and exit
-        await runCommand('easter-eggs', [args.year, args.day]);
-        process.send('exit');
-      }
+    const cmdArgs = { name: 'solve', part, ...args };
+    if (watch) {
+      let latestAnswer;
+
+      const onResult = result => {
+        latestAnswer = result?.answer;
+      };
+
+      const onCommand = async (cmd, currentArgs) => {
+        // "submit" command, which will try to submit last known result
+        if (cmd === 's') {
+          await require('../lib/solve').submitAnswer(latestAnswer, cmdArgs.year, cmdArgs.day, cmdArgs.part);
+          if (currentArgs.part === 1) {
+            currentArgs.part = currentArgs.part === 1 ? 2 : 1;
+            return true;
+          }
+          if (currentArgs.part === 2) {
+            // Done solving of the day. Treat myself with some fun stuff
+            await runCommand({ name: 'easter-eggs', ...args });
+          }
+        }
+        return false;
+      };
+      return watchAndRunCommand({ ...cmdArgs, onResult, onCommand });
     }
+    return runCommand(cmdArgs);
   });
 
 withDayAndYear(program.command('add-test'))
   .argument('<part>', 'Defines which part of the solution to run – part 1 or part 2', Number)
   .argument('<answer>', 'Expected answer')
   .argument('[input]', 'Test input')
-  .action(async (part, answer, inputArg, { year, day }) => {
+  .action(async (part, answer, inputArg, args) => {
     const input = inputArg || await readInput();
-    return runCommand('add-test', [year, day, part, input, answer]);
+    return runCommand({
+      name: 'add-test',
+      part,
+      input,
+      answer,
+      ...args,
+    });
   });
 
 withDayAndYear(program.command('validate'))
   .argument('<part>', 'Defines which part of the solution to run – part 1 or part 2', Number)
   .option('--no-watch', 'Do not run solution in a watch mode')
-  .action((part, { year, day, watch }) => {
-    const args = watch ? ['-y', year, '-d', day, part] : [year, day, part];
-    return runCommand('validate', args, watch);
+  .action((part, { watch, ...args }) => {
+    const cmdArgs = { name: 'validate', part, ...args };
+    return watch ? watchAndRunCommand(cmdArgs) : runCommand(cmdArgs);
   });
 
 withDayAndYear(program.command('easter-eggs'))
   .description('Tries to find easter-eggs on the puzzle page (words with additional info on them), and prints links to them')
-  .action(({ year, day }) => runCommand('easter-eggs', [year, day]));
+  .action(args => runCommand({ name: 'easter-eggs', ...args }));
 
 (async function main() {
   try {
     await program.parseAsync(process.argv);
   } catch (error) {
     console.error(chalk`{red {inverse Error} ${error.message}}`);
+    if (!error.managed) {
+      // Also show error body
+      console.error(error);
+    }
     process.exitCode = 1;
   }
 }());
