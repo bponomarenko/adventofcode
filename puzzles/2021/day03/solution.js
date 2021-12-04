@@ -26,7 +26,7 @@ const part1 = input => {
 const findRating = (report, bit, inverse = false) => {
   const countHighBits = report.reduce((acc, num) => (num[bit] === '1' ? acc + 1 : acc), 0);
   // Find bit value to filter by
-  const filterBit = String(countHighBits >= report.length / 2 ? 1 ^ inverse : 0 ^ inverse);
+  const filterBit = String((countHighBits >= report.length / 2 ? 1 : 0) ^ inverse);
   // Get only numbers that match the bit
   const filteredReport = report.filter(num => num[bit] === filterBit);
 
