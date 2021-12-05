@@ -1,0 +1,32 @@
+[
+  {
+    "input": "ihgpwlah",
+    "answer": "DDRRRD",
+    "part": 1
+  },
+  {
+    "input": "kglvqrro",
+    "answer": "DDUDRLRRUDRD",
+    "part": 1
+  },
+  {
+    "input": "ulqzkmiv",
+    "answer": "DRURDRUDDLLDLUURRDULRLDUUDDDRR",
+    "part": 1
+  },
+  {
+    "input": "ihgpwlah",
+    "answer": "370",
+    "part": 2
+  },
+  {
+    "input": "kglvqrro",
+    "answer": "492",
+    "part": 2
+  },
+  {
+    "input": "ulqzkmiv",
+    "answer": "830",
+    "part": 2
+  }
+]
