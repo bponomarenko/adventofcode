@@ -1,0 +1,37 @@
+[
+  {
+    "input": "(())",
+    "answer": "0",
+    "part": 1
+  },
+  {
+    "input": "()()",
+    "answer": "0",
+    "part": 1
+  },
+  {
+    "input": "(((",
+    "answer": "3",
+    "part": 1
+  },
+  {
+    "input": "(()(()(",
+    "answer": "3",
+    "part": 1
+  },
+  {
+    "input": "))(((((",
+    "answer": "3",
+    "part": 1
+  },
+  {
+    "input": ")",
+    "answer": "1",
+    "part": 2
+  },
+  {
+    "input": "()())",
+    "answer": "5",
+    "part": 2
+  }
+]

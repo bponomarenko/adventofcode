@@ -1,0 +1,22 @@
+[
+  {
+    "input": "2x3x4",
+    "answer": "58",
+    "part": 1
+  },
+  {
+    "input": "1x1x10",
+    "answer": "43",
+    "part": 1
+  },
+  {
+    "input": "2x3x4",
+    "answer": "34",
+    "part": 2
+  },
+  {
+    "input": "1x1x10",
+    "answer": "14",
+    "part": 2
+  }
+]

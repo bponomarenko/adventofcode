@@ -1,0 +1,12 @@
+[
+  {
+    "input": "\"\"\n\"abc\"\n\"aaa\\\"aaa\"\n\"\\x27\"",
+    "answer": "12",
+    "part": 1
+  },
+  {
+    "input": "\"\"\n\"abc\"\n\"aaa\\\"aaa\"\n\"\\x27\"",
+    "answer": "19",
+    "part": 2
+  }
+]
