@@ -1,4 +1,4 @@
-import crypto from 'crypto';
+import { createHash } from 'crypto';
 
 export const formatInput = input => input;
 
@@ -6,7 +6,7 @@ const getHashSteps = (input, finish) => {
   let i = 0;
   let key;
   do {
-    key = crypto.createHash('md5').update(`${input}${i}`).digest('hex');
+    key = createHash('md5').update(`${input}${i}`).digest('hex');
     i += 1;
   } while (!key.startsWith(finish));
   return i - 1;
