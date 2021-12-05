@@ -7,6 +7,7 @@ import prompt from 'prompt';
 import chokidar from 'chokidar';
 import { execaNode } from 'execa';
 import { program } from 'commander';
+import throttle from 'lodash/throttle.js';
 import initPuzzle from '../lib/init.js';
 import addTest from '../lib/add-test.js';
 import findEasterEgg from '../lib/easter-egg.js';
@@ -105,17 +106,18 @@ const watchAndRunCommand = ({ name, onResult, onCommand, args }) => {
     readCmd();
   };
 
+  const throttledRestart = throttle(restart, 100);
   // Start watching project files
   watcher = chokidar
     .watch(['lib/', getYearPath(args[0])], {
       ignoreInitial: true,
       awaitWriteFinish: { stabilityThreshold: 100 },
     })
-    .on('add', restart)
-    .on('change', restart)
-    .on('unlink', restart)
-    .on('addDir', restart)
-    .on('unlinkDir', restart)
+    .on('add', throttledRestart)
+    .on('change', throttledRestart)
+    .on('unlink', throttledRestart)
+    .on('addDir', throttledRestart)
+    .on('unlinkDir', throttledRestart)
     .on('ready', async () => {
       await run();
 
