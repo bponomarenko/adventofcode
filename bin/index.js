@@ -166,10 +166,10 @@ withDayAndYear(program.command('solve'))
           return false;
         }
         await submitAnswer(latestAnswer, ...currentArgs);
-        // Small timeout to make sure successful message is visilble
-        await setTimeout(1500);
 
         if (currentArgs[2] === 1) {
+        // Small timeout to make sure successful message is visilble
+          await setTimeout(1500);
           // switch to the part 2
           currentArgs[2] = 2;
           // ...and request watcher restart
