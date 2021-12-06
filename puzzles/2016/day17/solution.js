@@ -1,4 +1,4 @@
-import md5 from 'md5';
+import { createHash } from 'crypto';
 
 export const formatInput = input => input;
 
@@ -43,7 +43,7 @@ export const part1 = input => {
       continue;
     }
 
-    const hash = md5(`${input}${path}`).slice(0, 4);
+    const hash = createHash('md5').update(`${input}${path}`).digest('hex').slice(0, 4);
     getMoves(pos, hash).forEach(move => {
       queue.push({ path: `${path}${move}`, pos: getNextPos(pos, move) });
     });
@@ -66,7 +66,7 @@ export const part2 = input => {
       continue;
     }
 
-    const hash = md5(`${input}${path}`).slice(0, 4);
+    const hash = createHash('md5').update(`${input}${path}`).digest('hex').slice(0, 4);
     getMoves(pos, hash).forEach(move => {
       queue.push({ path: `${path}${move}`, pos: getNextPos(pos, move) });
     });
