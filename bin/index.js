@@ -167,7 +167,12 @@ withDayAndYear(program.command('solve'))
           console.log(chalk.dim(`Can't submit empty answer: ${latestAnswer}.`));
           return false;
         }
-        await submitAnswer(latestAnswer, ...currentArgs);
+        try {
+          await submitAnswer(latestAnswer, ...currentArgs);
+        } catch (error) {
+          logError(error);
+          return false;
+        }
 
         if (currentArgs[2] === 1) {
         // Small timeout to make sure successful message is visilble
