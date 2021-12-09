@@ -1,11 +1,6 @@
-export const formatInput = input => input.split('\n').map(line => line.split('').map(Number));
+import { getAdjacent } from '../../2017/day14/solution.js';
 
-const getAdjacent = (input, x, y) => [
-  x > 0 ? [x - 1, y] : null,
-  x < input.length - 1 ? [x + 1, y] : null,
-  y > 0 ? [x, y - 1] : null,
-  y < input[x].length - 1 ? [x, y + 1] : null,
-].filter(Boolean);
+export const formatInput = input => input.split('\n').map(line => line.split('').map(Number));
 
 const getLowPoints = input => {
   const lowPoints = [];

@@ -1,0 +1,12 @@
+[
+  {
+    "input": "     |\n     |  +--+\n     A  |  C\n F---|----E|--+\n     |  |  |  D\n     +B-+  +--+",
+    "answer": "ABCDEF",
+    "part": 1
+  },
+  {
+    "input": "     |\n     |  +--+\n     A  |  C\n F---|----E|--+\n     |  |  |  D\n     +B-+  +--+",
+    "answer": "38",
+    "part": 2
+  }
+]
