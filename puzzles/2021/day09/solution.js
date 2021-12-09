@@ -1,8 +1,11 @@
 export const formatInput = input => input.split('\n').map(line => line.split('').map(Number));
 
-const getAdjacent = (x, y) => [[x - 1, y], [x + 1, y], [x, y - 1], [x, y + 1]];
-
-const getValue = (input, x, y, optional) => input[x]?.[y] ?? optional;
+const getAdjacent = (input, x, y) => [
+  x > 0 ? [x - 1, y] : null,
+  x < input.length - 1 ? [x + 1, y] : null,
+  y > 0 ? [x, y - 1] : null,
+  y < input[x].length - 1 ? [x, y + 1] : null,
+].filter(Boolean);
 
 const getLowPoints = input => {
   const lowPoints = [];
@@ -13,7 +16,7 @@ const getLowPoints = input => {
     for (let j = 0; j < line.length; j += 1) {
       const value = line[j];
 
-      if (getAdjacent(i, j).every(([x, y]) => value < getValue(input, x, y, Infinity))) {
+      if (getAdjacent(input, i, j).every(([x, y]) => value < input[x][y])) {
         lowPoints.push([i, j]);
       }
     }
@@ -27,13 +30,7 @@ export const part2 = input => {
   const lowPoints = getLowPoints(input);
   const visited = new Set();
 
-  const isNotBorder = ([x, y]) => {
-    if (visited.has(`${x}-${y}`)) {
-      return false;
-    }
-    const value = getValue(input, x, y);
-    return value != null && value !== 9;
-  };
+  const isNotBorder = ([x, y]) => !visited.has(`${x}-${y}`) && input[x][y] !== 9;
 
   const getSize = ([x, y]) => {
     let size = isNotBorder([x, y]) ? 1 : 0;
@@ -41,8 +38,8 @@ export const part2 = input => {
       // Mark as "visited"
       visited.add(`${x}-${y}`);
     }
-    return size + getAdjacent(x, y).reduce((acc, point) => acc + (isNotBorder(point) ? getSize(point) : 0), 0);
+    return size + getAdjacent(input, x, y).filter(isNotBorder).reduce((acc, point) => acc + getSize(point), 0);
   };
 
-  return lowPoints.map(point => getSize(point)).sort((a, b) => a - b).slice(-3).reduce((acc, num) => acc * num, 1);
+  return lowPoints.map(getSize).sort((a, b) => a - b).slice(-3).reduce((acc, num) => acc * num, 1);
 };
