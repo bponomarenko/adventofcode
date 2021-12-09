@@ -192,7 +192,7 @@ withDayAndYear(program.command('solve'))
     return watchAndRunCommand({ ...cmdArgs, onResult, onCommand });
   });
 
-withDayAndYear(program.command('add-test'))
+withDayAndYear(program.command('test'))
   .argument('<part>', 'Defines which part of the solution to run – part 1 or part 2', Number)
   .argument('<answer>', 'Expected answer')
   .argument('[input]', 'Test input')
