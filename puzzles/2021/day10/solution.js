@@ -20,7 +20,7 @@ const parseNavSubsystem = input => input.map(line => {
     }
   }
   // If there are any expected tags – line is incomplete
-  return expectedTags.length ? expectedTags.reverse() : null;
+  return expectedTags.length ? expectedTags : null;
 });
 
 export const part1 = input => parseNavSubsystem(input)
@@ -33,7 +33,7 @@ export const part2 = input => {
   const lineScores = parseNavSubsystem(input)
     .filter(line => line && !line.corrupted)
     // Get the score of the incomplete lines only
-    .map(line => line.reduce((acc, tag) => acc * 5 + incompleteScores.get(tag), 0))
+    .map(line => line.reverse().reduce((acc, tag) => acc * 5 + incompleteScores.get(tag), 0))
     .sort((a, b) => a - b);
   return lineScores[Math.floor(lineScores.length / 2)];
 };
