@@ -1,0 +1,32 @@
+[
+  {
+    "input": "start-A\nstart-b\nA-c\nA-b\nb-d\nA-end\nb-end",
+    "answer": "10",
+    "part": 1
+  },
+  {
+    "input": "dc-end\nHN-start\nstart-kj\ndc-start\ndc-HN\nLN-dc\nHN-end\nkj-sa\nkj-HN\nkj-dc",
+    "answer": "19",
+    "part": 1
+  },
+  {
+    "input": "fs-end\nhe-DX\nfs-he\nstart-DX\npj-DX\nend-zg\nzg-sl\nzg-pj\npj-he\nRW-he\nfs-DX\npj-RW\nzg-RW\nstart-pj\nhe-WI\nzg-he\npj-fs\nstart-RW",
+    "answer": "226",
+    "part": 1
+  },
+  {
+    "input": "start-A\nstart-b\nA-c\nA-b\nb-d\nA-end\nb-end",
+    "answer": "36",
+    "part": 2
+  },
+  {
+    "input": "dc-end\nHN-start\nstart-kj\ndc-start\ndc-HN\nLN-dc\nHN-end\nkj-sa\nkj-HN\nkj-dc",
+    "answer": "103",
+    "part": 2
+  },
+  {
+    "input": "fs-end\nhe-DX\nfs-he\nstart-DX\npj-DX\nend-zg\nzg-sl\nzg-pj\npj-he\nRW-he\nfs-DX\npj-RW\nzg-RW\nstart-pj\nhe-WI\nzg-he\npj-fs\nstart-RW",
+    "answer": "3509",
+    "part": 2
+  }
+]
