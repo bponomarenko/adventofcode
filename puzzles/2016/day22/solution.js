@@ -11,7 +11,7 @@ export const part1 = nodes => {
     for (let j = i + 1; j < nodes.length; j += 1) {
       const a = nodes[i];
       const b = nodes[j];
-      if ((a.used > 0 && a.used <= b.available) || b.used > 0 && b.used <= a.available) {
+      if ((a.used > 0 && a.used <= b.available) || (b.used > 0 && b.used <= a.available)) {
         count += 1;
       }
     }

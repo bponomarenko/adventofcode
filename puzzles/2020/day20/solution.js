@@ -1,4 +1,3 @@
-// eslint-disable-next-line max-classes-per-file
 export const formatInput = input => input.split('\n\n');
 
 const row2num = row => parseInt(row.map(pixel => (pixel === '#' ? '1' : '0')).join(''), 2);

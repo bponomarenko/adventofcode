@@ -1,5 +1,5 @@
-import chalk from 'chalk';
 import { getKnotHash } from '../day10/solution.js';
+import { getStraightAdjacent } from '../../utils/grid.js';
 
 export const formatInput = input => input;
 
@@ -21,13 +21,6 @@ export const part1 = input => defragment(input)
     return sum;
   }, 0), 0);
 
-export const getAdjacent = (input, x, y) => [
-  x > 0 ? [x - 1, y] : null,
-  x < input.length - 1 ? [x + 1, y] : null,
-  y > 0 ? [x, y - 1] : null,
-  y < input[x].length - 1 ? [x, y + 1] : null,
-].filter(Boolean);
-
 export const part2 = input => {
   const grid = defragment(input).map(hash => hash.map(num => num.toString(2).padStart(4, '0')).join(''));
   const visited = new Set();
@@ -38,7 +31,7 @@ export const part2 = input => {
     // Mark as "visited"
     visited.add(`${x}-${y}`);
     // Mark adjacent
-    getAdjacent(grid, x, y).filter(isNotEdge).forEach(point => markRegion(point));
+    getStraightAdjacent(grid, x, y).filter(isNotEdge).forEach(point => markRegion(point));
   };
 
   let count = 0;

@@ -1,3 +1,5 @@
+import { getStraightAdjacent } from '../../utils/grid.js';
+
 export const formatInput = input => +input;
 
 const isFree = (x, y, code) => {
@@ -11,8 +13,8 @@ const isFree = (x, y, code) => {
   return !(count & 1);
 };
 
-const getMoveOptions = (maze, visited, [x, y]) => [[x + 1, y], [x, y + 1], [x, y - 1], [x - 1, y]]
-  .filter(option => maze[option[0]]?.[option[1]] && !visited.has(option.join(',')));
+const getMoveOptions = (maze, visited, [x, y]) => getStraightAdjacent(maze, x, y)
+  .filter(option => maze[option[0]][option[1]] && !visited.has(option.join(',')));
 
 export const part1 = input => {
   const target = [39, 31];

@@ -1,3 +1,5 @@
+import { getAdjacent } from '../../utils/grid.js';
+
 export const formatInput = input => +input;
 
 const getSquareSize = input => {
@@ -24,14 +26,7 @@ export const part1 = input => {
 
 const directions = ['e', 'n', 'w', 's'];
 
-const getSum = (field, { x, y }) => field[y - 1][x - 1]
-  + field[y - 1][x]
-  + field[y - 1][x + 1]
-  + field[y][x - 1]
-  + field[y][x + 1]
-  + field[y + 1][x - 1]
-  + field[y + 1][x]
-  + field[y + 1][x + 1];
+const getSum = (field, { x, y }) => getAdjacent(field, y, x).reduce((sum, [nx, ny]) => sum + field[ny][nx], 0);
 
 const getNextCoordinates = ({ x, y, dir }) => {
   switch (dir) {

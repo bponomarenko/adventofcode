@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-// eslint-disable-next-line import/no-unresolved, node/no-missing-import
 import { setTimeout } from 'timers/promises';
 import chalk from 'chalk';
 import prompt from 'prompt';

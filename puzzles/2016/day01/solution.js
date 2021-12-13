@@ -11,6 +11,7 @@ const move = (coord, direction, count) => {
     case 'W':
       return [coord[0] - count, coord[1]];
   }
+  throw new Error(`Unexpected direction: ${direction}`);
 };
 
 export const part1 = input => {

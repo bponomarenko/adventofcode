@@ -1,7 +1,7 @@
 const diskRe = /^Disc #\d has (?<positions>\d+) positions; at time=0, it is at position (?<position>\d)\.$/;
 
 export const formatInput = input => input.split('\n')
-  .map((disk, i) => {
+  .map(disk => {
     const { position, positions } = diskRe.exec(disk).groups;
     return [+positions, +position];
   });
