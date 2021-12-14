@@ -21,7 +21,7 @@ const findAnswer = (input, registers) => {
         pointer += 1;
         break;
       case 'jnz':
-        pointer += getValue(arg1) !== 0 ? +arg2 : 1;
+        pointer += getValue(arg1) !== 0 ? getValue(arg2) : 1;
         break;
     }
   }

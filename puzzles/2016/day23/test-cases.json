@@ -1,0 +1,7 @@
+[
+  {
+    "input": "cpy 2 a\ntgl a\ntgl a\ntgl a\ncpy 1 a\ndec a\ndec a",
+    "answer": "3",
+    "part": 1
+  }
+]
