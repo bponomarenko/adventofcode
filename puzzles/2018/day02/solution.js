@@ -19,7 +19,21 @@ export const part1 = input => {
   return twoLetters * threeLetters;
 };
 
+const oneCharDiff = (line1, line2) => {
+  let diffs = 0;
+  for (let i = 0; i < line1.length; i += 1) {
+    diffs += line1[i] !== line2[i] ? 1 : 0;
+  }
+  return diffs === 1;
+};
+
 export const part2 = input => {
-  const result = part1(input);
-  return result;
+  for (let i = 0; i < input.length - 1; i += 1) {
+    const line1 = input[i];
+    const line2 = input.find((line, j) => i !== j && oneCharDiff(line1, line));
+    if (line2) {
+      return line1.split('').filter((char, index) => line2[index] === char).join('');
+    }
+  }
+  return null;
 };
