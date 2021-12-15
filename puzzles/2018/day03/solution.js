@@ -18,7 +18,6 @@ export const part1 = input => {
   return Array.from(claimedAreas.values()).filter(value => value > 1).length;
 };
 
-export const part2 = input => {
-  console.log(input);
-  return null;
-};
+const isIntersecting = ([, l1, t1, w1, h1], [, l2, t2, w2, h2]) => l1 + w1 > l2 && t1 + h1 > t2 && l2 + w2 > l1 && t2 + h2 > t1;
+
+export const part2 = input => input.find(claim1 => input.every(claim2 => claim1 === claim2 || !isIntersecting(claim1, claim2)))?.[0];

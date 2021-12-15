@@ -6,10 +6,33 @@ export const slidingWindows = (arr, size) => {
   return windows;
 };
 
-export const combinations = (arr, size) => {
+export function* combinations(arr, size) {
   if (size < 2) {
-    return arr.map(value => [value]);
+    for (const value of arr) {
+      yield [value];
+    }
+  } else {
+    for (let i = 0; i < arr.length + 1 - size; i += 1) {
+      const value = arr[i];
+      for (const combo of combinations(arr.slice(i + 1), size - 1)) {
+        yield [value, ...combo];
+      }
+    }
   }
-  return arr.slice(0, 1 - size)
-    .flatMap((value, index) => combinations(arr.slice(index + 1), size - 1).map(combo => [value, ...combo]));
-};
+}
+
+export function* permutations(arr, size) {
+  let index = 0;
+  for (const value of arr) {
+    if (size < 2) {
+      yield [value];
+    } else {
+      const subArr = Array.from(arr);
+      subArr.splice(index, 1);
+      for (const perm of permutations(subArr, size - 1)) {
+        yield [value, ...perm];
+      }
+    }
+    index += 1;
+  }
+}
