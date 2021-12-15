@@ -10,37 +10,26 @@ export const part1 = grid => {
     .reduce((acc, node) => acc + grid[node.x][node.y], 0);
 };
 
-const duplicateGrid = (grid, inc) => grid.map(line => line.map(num => {
-  const sum = num + inc;
-  return sum > 9 ? sum - 9 : sum;
-}));
-
 export const part2 = grid => {
   // Extend original grid 5 times more
-  const originalGrid = JSON.parse(JSON.stringify(grid));
   const originalSize = grid.length;
+  const size = originalSize * 5;
+  const extendedGrid = [];
 
-  for (let i = 0; i < 5; i += 1) {
-    for (let j = 0; j < 5; j += 1) {
-      if (i === 0 && j === 0) {
-        continue;
-      }
-      const extension = duplicateGrid(originalGrid, i + j);
-      extension.forEach((line, li) => {
-        if (j === 0) {
-        // Merge down
-          grid.push(line);
-        } else {
-        // Merge to the right
-          grid[i * originalSize + li].push(...line);
-        }
-      });
+  for (let x = 0; x < size; x += 1) {
+    extendedGrid[x] = [];
+
+    for (let y = 0; y < size; y += 1) {
+      const dx = Math.floor(x / originalSize);
+      const dy = Math.floor(y / originalSize);
+      const newValue = grid[x % originalSize][y % originalSize] + dx + dy;
+
+      extendedGrid[x][y] = newValue > 9 ? newValue - 9 : newValue;
     }
   }
 
-  const size = grid.length;
-  const graph = new aStar.Graph(grid);
+  const graph = new aStar.Graph(extendedGrid);
   return aStar.astar
     .search(graph, graph.grid[0][0], graph.grid[size - 1][size - 1])
-    .reduce((acc, node) => acc + grid[node.x][node.y], 0);
+    .reduce((acc, node) => acc + extendedGrid[node.x][node.y], 0);
 };
