@@ -38,6 +38,7 @@
     "commander": "^8.3.0",
     "dotenv": "^10.0.0",
     "execa": "^6.0.0",
+    "javascript-astar": "0.4.1",
     "jsdom": "^18.1.1",
     "lodash": "^4.17.21",
     "prompt": "^1.2.0"
