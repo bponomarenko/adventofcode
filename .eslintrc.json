@@ -65,6 +65,7 @@
     ],
     // This rule doesn't really work, last update was 2 years ago
     "node/no-unsupported-features/es-syntax": "off",
-    "max-classes-per-file": "off"
+    "max-classes-per-file": "off",
+    "no-continue": "off"
   }
 }

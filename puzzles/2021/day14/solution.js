@@ -1,4 +1,4 @@
-import { slidingWindows } from '../../utils/collection.js';
+import { slidingWindows } from '../../utils/collections.js';
 
 export const formatInput = input => {
   const [template, rules] = input.split('\n\n');

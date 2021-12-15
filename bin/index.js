@@ -108,7 +108,7 @@ const watchAndRunCommand = ({ name, onResult, onCommand, args }) => {
   const throttledRestart = throttle(restart, 100);
   // Start watching project files
   watcher = chokidar
-    .watch(['lib/', getYearPath(args[0])], {
+    .watch(['lib/', 'puzzles/utils/', getYearPath(args[0])], {
       ignoreInitial: true,
       awaitWriteFinish: { stabilityThreshold: 100 },
     })
