@@ -1,0 +1,12 @@
+[
+  {
+    "input": "target area: x=20..30, y=-10..-5",
+    "answer": "45",
+    "part": 1
+  },
+  {
+    "input": "target area: x=20..30, y=-10..-5",
+    "answer": "112",
+    "part": 2
+  }
+]
