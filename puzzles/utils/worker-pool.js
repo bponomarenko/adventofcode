@@ -2,7 +2,6 @@ import os from 'os';
 import { EventEmitter } from 'events';
 import { Worker } from 'worker_threads';
 import { AsyncResource } from 'async_hooks';
-// import path from 'path';
 
 const kTaskInfo = Symbol('kTaskInfo');
 const kWorkerFreedEvent = Symbol('kWorkerFreedEvent');

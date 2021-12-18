@@ -1,5 +1,5 @@
 import { createHash } from 'crypto';
-import WorkerPool from '../../../lib/workers/worker-pool.js';
+import WorkerPool from '../../utils/worker-pool.js';
 
 export const formatInput = input => input;
 
