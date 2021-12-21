@@ -1,0 +1,12 @@
+[
+  {
+    "input": "Player 1 starting position: 4\nPlayer 2 starting position: 8",
+    "answer": "739785",
+    "part": 1
+  },
+  {
+    "input": "Player 1 starting position: 4\nPlayer 2 starting position: 8",
+    "answer": "444356092776315",
+    "part": 2
+  }
+]
