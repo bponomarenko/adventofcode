@@ -66,6 +66,13 @@
     // This rule doesn't really work, last update was 2 years ago
     "node/no-unsupported-features/es-syntax": "off",
     "max-classes-per-file": "off",
-    "no-continue": "off"
+    "no-continue": "off",
+    "lines-between-class-members": [
+      "error",
+      "always",
+      {
+        "exceptAfterSingleLine": true
+      }
+    ]
   }
 }

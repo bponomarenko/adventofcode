@@ -1,4 +1,5 @@
 import { getStraightAdjacent } from '../../utils/grid.js';
+import BinaryHeap from '../../utils/binary-heap.js';
 
 export const formatInput = input => {
   let map = input.split('\n').map(line => line.split(''));
@@ -27,9 +28,8 @@ const getPositions = (count, map, x, y, dx, dy) => adjacent[x][y]
   .flatMap(([x1, y1]) => [[x1, y1, count]].concat(getPositions(count + 1, map, x1, y1, x, y)));
 
 class Field {
-  #notInPlace = null;
-
-  #state = null;
+  #notInPlace;
+  #hash;
 
   constructor(map, energy) {
     this.energy = energy;
@@ -38,11 +38,11 @@ class Field {
     this.columnLetters = [];
   }
 
-  get state() {
-    if (!this.#state) {
-      this.#state = this.map.map(line => line.join('')).join('\n');
+  get hash() {
+    if (!this.#hash) {
+      this.#hash = this.map.map(line => line.join('')).join('\n');
     }
-    return this.#state;
+    return this.#hash;
   }
 
   get notInPlace() {
@@ -142,23 +142,13 @@ class Field {
 
 const sortAmphipods = input => {
   const startField = new Field(input, 0);
-  const queue = new Map([[startField.state, startField]]);
+  const queue = new BinaryHeap(field => field.score, field => field.hash);
+  queue.push(startField);
   const visited = new Set([]);
 
   while (queue.size) {
-    // 1. Get next state
-    let min = Infinity;
-    let fieldState;
-    for (const [state, field] of queue) {
-      const h = field.score;
-      if (h < min) {
-        fieldState = state;
-        min = h;
-      }
-    }
-
-    const field = queue.get(fieldState);
-    queue.delete(fieldState);
+    // 1. Get next field
+    const field = queue.pop();
 
     // 2. Check if we found the node
     if (field.finished) {
@@ -166,18 +156,19 @@ const sortAmphipods = input => {
     }
 
     // 3. Mark it as visited
-    visited.add(field.state);
+    visited.add(field.hash);
 
     // 4. Find next steps
     field.generateNextFields().forEach(nextField => {
-      if (!visited.has(nextField.state)) {
-        if (queue.has(nextField.state)) {
-          const queuedField = queue.get(nextField.state);
+      if (!visited.has(nextField.hash)) {
+        if (queue.has(nextField)) {
+          const queuedField = queue.get(nextField);
           if (nextField.energy < queuedField.energy) {
             queuedField.energy = nextField.energy;
+            queue.reposition(queuedField);
           }
         } else {
-          queue.set(nextField.state, nextField);
+          queue.push(nextField);
         }
       }
     });
