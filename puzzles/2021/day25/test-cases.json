@@ -1,0 +1,7 @@
+[
+  {
+    "input": "v...>>.vv>\n.vv>>.vv..\n>>.>v>...v\n>>v>>.>.v.\nv>v.vv.v..\n>.>>..v...\n.vv..>.>v.\nv.v..>>v.v\n....v..v.>",
+    "answer": "58",
+    "part": 1
+  }
+]
