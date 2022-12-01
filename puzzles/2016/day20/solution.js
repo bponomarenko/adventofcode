@@ -31,7 +31,7 @@ export const part2 = ranges => {
       const nextBlocked = Math.min(...ranges.map(([min]) => min));
       count += nextBlocked - num;
       num = nextBlocked;
-      // eslint-disable-next-line no-continue
+
       continue;
     }
     const [range] = ranges.splice(index, 1);

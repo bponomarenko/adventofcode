@@ -42,7 +42,7 @@ export const part1 = input => {
 
     if (path.length >= shortestPath) {
       // Doesn't make sense to search for longer paths
-      // eslint-disable-next-line no-continue
+
       continue;
     }
 

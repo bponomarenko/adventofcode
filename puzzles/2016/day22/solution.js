@@ -29,7 +29,7 @@ export const part2 = async nodes => {
     }
   });
 
-  const weightenedGrid = grid.map((line, x) => line.map(([used], y) => (used > 100 ? 0 : 1)));
+  const weightenedGrid = grid.map(line => line.map(([used]) => (used > 100 ? 0 : 1)));
 
   // Find short path between wanted node and its target place
   let dataPos = [0, grid[0].length - 1];

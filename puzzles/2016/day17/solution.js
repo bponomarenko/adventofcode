@@ -33,13 +33,13 @@ export const part1 = input => {
       if (!shortestPath || path.length < shortestPath.length) {
         shortestPath = path;
       }
-      // eslint-disable-next-line no-continue
+
       continue;
     }
 
     if (path.length >= shortestPath?.length) {
       // No need to continue as the path would't be the shortest anymore
-      // eslint-disable-next-line no-continue
+
       continue;
     }
 
@@ -62,7 +62,7 @@ export const part2 = input => {
       if (path.length > longestPathLength) {
         longestPathLength = path.length;
       }
-      // eslint-disable-next-line no-continue
+
       continue;
     }
 

@@ -18,7 +18,6 @@ const doRound = seats => {
   for (let row = 0; row < seats.length; row += 1) {
     for (let i = 0; i < seats[row].length; i += 1) {
       if (seats[row][i] === '.') {
-        // eslint-disable-next-line no-continue
         continue;
       }
 
@@ -80,7 +79,6 @@ const doRound2 = seats => {
   for (let row = 0; row < seats.length; row += 1) {
     for (let i = 0; i < seats[row].length; i += 1) {
       if (seats[row][i] === '.') {
-        // eslint-disable-next-line no-continue
         continue;
       }
 
