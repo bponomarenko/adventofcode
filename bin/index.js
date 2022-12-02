@@ -12,6 +12,7 @@ import addTest from '../lib/add-test.js';
 import findEasterEgg from '../lib/easter-egg.js';
 import { submitAnswer } from '../lib/answers.js';
 import { readInput, getYearPath, logError } from '../lib/utils.js';
+import getLeaderboardPosition from '../lib/leaderboard.js';
 
 // zero-width whitespace character
 const zwws = '​';
@@ -87,7 +88,7 @@ const watchAndRunCommand = ({ name, onResult, onCommand, args }) => {
 
   const readCmd = async () => {
     try {
-    // Read for additional commands from the command line
+      // Read for additional commands from the command line
       const { cmd } = await prompt.get([{ name: 'cmd', message: zwws }]);
       let doRestart = await onCommand?.(cmd, args) || cmd === 'r' || cmd === 'c';
 
@@ -168,14 +169,15 @@ withDayAndYear(program.command('solve'))
         }
         try {
           await submitAnswer(latestAnswer, ...currentArgs);
+          await getLeaderboardPosition(year, day, currentArgs[2]);
         } catch (error) {
           logError(error);
           return false;
         }
 
         if (currentArgs[2] === 1) {
-        // Small timeout to make sure successful message is visilble
-          await setTimeout(1500);
+          // Small timeout to make sure successful message is visilble
+          await setTimeout(2000);
           // switch to the part 2
           currentArgs[2] = 2;
           // ...and request watcher restart
