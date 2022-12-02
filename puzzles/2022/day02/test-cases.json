@@ -1,0 +1,12 @@
+[
+  {
+    "input": "A Y\nB X\nC Z",
+    "answer": "15",
+    "part": 1
+  },
+  {
+    "input": "A Y\nB X\nC Z",
+    "answer": "12",
+    "part": 2
+  }
+]
