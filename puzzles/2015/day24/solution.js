@@ -1,6 +1,7 @@
+import { sum } from '../../utils/collections.js';
+
 export const formatInput = input => input;
 
-const sum = weights => weights.reduce((acc, weight) => acc + weight, 0);
 const prod = weights => weights.reduce((acc, weight) => acc * weight, 1);
 
 function* weightGroups(weights, size, initialGroup = []) {

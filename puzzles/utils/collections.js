@@ -36,3 +36,5 @@ export function* permutations(arr, size) {
     index += 1;
   }
 }
+
+export const sum = arr => arr.reduce((total, value) => total + value, 0);
