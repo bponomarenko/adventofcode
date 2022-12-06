@@ -1,0 +1,52 @@
+[
+  {
+    "input": "mjqjpqmgbljsphdztnvjfqwrcgsmlb",
+    "answer": "7",
+    "part": 1
+  },
+  {
+    "input": "bvwbjplbgvbhsrlpgdmjqwftvncz",
+    "answer": "5",
+    "part": 1
+  },
+  {
+    "input": "nppdvjthqldpwncqszvftbrmjlhg",
+    "answer": "6",
+    "part": 1
+  },
+  {
+    "input": "nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg",
+    "answer": "10",
+    "part": 1
+  },
+  {
+    "input": "zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw",
+    "answer": "11",
+    "part": 1
+  },
+  {
+    "input": "mjqjpqmgbljsphdztnvjfqwrcgsmlb",
+    "answer": "19",
+    "part": 2
+  },
+  {
+    "input": "bvwbjplbgvbhsrlpgdmjqwftvncz",
+    "answer": "23",
+    "part": 2
+  },
+  {
+    "input": "nppdvjthqldpwncqszvftbrmjlhg",
+    "answer": "23",
+    "part": 2
+  },
+  {
+    "input": "nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg",
+    "answer": "29",
+    "part": 2
+  },
+  {
+    "input": "zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw",
+    "answer": "26",
+    "part": 2
+  }
+]
