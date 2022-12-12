@@ -1,0 +1,12 @@
+[
+  {
+    "input": "Sabqponm\nabcryxxl\naccszExk\nacctuvwj\nabdefghi",
+    "answer": "31",
+    "part": 1
+  },
+  {
+    "input": "Sabqponm\nabcryxxl\naccszExk\nacctuvwj\nabdefghi",
+    "answer": "29",
+    "part": 2
+  }
+]
