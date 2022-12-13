@@ -12,35 +12,7 @@ export const formatInput = input => input.split('\n').map(floor => {
 });
 
 const lastFloor = 3;
-
-const isGenerator = item => (item & 1) === 1;
-const isSameName = (item1, item2) => (item1 >> 1) === (item2 >> 1);
-// if name the same, they are of the matching group
-// if not – check if the type is the same
-const isCompatible = (item1, item2) => isSameName(item1, item2) || isGenerator(item1) === isGenerator(item2);
-
-class Floor {
-  #snapshot;
-
-  constructor(items) {
-    this.items = items;
-  }
-
-  get snapshot() {
-    if (!this.#snapshot) {
-      this.#snapshot = this.items.sort().join(',');
-    }
-    return this.#snapshot;
-  }
-
-  get empty() {
-    return this.items.length === 0;
-  }
-
-  clone() {
-    return new Floor(Array.from(this.items));
-  }
-}
+const sort = items => items.sort((a, b) => a - b);
 
 class State {
   #snapshot;
@@ -53,85 +25,113 @@ class State {
   }
 
   get score() {
-    return this.steps + this.heuristic;
+    return this.steps + this.heuristic / 100;
   }
 
   get heuristic() {
     if (!this.#heuristic) {
-      this.#heuristic = this.floors.reduce((acc, floor, i) => acc + floor.items.length * (lastFloor - i), 0);
+      this.#heuristic = this.floors.reduce((acc, items, i) => acc + items.length * (lastFloor - i) ** 2, 0);
     }
     return this.#heuristic;
   }
 
   get snapshot() {
     if (!this.#snapshot) {
-      this.#snapshot = `${this.el}|${this.floors.map(floor => floor.snapshot).join('|')}`;
+      const typeMap = new Map();
+      let counter = 1;
+      const floors = this.floors.map(items => items.map(item => {
+        const type = Math.abs(item);
+        if (!typeMap.has(type)) {
+          typeMap.set(type, counter);
+          counter += 1;
+        }
+        return typeMap.get(type) * (item > 0 ? 1 : -1);
+      }).join(','));
+
+      this.#snapshot = [this.el].concat(floors).join('|');
     }
     return this.#snapshot;
   }
 
   get finished() {
-    return this.floors.slice(0, -1).every(floor => floor.empty);
+    return !this.floors[0].length && !this.floors[1].length && !this.floors[2].length;
   }
 
   canGoToFloor(floorIndex, combo) {
-    const floor = this.floors[floorIndex];
+    const items = this.floors[floorIndex];
     // Empty floor? No problems!
-    if (floor.empty) {
+    if (!items.length) {
       return true;
     }
 
-    const allItems = combo.concat(floor.items);
+    const allItems = combo.concat(items);
     // Make sure all elements are compatible between each other.
-    return allItems.every(item => isGenerator(item) || allItems.some(subItem => isSameName(subItem, item) && isGenerator(subItem)));
+    return allItems.every(item => item < 0 || allItems.some(subItem => (subItem + item === 0) && subItem < 0));
   }
 
   clone(floorIndex, combo) {
-    const state = new State(floorIndex, this.floors.map(floor => floor.clone()), this.steps + 1);
-    state.floors[this.el].items = state.floors[this.el].items.filter(item => !combo.includes(item));
-    state.floors[floorIndex].items.push(...combo);
-    return state;
+    const floors = this.floors.map((floor, i) => {
+      if (i === floorIndex) {
+        return sort([...floor, ...combo]);
+      }
+      const items = i === this.el ? floor.filter(item => !combo.includes(item)) : Array.from(floor);
+      return sort([...items]);
+    });
+    return new State(floorIndex, floors, this.steps + 1);
   }
 
   generateNextStates() {
-    const floor = this.floors[this.el];
-    if (floor.empty) {
+    const items = this.floors[this.el];
+    if (!items.length) {
       return [];
     }
 
-    // get component combinations
-    const count = floor.items.length;
     const componentCombos = [];
-    for (let i = 0; i < count; i += 1) {
-      // try to go with a single component
-      componentCombos.push([floor.items[i]]);
-      for (let j = i + 1; j < count; j += 1) {
-        // ...or with two of them (if compatible)
-        if (isCompatible(floor.items[i], floor.items[j])) {
-          componentCombos.push([floor.items[i], floor.items[j]]);
+    const canMoveUp = this.el < lastFloor;
+    const shouldMoveDown = this.el > 0 && this.floors.some((floor, i) => floor.length > 0 && i < this.el);
+
+    // get component combinations
+    for (let i = 0; i < items.length; i += 1) {
+      const item1 = items[i];
+      const canMoveItemDown = shouldMoveDown && this.canGoToFloor(this.el - 1, [item1]);
+      let canMoveTwoItemsUp = false;
+
+      for (let j = i + 1; j < items.length; j += 1) {
+        const item2 = items[j];
+        // try to go with two of them (if compatible)
+        // if name the same, they are of the matching group
+        // if not – check if the type is the same
+        if ((item1 + item2 === 0) || (item1 < 0 && item2 < 0)) {
+          if (canMoveUp && this.canGoToFloor(this.el + 1, [item1, item2])) {
+            componentCombos.push(this.clone(this.el + 1, [item1, item2]));
+            canMoveTwoItemsUp = true;
+          } else if (!canMoveItemDown && shouldMoveDown && this.canGoToFloor(this.el - 1, [item1, item2])) {
+            componentCombos.push(this.clone(this.el - 1, [item1, item2]));
+          }
         }
       }
-    }
 
-    // Convert combination to a future state, if compatible
-    return componentCombos
-      .flatMap(combo => [
-        this.el < lastFloor && this.canGoToFloor(this.el + 1, combo) && this.clone(this.el + 1, combo),
-        this.el > 0 && this.canGoToFloor(this.el - 1, combo) && this.clone(this.el - 1, combo),
-      ])
-      .filter(Boolean);
+      // ...or try to go with a single component
+      if (!canMoveTwoItemsUp && canMoveUp && this.canGoToFloor(this.el + 1, [item1])) {
+        componentCombos.push(this.clone(this.el + 1, [item1]));
+      }
+      if (canMoveItemDown) {
+        componentCombos.push(this.clone(this.el - 1, [item1]));
+      }
+    }
+    return componentCombos;
   }
 }
 
 const mapToFloors = floors => {
   const numMap = new Map();
   let num = 1;
-  return floors.map(items => new Floor(items.map(([name, type]) => {
+  return floors.map(items => sort(items.map(([name, type]) => {
     if (!numMap.has(name)) {
       numMap.set(name, num);
       num += 1;
     }
-    return (numMap.get(name) << 1) + (type === 'generator' ? 1 : 0);
+    return numMap.get(name) * (type === 'generator' ? -1 : 1);
   })));
 };
 
