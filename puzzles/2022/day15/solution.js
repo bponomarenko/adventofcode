@@ -18,9 +18,11 @@ export const part1 = input => {
 
   const ranges = [];
   inputSlice.forEach(({ sensor, dy }) => {
+    // range is a line on the sensor's "visibility area" by a specified y value
     let range = [sensor[0] - dy, sensor[0] + dy];
     let overlapIndex;
     do {
+      // Merge overlapping ranges
       overlapIndex = ranges.findIndex(([x1, x2]) => !(range[1] < x1 || range[0] > x2));
       if (overlapIndex >= 0) {
         const overlap = ranges.splice(overlapIndex, 1)[0];
@@ -29,38 +31,36 @@ export const part1 = input => {
     } while (overlapIndex >= 0);
     ranges.push(range);
   });
+  // For the result just add values in the ranges
   return ranges.reduce((acc, [x1, x2]) => acc + x2 - x1, 0);
 };
 
-const isEmptySpot = (input, [x, y], xRange, yRange) => {
-  if (x < xRange[0] || x > xRange[1] || y < yRange[0] || y > yRange[1]) {
+const isEmptySpot = (input, [x, y], maxRange) => {
+  if (x < 0 || x > maxRange || y < 0 || y > maxRange) {
     return false;
   }
   return input.every(({ sensor, distance }) => distance < getDistance([x, y], sensor));
 };
 
-const findEmptySpot = (input, xRange, yRange) => {
+export const part2 = input => {
+  const max = 4000000;
+
   for (let i = 0; i < input.length; i += 1) {
     const { sensor: [x, y], distance } = input[i];
-    // Check sensor outer positions and see if they are visin other sensors range
+    // Check sensor outer positions and see if they are vithin range of other sensors
     // If not – that's the one
     for (let j = 0; j <= distance; j += 1) {
-      const emptySpot = [
+      const hiddenSensor = [
         [x + j + 1, y - distance + j],
         [x + j + 1, y + distance - j],
         [x - j - 1, y - distance + j],
         [x - j - 1, y + distance - j],
-      ].find(point => isEmptySpot(input, point, xRange, yRange));
-      if (emptySpot) {
-        return emptySpot;
+      ].find(point => isEmptySpot(input, point, max));
+
+      if (hiddenSensor) {
+        return hiddenSensor[0] * max + hiddenSensor[1];
       }
     }
   }
-  return [0, 0];
-};
-
-export const part2 = input => {
-  const max = 4000000;
-  const [x, y] = findEmptySpot(input, [0, max], [0, max]);
-  return x * max + y;
+  return 0;
 };
