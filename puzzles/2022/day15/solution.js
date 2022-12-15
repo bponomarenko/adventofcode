@@ -9,26 +9,27 @@ export const formatInput = input => input.split('\n').map(line => {
   return { sensor, beacon, distance: getDistance(sensor, beacon) };
 });
 
-const countKnownPositions = (input, y, lx, rx) => {
-  const knownPos = new Set();
-  input.forEach(({ sensor, distance }) => {
-    const dx = distance - Math.abs(sensor[1] - y);
-    if (dx >= 0) {
-      for (let x = Math.max(lx, sensor[0] - dx), mx = Math.min(sensor[0] + dx, rx); x <= mx; x += 1) {
-        knownPos.add(x);
-      }
-    }
-  });
-  return knownPos.size - 1;
-};
-
 export const part1 = input => {
-  const maxD = Math.max(...input.map(({ distance }) => distance));
-  const xRange = input.flatMap(({ sensor, beacon }) => [sensor[0], beacon[0]]);
-  const lx = Math.min(...xRange) - maxD;
-  const rx = Math.max(...xRange) + maxD;
   const y = 2000000;
-  return countKnownPositions(input, y, lx, rx);
+  // Only use sensors that affect specified line
+  const inputSlice = input
+    .map(row => ({ ...row, dy: row.distance - Math.abs(y - row.sensor[1]) }))
+    .filter(({ dy }) => dy >= 0);
+
+  const ranges = [];
+  inputSlice.forEach(({ sensor, dy }) => {
+    let range = [sensor[0] - dy, sensor[0] + dy];
+    let overlapIndex;
+    do {
+      overlapIndex = ranges.findIndex(([x1, x2]) => !(range[1] < x1 || range[0] > x2));
+      if (overlapIndex >= 0) {
+        const overlap = ranges.splice(overlapIndex, 1)[0];
+        range = [Math.min(overlap[0], range[0]), Math.max(overlap[1], range[1])];
+      }
+    } while (overlapIndex >= 0);
+    ranges.push(range);
+  });
+  return ranges.reduce((acc, [x1, x2]) => acc + x2 - x1, 0);
 };
 
 const isEmptySpot = (input, [x, y], xRange, yRange) => {
