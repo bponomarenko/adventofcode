@@ -1,3 +1,5 @@
+import { getDistance as getManhattanDistance } from '../../utils/grid.js';
+
 const lineToVectors = line => {
   let start = [0, 0];
   return line.split(',').map(instr => {
@@ -37,9 +39,9 @@ const getIntersections = (line1, line2) => {
       const [ver, hor] = vec1[2] === 'v' ? [vec1, vec2] : [vec2, vec1];
       // if intersect
       if (ver[0][0] >= Math.min(hor[0][0], hor[1][0])
-          && ver[0][0] <= Math.max(hor[0][0], hor[1][0])
-          && hor[0][1] >= Math.min(ver[0][1], ver[1][1])
-          && hor[0][1] <= Math.max(ver[0][1], ver[1][1])
+        && ver[0][0] <= Math.max(hor[0][0], hor[1][0])
+        && hor[0][1] >= Math.min(ver[0][1], ver[1][1])
+        && hor[0][1] <= Math.max(ver[0][1], ver[1][1])
       ) {
         res.push([ver[0][0], hor[0][1]]);
       }
@@ -67,10 +69,10 @@ const getLineDistance = (line, intersection) => {
     || Math.max(line[i][0][1], line[i][1][1]) < intersection[1]
   ) {
     const [start, end] = line[i];
-    traveled += Math.abs(end[0] - start[0]) + Math.abs(end[1] - start[1]);
+    traveled += getManhattanDistance(start, end);
     i += 1;
   }
-  return traveled + Math.abs(intersection[0] - line[i][0][0]) + Math.abs(intersection[1] - line[i][0][1]);
+  return traveled + getManhattanDistance(intersection, line[i][0]);
 };
 
 const getDistance2 = (line1, line2) => {

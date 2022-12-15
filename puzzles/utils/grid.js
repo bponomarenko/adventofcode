@@ -31,3 +31,5 @@ export const flip = (grid, byYAxis) => {
   const lastIndex = grid.length - 1;
   return grid.map((_, i) => [...grid[lastIndex - i]]);
 };
+
+export const getDistance = ([x1, y1, z1], [x2, y2, z2]) => Math.abs(x1 - x2) + Math.abs(y1 - y2) + Math.abs((z1 || 0) - (z2 || 0));
