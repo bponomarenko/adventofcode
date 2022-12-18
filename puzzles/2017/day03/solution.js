@@ -26,7 +26,8 @@ export const part1 = input => {
 
 const directions = ['e', 'n', 'w', 's'];
 
-const getSum = (field, { x, y }) => getAdjacent(field, y, x).reduce((sum, [nx, ny]) => sum + field[ny][nx], 0);
+const getSum = (field, { x, y }) => getAdjacent(y, x, [0, field[0].length - 1], [0, field.length - 1])
+  .reduce((sum, [nx, ny]) => sum + field[ny][nx], 0);
 
 const getNextCoordinates = ({ x, y, dir }) => {
   switch (dir) {

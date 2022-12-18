@@ -24,6 +24,7 @@ export const part1 = input => defragment(input)
 export const part2 = input => {
   const grid = defragment(input).map(hash => hash.map(num => num.toString(2).padStart(4, '0')).join(''));
   const visited = new Set();
+  const limits = [[0, grid[0].length - 1], [0, grid.length - 1]];
 
   const isNotEdge = ([x, y]) => !visited.has(`${x}-${y}`) && grid[x][y] !== '0';
 
@@ -31,7 +32,7 @@ export const part2 = input => {
     // Mark as "visited"
     visited.add(`${x}-${y}`);
     // Mark adjacent
-    getStraightAdjacent(grid, x, y).filter(isNotEdge).forEach(point => markRegion(point));
+    getStraightAdjacent(x, y, ...limits).filter(isNotEdge).forEach(point => markRegion(point));
   };
 
   let count = 0;

@@ -1,17 +1,35 @@
-export const getStraightAdjacent = (grid, x, y) => [
-  x > 0 ? [x - 1, y] : null,
-  x < grid.length - 1 ? [x + 1, y] : null,
-  y > 0 ? [x, y - 1] : null,
-  y < grid[x].length - 1 ? [x, y + 1] : null,
-].filter(Boolean);
+const filterInLimits = (limitsX, limitsY, limitsZ) => ([x, y, z]) => (!limitsX || (x >= limitsX[0] && x <= limitsX[1]))
+  && (!limitsY || (y >= limitsY[0] && y <= limitsY[1]))
+  && (!limitsZ || (z >= limitsZ[0] && z <= limitsZ[1]));
 
-export const getAdjacent = (grid, x, y) => getStraightAdjacent(grid, x, y)
-  .concat([
-    x > 0 && y > 0 ? [x - 1, y - 1] : null,
-    x > 0 && y < grid[x].length - 1 ? [x - 1, y + 1] : null,
-    x < grid.length - 1 && y > 0 ? [x + 1, y - 1] : null,
-    x < grid.length - 1 && y < grid[x].length - 1 ? [x + 1, y + 1] : null,
-  ].filter(Boolean));
+export const getStraightAdjacent = (x, y, ...limits) => [
+  [x - 1, y],
+  [x + 1, y],
+  [x, y - 1],
+  [x, y + 1],
+].filter(filterInLimits(...limits));
+
+export const getAdjacent = (x, y, ...limits) => [
+  [x - 1, y - 1],
+  [x, y - 1],
+  [x + 1, y - 1],
+  [x - 1, y],
+  [x + 1, y],
+  [x - 1, y + 1],
+  [x, y + 1],
+  [x + 1, y + 1],
+].filter(filterInLimits(...limits));
+
+export const getStraightAdjacent3d = (x, y, z, ...limits) => [
+  [x - 1, y, z],
+  [x + 1, y, z],
+  [x, y - 1, z],
+  [x, y + 1, z],
+  [x, y, z - 1],
+  [x, y, z + 1],
+].filter(filterInLimits(...limits));
+
+export const isStraightAdjacent3d = ([x1, y1, z1], [x2, y2, z2]) => Math.abs(x1 - x2) + Math.abs(y1 - y2) + Math.abs(z1 - z2) === 1;
 
 export const rotate = (grid, clockwise = true) => {
   const rotatedGrid = [];

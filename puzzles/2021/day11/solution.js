@@ -4,12 +4,13 @@ export const formatInput = input => input.split('\n').map(line => line.split('')
 
 const updateEnergyLevels = input => {
   const adjacent = [];
+  const limits = [[0, input[0].length - 1], [0, input.length - 1]];
   let flashes = 0;
 
   input.forEach((line, x) => line.forEach((energy, y) => {
     if (energy === 9) {
       flashes += 1;
-      adjacent.push(...getAdjacent(input, x, y));
+      adjacent.push(...getAdjacent(x, y, ...limits));
       line[y] = 0;
     } else {
       line[y] = energy + 1;
@@ -24,7 +25,7 @@ const updateEnergyLevels = input => {
     } else if (energy === 9) {
       input[x][y] = 0;
       flashes += 1;
-      adjacent.push(...getAdjacent(input, x, y));
+      adjacent.push(...getAdjacent(x, y, ...limits));
     }
   }
   return flashes;

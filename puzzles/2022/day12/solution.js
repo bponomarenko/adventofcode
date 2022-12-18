@@ -18,7 +18,7 @@ export const formatInput = input => {
   return { start, end, grid };
 };
 
-const getMoveOptions = (grid, [x, y]) => getStraightAdjacent(grid, y, x)
+const getMoveOptions = (grid, [x, y]) => getStraightAdjacent(y, x, [0, grid.length - 1], [0, grid[0].length - 1])
   .map(node => node.reverse())
   .filter(node => grid[y][x] - grid[node[1]][node[0]] <= 1);
 

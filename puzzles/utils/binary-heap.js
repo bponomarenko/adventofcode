@@ -43,7 +43,9 @@ export default class BinaryHeap {
 
   pop() {
     const node = this.#heap.shift();
-    this.#cache.delete(this.#getHash(node));
+    if (node) {
+      this.#cache.delete(this.#getHash(node));
+    }
     return node;
   }
 

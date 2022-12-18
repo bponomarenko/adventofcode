@@ -13,7 +13,7 @@ const isFree = (x, y, code) => {
   return !(count & 1);
 };
 
-const getMoveOptions = (maze, visited, [x, y]) => getStraightAdjacent(maze, x, y)
+const getMoveOptions = (maze, visited, [x, y]) => getStraightAdjacent(x, y, [0, maze[0].length - 1], [0, maze.length - 1])
   .filter(option => maze[option[0]][option[1]] && !visited.has(option.join(',')));
 
 export const part1 = input => {

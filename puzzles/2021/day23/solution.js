@@ -20,7 +20,8 @@ let adjacent;
 
 const populateAdjacent = map => {
   // populate adjacent elements map
-  adjacent = map.map((line, x) => line.map((char, y) => getStraightAdjacent(map, x, y).filter(([dx, dy]) => map[dx][dy] !== '#')));
+  const limits = [[0, map.length - 1], [0, map[0].length - 1]];
+  adjacent = map.map((line, x) => line.map((char, y) => getStraightAdjacent(x, y, ...limits).filter(([dx, dy]) => map[dx][dy] !== '#')));
 };
 
 const getPositions = (count, map, x, y, dx, dy) => adjacent[x][y]
