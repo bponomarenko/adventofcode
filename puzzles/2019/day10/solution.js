@@ -16,7 +16,7 @@ const findStationVisibleAsteroids = input => {
       }
       const [x, y] = asteroids[j];
       const dx = x - cx;
-      const dy = y - cy;
+      const dy = cy - y;
 
       // calculate angle between vector to the target asteroid and vector to the North
       let deg;
@@ -43,15 +43,25 @@ const findStationVisibleAsteroids = input => {
 export const part1 = input => findStationVisibleAsteroids(input)[0].size;
 
 export const part2 = input => {
-  const [asteroidAnges, center] = findStationVisibleAsteroids(input);
-  const asteroidsByAngle = Array.from(asteroidAnges.entries())
+  const [asteroidAngles, center] = findStationVisibleAsteroids(input);
+  const asteroidsByAngle = Array.from(asteroidAngles.entries())
     .sort(([deg1], [deg2]) => deg1 - deg2)
-    .map(([deg, asteroids]) => [
-      deg,
-      asteroids.sort((a1, a2) => getDistance(center, a2) - getDistance(center, a1)),
-    ]);
+    .map(([, asteroids]) => asteroids.sort((a1, a2) => getDistance(center, a1) - getDistance(center, a2)));
 
-  let lastAsteroid = [0, 0];
+  let degPointer = 0;
+  let lastAsteroid;
+
   // shoot asteroids
+  for (let i = 0; i < 200; i += 1) {
+    [lastAsteroid] = asteroidsByAngle[degPointer].splice(0, 1);
+    if (asteroidsByAngle[degPointer].length > 0) {
+      degPointer += 1;
+    } else {
+      asteroidsByAngle.splice(degPointer, 1);
+    }
+    if (degPointer >= asteroidsByAngle.length) {
+      degPointer = 0;
+    }
+  }
   return lastAsteroid[0] * 100 + lastAsteroid[1];
 };
