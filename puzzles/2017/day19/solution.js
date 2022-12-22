@@ -1,5 +1,5 @@
 export const formatInput = input => input.split('\n');
-export const doNotTrim = true;
+formatInput.doNotTrim = true;
 
 const nextPos = (x, y, dir) => {
   switch (dir) {
