@@ -1,8 +1,8 @@
 export const formatInput = input => {
-  const [steps, ...positions] = input.split('\n');
+  const [steps, positions] = input.split('\n\n');
   return {
     steps: +steps,
-    moons: positions.flatMap(position => position
+    moons: (positions || steps).split('\n').flatMap(position => position
       .slice(1, -1)
       .split(', ')
       .map(coord => +coord.split('=')[1])
