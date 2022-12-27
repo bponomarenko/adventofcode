@@ -1,7 +1,7 @@
 import { permutations } from '../../utils/collections.js';
 import Intcode from '../intcode.js';
 
-export const formatInput = input => input.split(',').map(Number);
+export const formatInput = input => input;
 
 const runSetting = (sequence, phaseSetting) => phaseSetting
   .reduce((acc, setting) => new Intcode(sequence, { input: [setting, acc] }).lastOutput, 0);
@@ -15,7 +15,7 @@ export const part1 = input => {
 };
 
 const generateAmplifiers = (program, combo) => new Array(5).fill()
-  .map((_, index) => new Intcode(program, { pauseOnOutput: true, input: [combo[index]], autoRun: false }));
+  .map((_, index) => new Intcode(program, { input: [combo[index]], autoRun: false }));
 
 const runLoop = (amplifiers, firstInput) => amplifiers.reduce((input, amplifier) => amplifier.run(input).lastOutput, firstInput);
 
@@ -26,7 +26,7 @@ export const part2 = input => {
     const amplifiers = generateAmplifiers(input, combo);
     do {
       loopInput = runLoop(amplifiers, loopInput);
-    } while (amplifiers.at(-1).paused);
+    } while (!amplifiers.at(-1).halted);
     maxSignal = Math.max(maxSignal, loopInput);
   }
   return maxSignal;

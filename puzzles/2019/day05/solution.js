@@ -1,6 +1,6 @@
 import Intcode from '../intcode.js';
 
-export const formatInput = input => input.split(',').map(Number);
+export const formatInput = input => input;
 
 export const part1 = program => new Intcode(program, { input: [1] }).lastOutput;
 

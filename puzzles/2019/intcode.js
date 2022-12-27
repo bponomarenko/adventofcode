@@ -1,18 +1,25 @@
 export default class Intcode {
   #program;
-  #input;
-  #paused = false;
   #pauseOnOutput = false;
   #addr = 0;
   #parsedInstruction;
   #relBase = 0;
+  #convertOutput;
+  #inputFallback;
+  #runTick = false;
 
+  input = [];
   output = [];
 
   constructor(program, options) {
-    this.#program = Array.from(program);
-    this.#pauseOnOutput = !!options?.pauseOnOutput;
-    this.#input = options?.input ?? [];
+    this.#program = program.split(',').map(Number);
+    this.#pauseOnOutput = options?.autoRun === false;
+    this.#addr = options?.addr ?? 0;
+    this.#relBase = options?.relBase ?? 0;
+    this.#convertOutput = options?.convertOutput;
+    this.#inputFallback = options?.inputFallback;
+    this.#runTick = !!options?.runTick;
+    this.input = options?.input ?? [];
 
     if (options?.autoRun !== false) {
       this.run();
@@ -23,36 +30,38 @@ export default class Intcode {
     return this.output.at(-1);
   }
 
-  get paused() {
-    return this.#paused;
-  }
-
   get halted() {
-    return this.#currentOpcode === 99;
+    return this.#currentInstruction.opcode === 99;
   }
 
-  get program() {
-    return [...this.#program];
+  get firstInstruction() {
+    return this.#program[0];
   }
 
   run(...input) {
-    if (!this.#paused) {
-      this.#addr = 0;
-      this.#relBase = 0;
-    }
-    this.#paused = false;
-    this.#input.push(...input);
+    this.input.push(...input);
 
     while (!this.halted) {
-      const pauseAfter = this.#currentOpcode === 4 && this.#pauseOnOutput;
+      const pauseAfter = this.#currentInstruction.opcode === 4 && this.#pauseOnOutput;
       this.#processInstruction();
-
-      if (pauseAfter && !this.halted) {
-        this.#paused = true;
-        return this;
+      if (pauseAfter || this.#runTick) {
+        break;
       }
     }
     return this;
+  }
+
+  clone() {
+    return new Intcode(this.#program.join(','), {
+      input: Array.from(this.input),
+      pauseOnOutput: this.#pauseOnOutput,
+      addr: this.#addr,
+      relBase: this.#relBase,
+      autoRun: false,
+      convertOutput: this.#convertOutput,
+      inputFallback: this.#inputFallback,
+      runTick: this.#runTick,
+    });
   }
 
   get #currentInstruction() {
@@ -68,10 +77,6 @@ export default class Intcode {
       };
     }
     return this.#parsedInstruction;
-  }
-
-  get #currentOpcode() {
-    return this.#currentInstruction.opcode;
   }
 
   #getValue(addrShift) {
@@ -102,7 +107,7 @@ export default class Intcode {
   }
 
   #processInstruction() {
-    switch (this.#currentOpcode) {
+    switch (this.#currentInstruction.opcode) {
       case 1:
         this.#setValue(3, this.#getValue(1) + this.#getValue(2));
         this.#moveAddressTo(this.#addr + 4);
@@ -112,11 +117,11 @@ export default class Intcode {
         this.#moveAddressTo(this.#addr + 4);
         break;
       case 3:
-        this.#setValue(1, this.#input.shift());
+        this.#setValue(1, this.input.length > 0 ? this.input.shift() : this.#inputFallback?.());
         this.#moveAddressTo(this.#addr + 2);
         break;
       case 4:
-        this.output.push(this.#getValue(1));
+        this.output.push(this.#convertOutput ? this.#convertOutput(this.#getValue(1)) : this.#getValue(1));
         this.#moveAddressTo(this.#addr + 2);
         break;
       case 5:
@@ -146,7 +151,7 @@ export default class Intcode {
         this.#moveAddressTo(this.#addr + 2);
         break;
       default:
-        throw new Error(`Received unexpected opcode "${this.#currentOpcode}" at address "${this.#addr}".`);
+        throw new Error(`Received unexpected opcode "${this.#currentInstruction.opcode}" at address "${this.#addr}".`);
     }
   }
 }
