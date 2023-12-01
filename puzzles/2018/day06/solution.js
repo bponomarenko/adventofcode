@@ -1,17 +1,22 @@
 import { getDistance } from '../../utils/grid.js';
+import { sum } from '../../utils/collections.js';
 
 export const formatInput = input => input.split('\n').map(line => line.split(', '));
 
 const sortNums = arr => arr.sort(([a], [b]) => a - b);
+const getLimits = points => {
+  const xValues = points.map(([x]) => x);
+  const yValues = points.map(([, y]) => y);
+  return [
+    Math.min(...xValues),
+    Math.max(...xValues),
+    Math.min(...yValues),
+    Math.max(...yValues),
+  ];
+};
 
 export const part1 = input => {
-  const xValues = input.map(([x]) => x);
-  const yValues = input.map(([, y]) => y);
-  const minX = Math.min(...xValues);
-  const maxX = Math.max(...xValues);
-  const minY = Math.min(...yValues);
-  const maxY = Math.max(...yValues);
-
+  const [minX, maxX, minY, maxY] = getLimits(input);
   const points = new Set(input.map(point => point.join(',')));
   const distances = new Array(points.size).fill(0);
   const pointsToSkip = new Set();
@@ -34,8 +39,18 @@ export const part1 = input => {
   return Math.max(...distances);
 };
 
-export const part2 = input => {
-  const result = part1(input);
-  console.log(result);
-  return null;
+export const part2 = (input, isTest) => {
+  const limit = isTest ? 32 : 10000;
+  const [minX, maxX, minY, maxY] = getLimits(input);
+  let validLocations = 0;
+
+  for (let x = minX; x <= maxX; x += 1) {
+    for (let y = minY; y <= maxY; y += 1) {
+      const distances = sum(input.map(point => getDistance(point, [x, y])));
+      if (distances < limit) {
+        validLocations += 1;
+      }
+    }
+  }
+  return validLocations;
 };
