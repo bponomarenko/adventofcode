@@ -38,3 +38,5 @@ export function* permutations(arr, size) {
 }
 
 export const sum = arr => arr.reduce((total, value) => total + value, 0);
+
+export const power = arr => arr.reduce((total, value) => total * value, 1);
