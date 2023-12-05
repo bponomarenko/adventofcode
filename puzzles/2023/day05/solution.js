@@ -33,15 +33,15 @@ const getNewRanges = (start, end, target, source, size) => {
   const sourceEnd = source + size - 1;
   const overlapEnd = sourceEnd >= end ? end : sourceEnd;
   const shift = target - source;
-  const ranges = [[overlapStart + shift, overlapEnd + shift]];
+  const remaining = [];
 
   if (overlapStart > start) {
-    ranges.push([start, overlapStart - 1]);
+    remaining.push([start, overlapStart - 1]);
   }
   if (overlapEnd < end) {
-    ranges.push([overlapEnd + 1, end]);
+    remaining.push([overlapEnd + 1, end]);
   }
-  return ranges;
+  return { newRange: [overlapStart + shift, overlapEnd + shift], remaining };
 };
 
 export const part2 = ({ seeds, maps }) => {
@@ -57,9 +57,27 @@ export const part2 = ({ seeds, maps }) => {
   let type = 'seed';
   do {
     const { to, nums } = maps.find(({ from }) => from === type);
-    seedRanges = seedRanges.flatMap(([start, end]) => {
-      const match = nums.find(([, source, length]) => isOverlap(start, end, source, length));
-      return match ? getNewRanges(start, end, ...match) : [[start, end]];
+    seedRanges = seedRanges.flatMap(range => {
+      const queue = [range];
+      const newRanges = [];
+      while (queue.length > 0) {
+        const [start, end] = queue.pop();
+        /**
+         * Find any overlaps with the current range.
+         * For overlap – calculate new range.
+         * For not-overlapping parts – define them as new sub-ranges, and try to find new ranges for them instead
+         */
+        const match = nums.find(([, source, length]) => isOverlap(start, end, source, length));
+        if (match) {
+          const { newRange, remaining } = getNewRanges(start, end, ...match);
+          queue.push(...remaining);
+          newRanges.push(newRange);
+        } else {
+          // if no overlap – preserve the range as it is
+          newRanges.push([start, end]);
+        }
+      }
+      return newRanges;
     });
     type = to;
   } while (type !== 'location');
