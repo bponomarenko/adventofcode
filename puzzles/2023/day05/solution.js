@@ -57,28 +57,20 @@ export const part2 = ({ seeds, maps }) => {
   let type = 'seed';
   do {
     const { to, nums } = maps.find(({ from }) => from === type);
-    seedRanges = seedRanges.flatMap(range => {
-      const queue = [range];
-      const newRanges = [];
-      while (queue.length > 0) {
-        const [start, end] = queue.pop();
-        /**
+    for (let i = 0; i < seedRanges.length; i += 1) {
+      const [start, end] = seedRanges[i];
+      /**
          * Find any overlaps with the current range.
          * For overlap – calculate new range.
          * For not-overlapping parts – define them as new sub-ranges, and try to find new ranges for them instead
          */
-        const match = nums.find(([, source, length]) => isOverlap(start, end, source, length));
-        if (match) {
-          const { newRange, remaining } = getNewRanges(start, end, ...match);
-          queue.push(...remaining);
-          newRanges.push(newRange);
-        } else {
-          // if no overlap – preserve the range as it is
-          newRanges.push([start, end]);
-        }
+      const match = nums.find(([, source, length]) => isOverlap(start, end, source, length));
+      if (match) {
+        const { newRange, remaining } = getNewRanges(start, end, ...match);
+        seedRanges.push(...remaining);
+        seedRanges[i] = newRange;
       }
-      return newRanges;
-    });
+    }
     type = to;
   } while (type !== 'location');
   return Math.min(...seedRanges.map(([start]) => start));
