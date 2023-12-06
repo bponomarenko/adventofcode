@@ -3,14 +3,9 @@ import { power } from '../../utils/collections.js';
 export const formatInput = input => input.split('\n').map(line => line.split(':')[1].split(' ').filter(Boolean).map(Number));
 
 const countPossibleWins = (time, distance) => {
-  let count = 0;
-  for (let t = 1; t < time; t += 1) {
-    const d = (time - t) * t;
-    if (d > distance) {
-      count += 1;
-    }
-  }
-  return count;
+  const p1 = time / 2;
+  const p2 = Math.sqrt(time ** 2 - 4 * distance) / 2;
+  return Math.ceil(p1 + p2) - Math.floor(p1 - p2) - 1;
 };
 
 export const part1 = ([times, distances]) => power(times.map((time, index) => countPossibleWins(time, distances[index])));
