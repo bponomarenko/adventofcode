@@ -40,3 +40,14 @@ export function* permutations(arr, size) {
 export const sum = arr => arr.reduce((total, value) => total + value, 0);
 
 export const power = arr => arr.reduce((total, value) => total * value, 1);
+
+// LCM - Lowest Common Multiplier
+export const getLCM = nums => nums.reduce((lcm, num) => {
+  let hcf;
+  for (let i = 1; i <= lcm && i <= num; i += 1) {
+    if (lcm % i === 0 && num % i === 0) {
+      hcf = i;
+    }
+  }
+  return (lcm * num) / hcf;
+}, 1);
