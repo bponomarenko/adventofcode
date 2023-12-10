@@ -176,12 +176,25 @@ withDayAndYear(program.command('solve'))
         }
 
         if (currentArgs[2] === 1) {
-          // Small timeout to make sure successful message is visilble
-          await setTimeout(2000);
           // switch to the part 2
           currentArgs[2] = 2;
-          // ...and request watcher restart
-          return true;
+
+          if (currentArgs[1] === 25) {
+            // Small timeout to make sure successful message is visilble
+            await setTimeout(1000);
+            // if it is a last day – try to submit part2 immediately
+            try {
+              await submitAnswer(0, ...currentArgs);
+            } catch (error) {
+              logError(error);
+              return false;
+            }
+          } else {
+            // Small timeout to make sure successful message is visilble
+            await setTimeout(2000);
+            // ...request watcher to restart to still solve the
+            return true;
+          }
         }
         if (currentArgs[2] === 2) {
           // Done solving of the day. Treat myself with some fun stuff
