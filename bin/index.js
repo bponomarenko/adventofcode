@@ -5,7 +5,7 @@ import chalk from 'chalk';
 import prompt from 'prompt';
 import chokidar from 'chokidar';
 import { execaNode } from 'execa';
-import { program } from 'commander';
+import { program, Option } from 'commander';
 import throttle from 'lodash/throttle.js';
 import initPuzzle from '../lib/init.js';
 import addTest from '../lib/add-test.js';
@@ -135,18 +135,20 @@ const watchAndRunCommand = ({ name, onResult, onCommand, args }) => {
 
 withDayAndYear(program.command('init'))
   .description('Scaffolds necessary files for a specific puzzle of the day and year')
-  .action(({ year, day }) => initPuzzle(year, day));
+  .addOption(new Option('--no-open', 'Do not open the solution file in the code editor').env('NO_FILE_OPEN'))
+  .action(({ year, day, open }) => initPuzzle(year, day, open));
 
 withDayAndYear(program.command('solve'))
   .argument('[part]', 'Defines which part of the solution to run – part 1 or part 2', Number, 1)
   .description('Runs puzzle solution code with specified input and prints the answer')
   .option('--no-init', 'Do not scaffold the solution before solving it')
+  .addOption(new Option('--no-open', 'Do not open the solution file in the code editor').env('NO_FILE_OPEN'))
   .option('--no-watch', 'Do not run solution in a watch mode')
   .option('--no-validate', 'Do not run validation test cases prior to solving a solution')
-  .action(async (part, { watch, init, year, day, validate }) => {
+  .action(async (part, { watch, init, open, year, day, validate }) => {
     if (init) {
       // Initialize the project first
-      await initPuzzle(year, day);
+      await initPuzzle(year, day, open);
     }
 
     const cmdArgs = { name: 'solve', args: [year, day, part, validate] };

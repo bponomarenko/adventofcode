@@ -1,0 +1,21 @@
+{
+  "name": "adventofcode",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node",
+  "hostRequirements": {
+    "cpus": 2
+  },
+  "onCreateCommand": {
+    "link": "npm link",
+    "dependencies": "npm install"
+  },
+  "remoteEnv": {
+    "NO_FILE_OPEN": "true",
+    "SESSION_COOKIE": "${localEnv:AOC_SESSION_ID}"
+  },
+  "secrets": {
+    "AOC_SESSION_ID": {
+      "description": "This would be used as a session cookie for the network requests with the AOC website",
+      "documentationUrl": "https://github.com/bponomarenko/adventofcode?tab=readme-ov-file#configuration"
+    }
+  }
+}
