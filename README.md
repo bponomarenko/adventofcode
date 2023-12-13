@@ -19,4 +19,4 @@ It also contains CLI with automation commands:
 ### Configuration
 This project requires `.env` file in the root folder with the session cookie: `SESSION_COOKIE=....` to connect to the AOC website, and `LEADERBOARD_ID=...` to get leaderboard position after the puzzle solve.
 
-If you are using Github Codespaces, you can also create [Codespace secret](https://docs.github.com/en/codespaces/managing-your-codespaces/managing-secrets-for-your-codespaces) with name `AOC_SESSION_ID` and session cookie as a value, and make it available for your repository.
+If you are using Github Codespaces, you would need [Codespaces secret](https://docs.github.com/en/codespaces/managing-your-codespaces/managing-secrets-for-your-codespaces) with the name `AOC_SESSION_ID` and session cookie from AOC website as a value. You would also need to associate this secret with your Codespaces repository.
