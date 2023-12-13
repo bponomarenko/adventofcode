@@ -227,6 +227,8 @@ withDayAndYear(program.command('easter-egg'))
   .description('Tries to find easter-eggs on the puzzle page (words with additional info on them), and prints links to them')
   .action(({ year, day }) => findEasterEgg(year, day));
 
+process.noDeprecation = true;
+
 (async function main() {
   try {
     await program.parseAsync(process.argv);
