@@ -16,4 +16,7 @@ It also contains CLI with automation commands:
 * 🔌 `npx aoc validate` validates current solution against all configured test cases
 * 🎁 `npx aoc easter-egg` would generate a link to the hidden text on the page (link would only work in the [Google Chrome v90+](https://blog.google/products/chrome/more-helpful-chrome-throughout-your-workday/))
 
-(it requires `.env` file in the root folder with the session cookie: `SESSION_COOKIE=....` to connect to the aoc website, and `LEADERBOARD_ID=...` to get leaderboard position after the puzzle solve)
+### Configuration
+This project requires `.env` file in the root folder with the session cookie: `SESSION_COOKIE=....` to connect to the AOC website, and `LEADERBOARD_ID=...` to get leaderboard position after the puzzle solve.
+
+If you are using Github Codespaces, you can also create [Codespace secret](https://docs.github.com/en/codespaces/managing-your-codespaces/managing-secrets-for-your-codespaces) with name `AOC_SESSION_ID` and session cookie as a value, and make it available for your repository.

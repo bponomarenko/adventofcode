@@ -1,8 +1,12 @@
 {
- "name": "adventofcode",
- "image": "mcr.microsoft.com/devcontainers/javascript-node",
- "hostRequirements": {
-  "cpus": 2
- },
- "onCreateCommand": "npm link"
+  "name": "adventofcode",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node",
+  "hostRequirements": {
+    "cpus": 2
+  },
+  "onCreateCommand": ["npm link", "npm install"],
+  "containerEnv": {
+    "NO_FILE_OPEN": "true",
+    "SESSION_COOKIE": "${localEnv:AOC_SESSION_ID}"
+  }
 }
