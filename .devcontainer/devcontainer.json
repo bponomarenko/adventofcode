@@ -1,0 +1,8 @@
+{
+ "name": "adventofcode",
+ "image": "mcr.microsoft.com/devcontainers/javascript-node",
+ "hostRequirements": {
+  "cpus": 2
+ },
+ "onCreateCommand": "npm link"
+}
