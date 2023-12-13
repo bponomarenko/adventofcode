@@ -5,7 +5,7 @@ import chalk from 'chalk';
 import prompt from 'prompt';
 import chokidar from 'chokidar';
 import { execaNode } from 'execa';
-import { program } from 'commander';
+import { program, Option } from 'commander';
 import throttle from 'lodash/throttle.js';
 import initPuzzle from '../lib/init.js';
 import addTest from '../lib/add-test.js';
