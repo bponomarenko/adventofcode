@@ -171,7 +171,9 @@ withDayAndYear(program.command('solve'))
         }
         try {
           await submitAnswer(latestAnswer, ...currentArgs);
-          await getLeaderboardPosition(year, day, currentArgs[2]);
+          if (process.env.LEADERBOARD_ID) {
+            await getLeaderboardPosition(year, day, currentArgs[2]);
+          }
         } catch (error) {
           logError(error);
           return false;

@@ -10,7 +10,8 @@
   },
   "remoteEnv": {
     "NO_FILE_OPEN": "true",
-    "SESSION_COOKIE": "${localEnv:AOC_SESSION_ID}"
+    "SESSION_COOKIE": "${localEnv:AOC_SESSION_ID}",
+    "LEADERBOARD_ID": "${localEnv:AOC_LEADERBOARD_ID}"
   },
   "secrets": {
     "AOC_SESSION_ID": {
