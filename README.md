@@ -1,6 +1,6 @@
 ## Advent of Code solutions
 
-![](https://img.shields.io/badge/stars%20⭐-403%2F450-brightgreen)
+![](https://img.shields.io/badge/stars%20⭐-404%2F450-brightgreen)
 [![](https://badgen.net/badge/icon/Open%20in%20codespaces?icon=github&label)](https://codespaces.new/bponomarenko/adventofcode?quickstart=1)
 
 Small project to keep all found solutions for the [Advent of Code](https://adventofcode.com/) puzzles.

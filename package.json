@@ -23,7 +23,7 @@
     "puzzles"
   ],
   "engines": {
-    "node": ">=16.13"
+    "node": ">=20"
   },
   "author": "Borys Ponomarenko <bponomarenko@gmail.com>",
   "license": "MIT",

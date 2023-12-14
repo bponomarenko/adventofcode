@@ -15,7 +15,7 @@ export const formatInput = input => {
   ];
 };
 
-const opcodes = {
+export const opcodes = {
   addr: (reg, a, b, c) => {
     reg[c] = reg[a] + reg[b];
     return reg;
