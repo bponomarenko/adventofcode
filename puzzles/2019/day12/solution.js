@@ -1,8 +1,10 @@
+import { sum } from '../../utils/collections.js';
+
 export const formatInput = input => {
-  const [steps, positions] = input.split('\n\n');
+  const [positions, steps] = input.split('\n\n');
   return {
     steps: +steps,
-    moons: (positions || steps).split('\n').flatMap(position => position
+    moons: positions.split('\n').flatMap(position => position
       .slice(1, -1)
       .split(', ')
       .map(coord => +coord.split('=')[1])
@@ -44,11 +46,13 @@ const applyVelocity = moon => {
   }
 };
 
-const sum = values => values.reduce((acc, value) => acc + Math.abs(value), 0);
+const getMoonEnergy = moon => {
+  moon = moon.map(value => Math.abs(value));
+  return sum(moon.slice(0, 3)) * sum(moon.slice(3));
+};
 
-const getMoonEnergy = moon => sum(moon.slice(0, 3)) * sum(moon.slice(3));
-
-export const part1 = ({ steps, moons }) => {
+export const part1 = ({ steps, moons }, isTest) => {
+  steps = isTest ? steps : 1000;
   for (let s = 0; s < steps; s += 1) {
     // 1. Update velocity
     for (let i = 0; i < size - moonSize; i += moonSize) {
