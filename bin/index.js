@@ -19,6 +19,7 @@ const zwws = '​';
 
 prompt.delimiter = zwws;
 prompt.message = chalk.gray.dim('>');
+process.noDeprecation = true;
 
 const withDayAndYear = command => command
   .option('-y, --year <year>', 'Year of the puzzle to scaffold', Number, process.env.YEAR ? +process.env.YEAR : new Date().getFullYear())
@@ -32,9 +33,12 @@ const runCommand = async ({ name, args }) => {
 
   try {
     let response;
-    runningProcess = execaNode(`./lib/${name}.js`, args, { stdio: process.stdio, stdout: process.stdout })
-      // Actual respoznse would be sent as a message
-      .on('message', msg => { response = msg; });
+    runningProcess = execaNode(`./lib/${name}.js`, args, {
+      stdio: process.stdio,
+      stdout: process.stdout,
+      nodeOptions: ['--no-deprecation'],
+    }).on('message', msg => { response = msg; }); // Actual response would be sent as a message
+
     await runningProcess;
     return response;
   } catch (error) {
@@ -145,7 +149,9 @@ withDayAndYear(program.command('solve'))
   .addOption(new Option('--no-open', 'Do not open the solution file in the code editor').env('NO_FILE_OPEN'))
   .option('--no-watch', 'Do not run solution in a watch mode')
   .option('--no-validate', 'Do not run validation test cases prior to solving a solution')
-  .action(async (part, { watch, init, open, year, day, validate }) => {
+  .action(async (part, {
+    watch, init, open, year, day, validate,
+  }) => {
     if (init) {
       // Initialize the project first
       await initPuzzle(year, day, open);
@@ -230,8 +236,6 @@ withDayAndYear(program.command('validate'))
 withDayAndYear(program.command('easter-egg'))
   .description('Tries to find easter-eggs on the puzzle page (words with additional info on them), and prints links to them')
   .action(({ year, day }) => findEasterEgg(year, day));
-
-process.noDeprecation = true;
 
 (async function main() {
   try {
