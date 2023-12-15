@@ -1,4 +1,4 @@
-import { getAdjacent } from '../../utils/grid.js';
+import { getAdjacent, getRelativeCoord, changeDirection } from '../../utils/grid.js';
 
 export const formatInput = input => +input;
 
@@ -26,38 +26,10 @@ export const part1 = input => {
 
 const directions = ['e', 'n', 'w', 's'];
 
-const getSum = (field, { x, y }) => getAdjacent(y, x, [0, field[0].length - 1], [0, field.length - 1])
+const getSum = (field, { x, y }) => getAdjacent(x, y, [0, field[0].length - 1], [0, field.length - 1])
   .reduce((sum, [nx, ny]) => sum + field[ny][nx], 0);
 
-const getNextCoordinates = ({ x, y, dir }) => {
-  switch (dir) {
-    case 'e':
-      return [x + 1, y];
-    case 'w':
-      return [x - 1, y];
-    case 'n':
-      return [x, y - 1];
-    case 's':
-      return [x, y + 1];
-    default:
-      throw new Error(`Not expected direction: ${dir}`);
-  }
-};
-
-const getLeftPos = ({ x, y, dir }) => {
-  switch (dir) {
-    case 'e':
-      return [x, y - 1];
-    case 'w':
-      return [x, y + 1];
-    case 'n':
-      return [x - 1, y];
-    case 's':
-      return [x + 1, y];
-    default:
-      throw new Error(`Not expected direction: ${dir}`);
-  }
-};
+const getLeftPos = ({ x, y, dir }) => getRelativeCoord(x, y, changeDirection(dir, -90));
 
 const getNextDir = dir => {
   const index = directions.indexOf(dir);
@@ -67,7 +39,7 @@ const getNextDir = dir => {
 };
 
 const getNextPos = (field, pos) => {
-  const [nX, nY] = getNextCoordinates(pos);
+  const [nX, nY] = getRelativeCoord(pos.x, pos.y, pos.dir);
   const nextPos = { x: nX, y: nY, dir: pos.dir };
   const [leftX, leftY] = getLeftPos(nextPos);
   // Check if we need to change the direction (to turn left)
@@ -80,7 +52,7 @@ const getNextPos = (field, pos) => {
 export const part2 = input => {
   const sideSize = getSquareSize(input);
   // Create two-dimensional array
-  const field = new Array(sideSize).fill(0).map(() => new Array(sideSize).fill(0));
+  const field = Array.from(new Array(sideSize), () => new Array(sideSize).fill(0));
   const center = Math.floor(sideSize / 2);
 
   // Set starting point in the center of the field
@@ -96,6 +68,5 @@ export const part2 = input => {
     sum = getSum(field, pos);
     field[pos.y][pos.x] = sum;
   }
-
   return sum;
 };
