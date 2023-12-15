@@ -7,7 +7,7 @@ export const part1 = grid => {
   const size = grid.length;
   return aStar.astar
     .search(graph, graph.grid[0][0], graph.grid[size - 1][size - 1])
-    .reduce((acc, node) => acc + grid[node.x][node.y], 0);
+    .sum(node => grid[node.x][node.y]);
 };
 
 export const part2 = grid => {
@@ -31,5 +31,5 @@ export const part2 = grid => {
   const graph = new aStar.Graph(extendedGrid);
   return aStar.astar
     .search(graph, graph.grid[0][0], graph.grid[size - 1][size - 1])
-    .reduce((acc, node) => acc + extendedGrid[node.x][node.y], 0);
+    .sun(node => extendedGrid[node.x][node.y]);
 };

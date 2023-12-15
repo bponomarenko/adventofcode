@@ -1,3 +1,5 @@
+import { getRelativeCoord } from '../../utils/grid.js';
+
 export const formatInput = input => input.split('\n');
 formatInput.doNotTrim = true;
 
@@ -31,39 +33,22 @@ const parseMap = input => {
 const turn = (direction, d) => directions[(directions.indexOf(direction) + d + 4) % 4];
 
 const moveCart = (track, carts, cart) => {
-  let nextPos;
+  const nextPos = getRelativeCoord(cart.x, cart.y, cart.direction);
   let crashPos;
-  // calculate next position
-  switch (cart.direction) {
-    case 'r':
-      nextPos = { x: cart.x + 1, y: cart.y };
-      break;
-    case 'l':
-      nextPos = { x: cart.x - 1, y: cart.y };
-      break;
-    case 'u':
-      nextPos = { x: cart.x, y: cart.y - 1 };
-      break;
-    case 'd':
-      nextPos = { x: cart.x, y: cart.y + 1 };
-      break;
-  }
 
   // find crashes
-  if (carts.some(({ x, y }) => nextPos.x === x && nextPos.y === y)) {
-    crashPos = [nextPos.x, nextPos.y];
+  if (carts.some(({ x, y }) => nextPos[0] === x && nextPos[1] === y)) {
+    crashPos = nextPos;
   }
 
   // update cart position
-  cart.x = nextPos.x;
-  cart.y = nextPos.y;
-
+  [cart.x, cart.y] = nextPos;
   if (crashPos) {
     return crashPos;
   }
 
   // update cart direction
-  switch (track[nextPos.y][nextPos.x]) {
+  switch (track[nextPos[1]][nextPos[0]]) {
     case '+':
       if (cart.countCrossroads % 3 === 0) {
         // turn left

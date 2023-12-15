@@ -38,6 +38,4 @@ const findTrees = (dx, dy, lines) => {
   return trees;
 };
 
-export const part2 = lines => [[1, 1], [3, 1], [5, 1], [7, 1], [1, 2]]
-  .map(([dx, dy]) => findTrees(dx, dy, lines))
-  .reduce((acc, count) => acc * count, 1);
+export const part2 = lines => [[1, 1], [3, 1], [5, 1], [7, 1], [1, 2]].power(([dx, dy]) => findTrees(dx, dy, lines));

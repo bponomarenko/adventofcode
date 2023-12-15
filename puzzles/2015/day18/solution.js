@@ -1,17 +1,11 @@
+import { getAdjacent } from '../../utils/grid.js';
+
 export const formatInput = input => input.split('\n').map(line => line.split('').map(light => light === '#'));
 
 const steps = 100;
 
-const countNeighbours = (lights, i, j) => (
-  (lights[i - 1]?.[j - 1] ?? 0)
-  + (lights[i - 1]?.[j] ?? 0)
-  + (lights[i - 1]?.[j + 1] ?? 0)
-  + (lights[i][j - 1] ?? 0)
-  + (lights[i][j + 1] ?? 0)
-  + (lights[i + 1]?.[j - 1] ?? 0)
-  + (lights[i + 1]?.[j] ?? 0)
-  + (lights[i + 1]?.[j + 1] ?? 0)
-);
+const countNeighbours = (lights, i, j) => getAdjacent(j, i, [0, lights[0].length - 1], [0, lights.length - 1])
+  .sum(([x, y]) => lights[y][x]);
 
 export const part1 = input => {
   let step = 0;
@@ -24,7 +18,7 @@ export const part1 = input => {
     }));
     step += 1;
   } while (step < steps);
-  return input.reduce((acc, row) => acc + row.reduce((res, light) => res + (light ? 1 : 0), 0), 0);
+  return input.sum(row => row.sum(light => (light ? 1 : 0)));
 };
 
 export const part2 = input => {
@@ -42,5 +36,5 @@ export const part2 = input => {
     }));
     step += 1;
   } while (step < steps);
-  return input.reduce((acc, row) => acc + row.reduce((res, light) => res + (light ? 1 : 0), 0), 0);
+  return input.sum(row => row.sum(light => (light ? 1 : 0)));
 };

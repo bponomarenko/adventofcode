@@ -1,5 +1,4 @@
 import aStar from 'javascript-astar';
-import { permutations } from '../../utils/collections.js';
 
 export const formatInput = input => input.split('\n').map(line => line.split(''));
 
@@ -39,7 +38,7 @@ const findMinDistance = (input, returnToStart) => {
   const points = Array.from(visitPoints.keys()).filter(point => point !== '0');
 
   // Find all the different path options, and find the one with minimum distance
-  for (const perm of permutations(points, points.length)) {
+  for (const perm of points.permutations(points.length)) {
     perm.unshift('0');
     if (returnToStart) {
       perm.push('0');

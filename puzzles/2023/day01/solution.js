@@ -1,5 +1,3 @@
-import { sum } from '../../utils/collections.js';
-
 export const formatInput = input => input.split('\n');
 
 const lettersRe = /\D/g;
@@ -8,17 +6,14 @@ const getTwoDigitNum = str => {
   return +`${digitsStr.at(0)}${digitsStr.at(-1)}`;
 };
 
-export const part1 = input => sum(input.map(getTwoDigitNum));
+export const part1 = input => input.sum(getTwoDigitNum);
 
 const digits = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
   .map((digit, index) => [digit, `${digit.at(0)}${index + 1}${digit.at(-1)}`]);
 
-export const part2 = input => {
-  const nums = input.map(line => {
-    digits.forEach(([digit, replace]) => {
-      line = line.replaceAll(digit, replace);
-    });
-    return getTwoDigitNum(line);
+export const part2 = input => input.sum(line => {
+  digits.forEach(([digit, replace]) => {
+    line = line.replaceAll(digit, replace);
   });
-  return sum(nums);
-};
+  return getTwoDigitNum(line);
+});

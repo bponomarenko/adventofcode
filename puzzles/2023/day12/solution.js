@@ -1,5 +1,3 @@
-import { sum } from '../../utils/collections.js';
-
 export const formatInput = input => input.split('\n').map(row => {
   const [springs, groups] = row.split(' ');
   return [springs, groups.split(',').map(Number)];
@@ -80,12 +78,10 @@ const countVariations = (springs, groups, startPos = 0, startIndex = 0, memory =
   return 0;
 };
 
-export const part1 = input => sum(input.map(params => countVariations(...params)));
+export const part1 = input => input.sum(params => countVariations(...params));
 
-export const part2 = input => sum(
-  input.map(([springs, groups]) => {
-    groups = new Array(5).fill(groups).flat();
-    springs = new Array(5).fill(springs).join('?');
-    return countVariations(springs, groups);
-  }),
-);
+export const part2 = input => input.sum(([springs, groups]) => {
+  groups = new Array(5).fill(groups).flat();
+  springs = new Array(5).fill(springs).join('?');
+  return countVariations(springs, groups);
+});

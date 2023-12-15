@@ -1,5 +1,3 @@
-import { slidingWindows } from '../../utils/collections.js';
-
 export const formatInput = input => {
   const [template, rules] = input.split('\n\n');
   return [template, new Map(rules.split('\n').map(rule => {
@@ -8,9 +6,16 @@ export const formatInput = input => {
   }))];
 };
 
+const slidingWindows = (arr, size) => {
+  let windows = [];
+  for (let i = 0; i < arr.length - size + 1; i += size - 1) {
+    windows.push(arr.slice(i, i + size));
+  }
+  return windows;
+};
+
 const findPolymerizationResult = ([template, rules], steps) => {
   let pairCounts = new Map();
-
   slidingWindows(template, 2).forEach(pair => {
     pairCounts.set(pair, (pairCounts.get(pair) || 0) + 1);
   });

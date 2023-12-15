@@ -1,5 +1,3 @@
-import { sum } from '../../utils/collections.js';
-
 export const formatInput = input => input.split(' ').map(Number);
 
 const readNode = data => {
@@ -21,18 +19,18 @@ const getNodeMeta = node => [...node.meta, ...node.children.flatMap(getNodeMeta)
 
 export const part1 = input => {
   const [tree] = readNode(input);
-  return sum(getNodeMeta(tree));
+  return getNodeMeta(tree).sum();
 };
 
 const getNodeValue = node => {
   if (node.children.length) {
-    const children = node.meta.map(value => node.children[value - 1]).filter(Boolean);
-    return sum(children.map(getNodeValue));
+    return node.meta
+      .map(value => node.children[value - 1])
+      .filter(Boolean)
+      .map(getNodeValue)
+      .sum();
   }
-  return sum(node.meta);
+  return node.meta.sum();
 };
 
-export const part2 = input => {
-  const [tree] = readNode(input);
-  return getNodeValue(tree);
-};
+export const part2 = input => getNodeValue(readNode(input)[0]);

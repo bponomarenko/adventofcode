@@ -1,4 +1,4 @@
-export const formatInput = input => input.split('\n').map(size => size.split('x'));
+export const formatInput = input => input.toGrid('\n', 'x');
 
 export const part1 = input => input
   .map(([l, w, h]) => {

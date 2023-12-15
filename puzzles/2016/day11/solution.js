@@ -30,7 +30,7 @@ class State {
 
   get heuristic() {
     if (!this.#heuristic) {
-      this.#heuristic = this.floors.reduce((acc, items, i) => acc + items.length * (lastFloor - i) ** 2, 0);
+      this.#heuristic = this.floors.sum((items, i) => items.length * (lastFloor - i) ** 2);
     }
     return this.#heuristic;
   }

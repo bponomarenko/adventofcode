@@ -19,7 +19,7 @@ const getNextPos = (dir, pos) => {
   }
 };
 
-const getDistance = pos => (Math.abs(pos[0]) + Math.abs(pos[1]) + Math.abs(pos[2])) / 2;
+const getDistance = pos => pos.sum(n => Math.abs(n)) / 2;
 
 export const part1 = input => {
   let pos = [0, 0, 0];

@@ -1,7 +1,6 @@
 import { getDistance } from '../../utils/grid.js';
-import { sum } from '../../utils/collections.js';
 
-export const formatInput = input => input.split('\n').map(line => line.split(', '));
+export const formatInput = input => input.toGrid('\n', ', ');
 
 const sortNums = arr => arr.sort(([a], [b]) => a - b);
 const getLimits = points => {
@@ -46,7 +45,7 @@ export const part2 = (input, isTest) => {
 
   for (let x = minX; x <= maxX; x += 1) {
     for (let y = minY; y <= maxY; y += 1) {
-      const distances = sum(input.map(point => getDistance(point, [x, y])));
+      const distances = input.sum(point => getDistance(point, [x, y]));
       if (distances < limit) {
         validLocations += 1;
       }

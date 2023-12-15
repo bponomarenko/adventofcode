@@ -1,5 +1,3 @@
-import { sum } from '../../utils/collections.js';
-
 export const formatInput = input => {
   const walls = new Map();
   input.split('\n').forEach(row => {
@@ -107,4 +105,4 @@ const findWaterTiles = walls => {
 
 export const part1 = input => findWaterTiles(input).size;
 
-export const part2 = input => sum(Array.from(findWaterTiles(input).values()));
+export const part2 = input => Array.from(findWaterTiles(input).values()).sum();

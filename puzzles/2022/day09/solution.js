@@ -1,16 +1,8 @@
+import { getRelativeCoord } from '../../utils/grid.js';
+
 export const formatInput = input => input.split('\n').map(line => {
   const [cmd, size] = line.split(' ');
-  switch (cmd) {
-    case 'R':
-      return [(x, y) => [x + 1, y], +size];
-    case 'L':
-      return [(x, y) => [x - 1, y], +size];
-    case 'U':
-      return [(x, y) => [x, y - 1], +size];
-    case 'D':
-      return [(x, y) => [x, y + 1], +size];
-  }
-  return null;
+  return [(x, y) => getRelativeCoord(x, y, cmd), +size];
 });
 
 const getDx = (k1, k2) => k1[0] - k2[0];
@@ -19,7 +11,7 @@ const isTooFar = value => Math.abs(value) > 1;
 const haveToMove = (k1, k2) => isTooFar(getDx(k1, k2)) || isTooFar(getDy(k1, k2));
 
 const countRopeTailPositions = (moves, ropeLength) => {
-  const rope = new Array(ropeLength).fill(0).map(() => [0, 0]);
+  const rope = Array.from(new Array(ropeLength), () => [0, 0]);
   const lastKnotIndex = ropeLength - 1;
   const visited = new Set([rope[lastKnotIndex].join(',')]);
 

@@ -51,5 +51,4 @@ const evalExpr2 = expr => {
   return evalSimpleExpr2(finalExpr);
 };
 
-export const part2 = input => input.map(expr => evalExpr2(expr))
-  .reduce((acc, v) => acc + v, 0);
+export const part2 = input => input.sum(expr => evalExpr2(expr));

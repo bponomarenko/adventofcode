@@ -1,5 +1,4 @@
 import jsAStar from 'javascript-astar';
-import { combinations } from '../../utils/collections.js';
 
 const { astar, Graph } = jsAStar;
 const nodeRe = /\/dev\/grid\/node-x(\d+)-y(\d+) +\d+T +(\d+)T +(\d+)T/;
@@ -9,7 +8,7 @@ export const formatInput = input => input.split('\n').slice(2).map(node => {
   return { x: +x, y: +y, used: +used, available: +available };
 });
 
-export const part1 = nodes => Array.from(combinations(nodes, 2))
+export const part1 = nodes => Array.from(nodes.combinations(2))
   .filter(([a, b]) => (a.used > 0 && a.used <= b.available) || (b.used > 0 && b.used <= a.available))
   .length;
 

@@ -68,11 +68,11 @@ export const formatInput = input => {
 const getSum = (groups, level) => groups
   // remove garbage blocks
   .filter(({ garbage }) => !garbage)
-  .reduce((acc, { children }) => acc + level + getSum(children, level + 1), 0);
+  .sum(({ children }) => level + getSum(children, level + 1));
 
 export const part1 = input => getSum(input, 1);
 
 // Count amount of the remove garbage characters this time
-const getSum2 = groups => groups.reduce((acc, { garbage, len, children }) => acc + (garbage ? len : getSum2(children)), 0);
+const getSum2 = groups => groups.sum(({ garbage, len, children }) => (garbage ? len : getSum2(children)));
 
 export const part2 = input => getSum2(input);

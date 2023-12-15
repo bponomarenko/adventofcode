@@ -1,3 +1,5 @@
+import { getRelativeCoord } from '../../utils/grid.js';
+
 export const formatInput = input => {
   const lines = input.split('\n');
   const center = [(lines[0].length - 1) / 2, (lines.length - 1) / 2];
@@ -26,20 +28,6 @@ const getNextDirection = (dir, node) => {
   }
 };
 
-const getNextPosition = ([x, y], dir) => {
-  switch (dir) {
-    case 'u':
-      return [x, y - 1];
-    case 'd':
-      return [x, y + 1];
-    case 'l':
-      return [x - 1, y];
-    case 'r':
-      return [x + 1, y];
-  }
-  return [x, y];
-};
-
 export const part1 = infectedNodes => {
   let pos = [0, 0];
   let dir = 'u';
@@ -55,7 +43,7 @@ export const part1 = infectedNodes => {
       infectedNodes.set(key, 'I');
       dir = getNextDirection(dir);
     }
-    pos = getNextPosition(pos, dir);
+    pos = getRelativeCoord(...pos, dir);
   }
   return infections;
 };
@@ -86,7 +74,7 @@ export const part2 = infectedNodes => {
       infectedNodes.set(key, 'W');
       dir = getNextDirection(dir);
     }
-    pos = getNextPosition(pos, dir);
+    pos = getRelativeCoord(...pos, dir);
   }
   return infections;
 };

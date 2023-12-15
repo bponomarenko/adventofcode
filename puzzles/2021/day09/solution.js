@@ -20,7 +20,7 @@ const getLowPoints = input => {
   return lowPoints;
 };
 
-export const part1 = input => getLowPoints(input).reduce((acc, [x, y]) => acc + input[x][y] + 1, 0);
+export const part1 = input => getLowPoints(input).sum(([x, y]) => input[x][y] + 1);
 
 export const part2 = input => {
   const lowPoints = getLowPoints(input);
@@ -38,5 +38,5 @@ export const part2 = input => {
     return size + getStraightAdjacent(x, y, ...limits).filter(isNotBorder).reduce((acc, point) => acc + getSize(point), 0);
   };
 
-  return lowPoints.map(getSize).sort((a, b) => a - b).slice(-3).reduce((acc, num) => acc * num, 1);
+  return lowPoints.map(getSize).sort((a, b) => a - b).slice(-3).power();
 };

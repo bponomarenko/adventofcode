@@ -1,5 +1,3 @@
-import { sum } from '../../utils/collections.js';
-
 export const formatInput = input => input.split('\n').map(line => {
   const [hand, bid] = line.split(' ');
   return [hand, +bid];
@@ -80,6 +78,6 @@ const getSortedBids = (input, withJoker) => input
   .reverse()
   .map(([, , bid], index) => bid * (index + 1));
 
-export const part1 = input => sum(getSortedBids(input));
+export const part1 = input => getSortedBids(input).sum();
 
-export const part2 = input => sum(getSortedBids(input, true));
+export const part2 = input => getSortedBids(input, true).sum();

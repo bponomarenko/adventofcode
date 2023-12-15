@@ -74,5 +74,15 @@
         "exceptAfterSingleLine": true
       }
     ]
-  }
+  },
+  "overrides": [
+    {
+      "files": [
+        "lib/prototype-extensions.js"
+      ],
+      "rules": {
+        "no-extend-native": "off"
+      }
+    }
+  ]
 }

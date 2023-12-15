@@ -28,5 +28,5 @@ export const part2 = arr => {
       distance = 0;
     }
   }
-  return distances.reduce((acc, d) => acc * (2 ** d - (d > 2 ? 1 : 0)), 1);
+  return distances.power(d => (2 ** d - (d > 2 ? 1 : 0)));
 };

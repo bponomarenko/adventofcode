@@ -37,7 +37,7 @@ function compareValues(v1, v2) {
 
 export const part1 = input => input
   .filter(({ value1, value2 }) => compareValues(value1, value2) !== false)
-  .reduce((acc, { index }) => acc + index + 1, 0);
+  .sum(({ index }) => index + 1);
 
 export const part2 = input => {
   const div1 = '[[2]]';

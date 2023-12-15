@@ -1,6 +1,4 @@
-import { sum } from '../../utils/collections.js';
-
-export const formatInput = input => input.split('\n').map(line => line.split(' '));
+export const formatInput = input => input.toGrid('\n', ' ');
 
 const rules = {
   A: { wins: 'C', looses: 'B', score: 1 }, // rock
@@ -8,11 +6,7 @@ const rules = {
   C: { wins: 'B', looses: 'A', score: 3 }, // scissors
 };
 
-const syn = {
-  X: 'A',
-  Y: 'B',
-  Z: 'C',
-};
+const syn = { X: 'A', Y: 'B', Z: 'C' };
 
 const play = (one, two) => {
   const { wins } = rules[one];
@@ -23,7 +17,7 @@ const play = (one, two) => {
   return result + rules[two].score;
 };
 
-export const part1 = input => sum(input.map(([one, two]) => play(one, syn[two])));
+export const part1 = input => input.sum(([one, two]) => play(one, syn[two]));
 
 const pickTwo = (one, result) => {
   const { wins, looses } = rules[one];
@@ -33,4 +27,4 @@ const pickTwo = (one, result) => {
   return result === 'Y' ? one : looses;
 };
 
-export const part2 = input => sum(input.map(([one, two]) => play(one, pickTwo(one, two))));
+export const part2 = input => input.sum(([one, two]) => play(one, pickTwo(one, two)));

@@ -5,7 +5,7 @@ export const part1 = input => {
   let min = Infinity;
 
   for (let i = 0; i < max; i += 1) {
-    min = Math.min(input.reduce((acc, num) => acc + Math.abs(num - i), 0), min);
+    min = Math.min(input.sum(num => Math.abs(num - i)), min);
   }
   return min;
 };
@@ -17,7 +17,7 @@ export const part2 = input => {
   let min = Infinity;
 
   for (let i = 0; i < max; i += 1) {
-    min = Math.min(min, input.reduce((acc, num) => acc + rate(Math.abs(num - i)), 0));
+    min = Math.min(min, input.sum(num => rate(Math.abs(num - i))));
   }
   return min;
 };

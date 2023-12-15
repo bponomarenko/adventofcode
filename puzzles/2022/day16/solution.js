@@ -15,7 +15,7 @@ const getBlockedValves = scan => Object.entries(scan)
   .sort(([, { rate: rate1 }], [, { rate: rate2 }]) => rate2 - rate1)
   .map(([valve]) => valve);
 
-const calcMaxPressure = (valves, scan, time) => valves.reduce((sum, valve, i) => sum + scan[valve].rate * Math.max(0, time - (i + 1) * 2), 0);
+const calcMaxPressure = (valves, scan, time) => valves.sum((valve, i) => scan[valve].rate * Math.max(0, time - (i + 1) * 2));
 
 export const part1 = scan => {
   const queue = new BinaryHeap(state => -state.pressure);

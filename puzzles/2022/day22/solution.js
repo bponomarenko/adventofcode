@@ -1,3 +1,5 @@
+import { changeDirection } from '../../utils/grid.js';
+
 export const formatInput = input => {
   const [map, path] = input.split('\n\n');
   return [
@@ -7,20 +9,20 @@ export const formatInput = input => {
 };
 formatInput.doNotTrim = true;
 
-const directions = ['r', 'd', 'l', 'u', 'r'];
+const directions = ['e', 's', 'w', 'n'];
 
 const followThePath = (grid, path, getNextPos) => {
   let x = grid[0].findIndex(tile => tile === '.');
   let y = 0;
-  let dir = 'r';
+  let dir = 'e';
 
   while (path.length) {
     let step = path.shift();
     // change direction
     if (step === 'L') {
-      dir = directions[directions.lastIndexOf(dir) - 1];
+      dir = changeDirection(dir, -90);
     } else if (step === 'R') {
-      dir = directions[directions.indexOf(dir) + 1];
+      dir = changeDirection(dir, 90);
     } else {
       // ...or do the move, step by step
       while (step > 0) {
@@ -41,13 +43,13 @@ const followThePath = (grid, path, getNextPos) => {
 
 export const part1 = ([grid, path]) => followThePath(grid, path, (x, y, dir) => {
   switch (dir) {
-    case 'r':
+    case 'e':
       return [[x + 1 >= grid[y].length ? grid[y].findIndex(tile => tile !== ' ') : x + 1, y], dir];
-    case 'l':
+    case 'w':
       return [[x - 1 < 0 || grid[y][x - 1] === ' ' ? grid[y].length - 1 : x - 1, y], dir];
-    case 'd':
+    case 's':
       return [[x, y + 1 >= grid.length || x >= grid[y + 1].length ? grid.findIndex(row => row[x] !== ' ') : y + 1], dir];
-    case 'u':
+    case 'n':
       return [[x, y - 1 < 0 || grid[y - 1][x] === ' ' ? grid.findLastIndex(row => x < row.length) : y - 1], dir];
   }
   return null;
@@ -59,52 +61,52 @@ export const part2 = ([grid, path], isTest) => {
     // Do woodoo "wrapping" around the sides of the cube
     // (solution hardcoded to the data structure of the input file, so it doesn't work for the example from the puzzle)
     switch (dir) {
-      case 'r':
+      case 'e':
         if (x + 1 >= grid[y].length) {
           if (y < size) {
-            return [[size * 2 - 1, size * 3 - 1 - y], 'l'];
+            return [[size * 2 - 1, size * 3 - 1 - y], 'w'];
           }
           if (y < size * 2) {
-            return [[y + size, size - 1], 'u'];
+            return [[y + size, size - 1], 'n'];
           }
           if (y < size * 3) {
-            return [[size * 3 - 1, size * 3 - 1 - y], 'l'];
+            return [[size * 3 - 1, size * 3 - 1 - y], 'w'];
           }
-          return [[y - size * 2, size * 3 - 1], 'u'];
+          return [[y - size * 2, size * 3 - 1], 'n'];
         }
         return [[x + 1, y], dir];
-      case 'l':
+      case 'w':
         if (x - 1 < 0 || grid[y][x - 1] === ' ') {
           if (y < size) {
-            return [[0, size * 3 - 1 - y], 'r'];
+            return [[0, size * 3 - 1 - y], 'e'];
           }
           if (y < size * 2) {
-            return [[y - size, size * 2], 'd'];
+            return [[y - size, size * 2], 's'];
           }
           if (y < size * 3) {
-            return [[size, size * 3 - 1 - y], 'r'];
+            return [[size, size * 3 - 1 - y], 'e'];
           }
-          return [[y - size * 2, 0], 'd'];
+          return [[y - size * 2, 0], 's'];
         }
         return [[x - 1, y], dir];
-      case 'd':
+      case 's':
         if (y + 1 >= grid.length || x >= grid[y + 1].length) {
           if (x < size) {
             return [[x + size * 2, 0], dir];
           }
           if (x < size * 2) {
-            return [[size - 1, size * 2 + x], 'l'];
+            return [[size - 1, size * 2 + x], 'w'];
           }
-          return [[size * 2 - 1, x - size], 'l'];
+          return [[size * 2 - 1, x - size], 'w'];
         }
         return [[x, y + 1], dir];
-      case 'u':
+      case 'n':
         if (y - 1 < 0 || grid[y - 1][x] === ' ') {
           if (x < size) {
-            return [[size, x + size], 'r'];
+            return [[size, x + size], 'e'];
           }
           if (x < size * 2) {
-            return [[0, x + size * 2], 'r'];
+            return [[0, x + size * 2], 'e'];
           }
           return [[x - size * 2, size * 4 - 1], dir];
         }

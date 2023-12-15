@@ -1,4 +1,3 @@
-import { combinations } from '../../utils/collections.js';
 import { getDistance } from '../../utils/grid.js';
 
 const parseValues = str => str.slice(str.indexOf('<') + 1, str.indexOf('>')).split(',').map(Number);
@@ -21,7 +20,7 @@ const canChangeDirection = particles => particles.some(({ v, a }) => diffSign(v[
 
 const hasConvergingParticles = (particles, distances) => {
   let result = false;
-  for (let [{ i: i1, p: p1 }, { i: i2, p: p2 }] of combinations(particles, 2)) {
+  for (let [{ i: i1, p: p1 }, { i: i2, p: p2 }] of particles.combinations(2)) {
     const key = `${i1}-${i2}`;
     const distance = getDistance(p1, p2);
     result = result || distance < distances.get(key);
@@ -32,7 +31,7 @@ const hasConvergingParticles = (particles, distances) => {
 
 export const part2 = input => {
   const pos = new Map();
-  const distances = new Map(Array.from(combinations(input, 2)).map(([{ i: i1, p: p1 }, { i: i2, p: p2 }]) => [`${i1}-${i2}`, getDistance(p1, p2)]));
+  const distances = new Map(Array.from(input.combinations(2), ([{ i: i1, p: p1 }, { i: i2, p: p2 }]) => [`${i1}-${i2}`, getDistance(p1, p2)]));
   let particles = input;
 
   do {

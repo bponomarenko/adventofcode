@@ -56,5 +56,5 @@ export const part2 = input => {
       }
     }
   });
-  return Array.from(memory.values()).reduce((acc, value) => acc + value, 0);
+  return Array.from(memory.values()).sum();
 };

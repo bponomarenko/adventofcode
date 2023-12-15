@@ -1,4 +1,4 @@
-const mapValue = value => (value === '#' ? 1 : 0);
+const mapValue = value => +(value === '#');
 
 export const formatInput = input => {
   const [algorithm, image] = input.split('\n\n');
@@ -36,7 +36,7 @@ const enhance = (image, algorithm, count) => {
     // ...being careful to account for the infinite size of the images
     placeholder = placeholder ? algorithm[algorithm.length - 1] : algorithm[0];
   }
-  return image.reduce((acc, line) => acc + line.filter(Boolean).length, 0);
+  return image.sum(line => line.filter(Boolean).length);
 };
 
 export const part1 = ([algorithm, image]) => enhance(image, algorithm, 2);

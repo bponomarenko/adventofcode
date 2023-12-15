@@ -1,4 +1,4 @@
-import { getStraightAdjacent } from '../../utils/grid.js';
+import { getStraightAdjacent, getRelativeCoord, changeDirection } from '../../utils/grid.js';
 import Intcode from '../intcode.js';
 
 export const formatInput = input => input;
@@ -38,22 +38,7 @@ const findRobot = grid => {
   return null;
 };
 
-const directions = ['u', 'r', 'd', 'l', 'u'];
-const directionsMap = { 94: 'u', 62: 'r', 118: 'd', 60: 'l' };
-
-const getAdjacent = (x, y, dir) => {
-  switch (dir) {
-    case 'u':
-      return [x, y - 1];
-    case 'r':
-      return [x + 1, y];
-    case 'd':
-      return [x, y + 1];
-    case 'l':
-      return [x - 1, y];
-  }
-  return null;
-};
+const directionsMap = { 94: 'n', 62: 'e', 118: 's', 60: 'w' };
 
 const findPath = (grid, x, y) => {
   const path = [];
@@ -61,13 +46,13 @@ const findPath = (grid, x, y) => {
 
   for (; ;) {
     // Find next direction
-    let nextDir = directions[directions.lastIndexOf(dir) - 1];
-    if (isScaffold(grid, getAdjacent(x, y, nextDir))) {
+    let nextDir = changeDirection(dir, -90);
+    if (isScaffold(grid, getRelativeCoord(x, y, nextDir))) {
       dir = nextDir;
       path.push('L');
     } else {
-      nextDir = directions[directions.indexOf(dir) + 1];
-      if (isScaffold(grid, getAdjacent(x, y, nextDir))) {
+      nextDir = changeDirection(dir, 90);
+      if (isScaffold(grid, getRelativeCoord(x, y, nextDir))) {
         dir = nextDir;
         path.push('R');
       } else {
@@ -78,8 +63,8 @@ const findPath = (grid, x, y) => {
 
     // Follow the path
     let count = 0;
-    while (isScaffold(grid, getAdjacent(x, y, dir))) {
-      [x, y] = getAdjacent(x, y, dir);
+    while (isScaffold(grid, getRelativeCoord(x, y, dir))) {
+      [x, y] = getRelativeCoord(x, y, dir);
       count += 1;
     }
     path.push(count);

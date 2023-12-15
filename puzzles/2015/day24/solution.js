@@ -1,13 +1,9 @@
-import { sum } from '../../utils/collections.js';
-
 export const formatInput = input => input;
-
-const prod = weights => weights.reduce((acc, weight) => acc * weight, 1);
 
 function* weightGroups(weights, size, initialGroup = []) {
   for (let i = 0; i < weights.length; i += 1) {
     const group = initialGroup.concat(weights[i]);
-    const groupSize = sum(group);
+    const groupSize = group.sum();
 
     if (groupSize === size) {
       // Found needed group
@@ -21,26 +17,26 @@ function* weightGroups(weights, size, initialGroup = []) {
 
 export const part1 = input => {
   const weights = input.split('\n').map(w => +w);
-  const groupSize = sum(weights) / 3;
+  const groupSize = weights.sum() / 3;
   let bestGroup;
 
   for (let group of weightGroups(weights, groupSize)) {
-    if (!bestGroup || group.length < bestGroup.length || (group.length === bestGroup.length && prod(group) < prod(bestGroup))) {
+    if (!bestGroup || group.length < bestGroup.length || (group.length === bestGroup.length && group.power() < bestGroup.power())) {
       bestGroup = group;
     }
   }
-  return prod(bestGroup);
+  return bestGroup.power();
 };
 
 export const part2 = input => {
   const weights = input.split('\n').map(w => +w);
-  const groupSize = sum(weights) / 4;
+  const groupSize = weights.sum() / 4;
   let bestGroup;
 
   for (let group of weightGroups(weights, groupSize)) {
-    if (!bestGroup || group.length < bestGroup.length || (group.length === bestGroup.length && prod(group) < prod(bestGroup))) {
+    if (!bestGroup || group.length < bestGroup.length || (group.length === bestGroup.length && group.power() < bestGroup.power())) {
       bestGroup = group;
     }
   }
-  return prod(bestGroup);
+  return bestGroup.power();
 };

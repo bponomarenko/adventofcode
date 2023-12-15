@@ -25,7 +25,7 @@ const getProductionCosts = (name, count, reactions, remaining) => {
   const mul = Math.ceil(count / reactions[name].count);
   remaining[name] = reactions[name].count * mul - count;
   return reactions[name].inputs
-    .reduce((acc, [chemName, chemCount]) => acc + getProductionCosts(chemName, chemCount * mul, reactions, remaining), 0);
+    .sum(([chemName, chemCount]) => getProductionCosts(chemName, chemCount * mul, reactions, remaining));
 };
 
 export const part1 = input => getProductionCosts('fuel', 1, input, {});

@@ -1,5 +1,3 @@
-import { permutations } from '../../utils/collections.js';
-
 // eslint-disable-next-line no-eval
 export const formatInput = input => input.split('\n').map(line => eval(line));
 
@@ -120,7 +118,7 @@ export const part1 = input => magnitude(input.slice(1).reduce((acc, value) => ad
 
 export const part2 = input => {
   let maxSum = 0;
-  for (const [value1, value2] of permutations(input, 2)) {
+  for (const [value1, value2] of input.permutations(2)) {
     maxSum = Math.max(maxSum, magnitude(add(value1, value2)));
   }
   return maxSum;

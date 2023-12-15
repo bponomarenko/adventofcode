@@ -28,7 +28,11 @@ You can check all possible options and configurations for the `aoc` CLI by runni
 
 This project requires `.env` file in the root folder with the session cookie: `SESSION_COOKIE=....` to connect to the AOC website (for pulling the input data and submitting the answer). Alternatively you can set `LEADERBOARD_ID=...` with your private leaderboard ID to get information on how many people solved the puzzle.
 
-#### Github Codespaces
+#### GitHub Codespaces
 
-If you are using GitHub Codespaces, alternatively you can manage your session cookie value in the [Codespaces secrets](https://docs.github.com/en/codespaces/managing-your-codespaces/managing-secrets-for-your-codespaces). To do that simply create a new secret with the name `AOC_SESSION_ID` and session cookie from AOC website as a value. You would also need to associate this secret with your Codespaces repository.
+You can [easily start a new dev container](https://codespaces.new/bponomarenko/adventofcode) for this repository (or for your clonned repository) which will have all necessary configurations to run puzzle solutions upon launching. For GituHb Codespaces, aternatively to `.env` file, you can manage your session cookie value in the [Codespaces secrets](https://docs.github.com/en/codespaces/managing-your-codespaces/managing-secrets-for-your-codespaces). You will be asked to fill it in upon creating a new codespace or you can do it manually by creating a new secret with the name `AOC_SESSION_ID` and session cookie from AOC website as a value. In case of manual creation you would also need to associate this secret with the codespace repository.
 
+### Extensions
+
+A lot of puzzle solutions does rely on the extended native objects – for example, `Array.prototype.sum()`. Usually it is not recommended to do this, but in this project it helps to eliminate writing additional import statements for competetive programming.
+See full list of the extended prototype methods in the `/lib/prototype-extensions.js` file.

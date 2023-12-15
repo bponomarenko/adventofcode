@@ -1,7 +1,6 @@
 import { getStraightAdjacent } from '../../utils/grid.js';
-import { sum } from '../../utils/collections.js';
 
-export const formatInput = input => input.split('\n').map(row => row.split(''));
+export const formatInput = input => input.toGrid();
 
 const size = 5;
 const limit = [0, size - 1];
@@ -20,7 +19,7 @@ export const part1 = input => {
       return bugs === 1 || (value === '.' && bugs === 2) ? '#' : '.';
     }));
   }
-  return sum(input.flat().map((value, i) => (2 ** i) * (value === '#' ? 1 : 0)));
+  return input.flat().sum((value, i) => (2 ** i) * +(value === '#'));
 };
 
 const getEmptyGrid = () => new Array(size).fill(0).map(() => new Array(size).fill('.'));
@@ -93,5 +92,5 @@ export const part2 = (input, isTest) => {
       ...(addLast ? [getEmptyGrid()] : []),
     ];
   }
-  return sum(grids.flatMap(grid => grid.flat()).map(value => (value === '#' ? 1 : 0)));
+  return grids.flatMap(grid => grid.flat()).sum(value => +(value === '#'));
 };

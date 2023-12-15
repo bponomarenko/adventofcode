@@ -1,7 +1,4 @@
-import { sum } from '../../utils/collections.js';
-import { rotate } from '../../utils/grid.js';
-
-export const formatInput = input => input.split('\n\n').map(grid => grid.split('\n'));
+export const formatInput = input => input.toGrid('\n\n', '\n');
 
 const findReflectionY = (grid, withFix) => {
   let found = -1;
@@ -41,17 +38,14 @@ const findReflectionY = (grid, withFix) => {
   return !withFix || fixed ? found + 1 : 0;
 };
 
-const countReflections = (input, withFix) => {
-  const result = input.map((grid, i) => {
-    const foundY = findReflectionY(grid, withFix, i);
-    if (foundY > 0) {
-      return 100 * foundY;
-    }
-    const rotatedGrid = rotate(grid.map(row => row.split(''))).map(row => row.join(''));
-    return findReflectionY(rotatedGrid, withFix, i);
-  });
-  return sum(result);
-};
+const countReflections = (input, withFix) => input.map((grid, i) => {
+  const foundY = findReflectionY(grid, withFix, i);
+  if (foundY > 0) {
+    return 100 * foundY;
+  }
+  const rotatedGrid = grid.map(row => row.split('')).rotateGrid().map(row => row.join(''));
+  return findReflectionY(rotatedGrid, withFix, i);
+}).sum();
 
 export const part1 = input => countReflections(input);
 

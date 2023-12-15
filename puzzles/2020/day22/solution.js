@@ -56,5 +56,5 @@ const game = (player1, player2) => {
 
 export const part2 = ({ player1, player2 }) => {
   const [, winner] = game(player1, player2);
-  return winner.reverse().reduce((acc, card, i) => acc + (i + 1) * card, 0);
+  return winner.reverse().sum((card, i) => (i + 1) * card);
 };

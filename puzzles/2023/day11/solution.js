@@ -1,5 +1,4 @@
-import { sum, combinations } from '../../utils/collections.js';
-import { getDistance, rotate } from '../../utils/grid.js';
+import { getDistance } from '../../utils/grid.js';
 
 export const formatInput = input => {
   const [grid, num] = input.split('\n\n');
@@ -11,12 +10,11 @@ export const formatInput = input => {
 
 const getSum = (grid, expansionSize) => {
   const emptyRows = grid.map((row, y) => (row.includes('#') ? -1 : y)).filter(num => num !== -1);
-  const emptyColumns = rotate(grid, false).map((row, y) => (row.includes('#') ? -1 : y)).filter(num => num !== -1);
+  const emptyColumns = grid.rotateGrid(false).map((row, y) => (row.includes('#') ? -1 : y)).filter(num => num !== -1);
 
   // find galaxies
   const galaxies = grid.flatMap((row, y) => row.map((point, x) => (point === '#' ? [x, y] : null)).filter(Boolean));
-
-  const distances = Array.from(combinations(galaxies, 2)).map(([g1, g2]) => {
+  return Array.from(galaxies.combinations(2), ([g1, g2]) => {
     let distance = getDistance(g1, g2);
 
     emptyRows.forEach(row => {
@@ -31,8 +29,7 @@ const getSum = (grid, expansionSize) => {
       }
     });
     return distance;
-  });
-  return sum(distances);
+  }).sum();
 };
 
 export const part1 = ([grid]) => getSum(grid, 2);

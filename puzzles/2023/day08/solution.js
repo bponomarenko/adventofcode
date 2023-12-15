@@ -1,5 +1,3 @@
-import { getLCM } from '../../utils/collections.js';
-
 export const formatInput = input => {
   const [cmd, maps] = input.split('\n\n');
   return [
@@ -26,8 +24,7 @@ const countSteps = (startNode, cmd, nodes, isFinished) => {
 
 export const part1 = ([cmd, nodes]) => countSteps('AAA', cmd, nodes, node => node === 'ZZZ');
 
-export const part2 = ([cmd, nodes]) => {
-  const startNodes = Object.keys(nodes).filter(node => node.endsWith('A'));
-  const steps = startNodes.map(node => countSteps(node, cmd, nodes, n => n.endsWith('Z')));
-  return getLCM(steps);
-};
+export const part2 = ([cmd, nodes]) => Object.keys(nodes)
+  .filter(node => node.endsWith('A'))
+  .map(node => countSteps(node, cmd, nodes, n => n.endsWith('Z')))
+  .lcm();

@@ -1,5 +1,3 @@
-import { sum } from '../../utils/collections.js';
-
 export const formatInput = input => {
   const [positions, steps] = input.split('\n\n');
   return {
@@ -48,7 +46,7 @@ const applyVelocity = moon => {
 
 const getMoonEnergy = moon => {
   moon = moon.map(value => Math.abs(value));
-  return sum(moon.slice(0, 3)) * sum(moon.slice(3));
+  return moon.slice(0, 3).sum() * moon.slice(3).sum();
 };
 
 export const part1 = ({ steps, moons }, isTest) => {

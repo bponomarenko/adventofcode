@@ -1,6 +1,4 @@
-import { sum } from '../../utils/collections.js';
-
-export const formatInput = input => input.split('\n').map(row => row.split(''));
+export const formatInput = input => input.toGrid();
 
 const rollingRock = 'O';
 
@@ -47,7 +45,7 @@ const rollRocks = (grid, dir) => {
   return grid;
 };
 
-const countTotalLoad = grid => sum(grid.map((row, i) => (grid.length - i) * row.filter(field => field === rollingRock).length));
+const countTotalLoad = grid => grid.map((row, i) => (grid.length - i) * row.filter(field => field === rollingRock).length).sum();
 
 export const part1 = input => countTotalLoad(rollRocks(input, 'n'));
 
@@ -64,7 +62,7 @@ export const part2 = async input => {
     rollRocks(input, 'e');
 
     // check if we seen state like this before
-    const hash = input.map(row => row.join('')).join('');
+    const hash = input.stringifyGrid('');
     if (memory.has(hash) && i % (memory.get(hash) - i) === 1) {
       break;
     }

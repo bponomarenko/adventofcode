@@ -1,7 +1,7 @@
 export const formatInput = input => input.split(/,\s|\n/).map(Number);
 
 // Can it be even simpler?
-export const part1 = input => input.reduce((acc, num) => acc + num, 0);
+export const part1 = input => input.sum();
 
 export const part2 = input => {
   const history = new Set();

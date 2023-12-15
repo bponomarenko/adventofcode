@@ -1,5 +1,3 @@
-import { sum } from '../../utils/collections.js';
-
 export const formatInput = input => input.split('\n').map(line => {
   const [a, b] = line.split('/');
   return [+a, +b];
@@ -25,7 +23,7 @@ const findStrongestBridge = (bridge, parts, checkLength) => {
       }
     }
   }
-  return max[1] ? max : [bridge.length - 1, sum(bridge.flat())];
+  return max[1] ? max : [bridge.length - 1, bridge.flat().sum()];
 };
 
 export const part1 = input => findStrongestBridge([[0, 0]], input)[1];

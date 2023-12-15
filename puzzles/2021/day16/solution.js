@@ -57,7 +57,7 @@ const parsePackets = bits => {
   return packets;
 };
 
-const sumVersions = pckts => pckts.reduce((acc, { version, packets }) => acc + version + (packets ? sumVersions(packets) : 0), 0);
+const sumVersions = pckts => pckts.sum(({ version, packets }) => version + (packets ? sumVersions(packets) : 0));
 
 export const part1 = input => sumVersions(parsePackets(input));
 

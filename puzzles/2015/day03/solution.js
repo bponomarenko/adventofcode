@@ -1,3 +1,5 @@
+import { getRelativeCoord } from '../../utils/grid.js';
+
 export const formatInput = input => input;
 
 export const part1 = input => {
@@ -5,38 +7,10 @@ export const part1 = input => {
   const houses = new Set([coords.join(',')]);
 
   for (let i = 0, l = input.length; i < l; i += 1) {
-    switch (input[i]) {
-      case '>':
-        coords[0] += 1;
-        break;
-      case '<':
-        coords[0] -= 1;
-        break;
-      case '^':
-        coords[1] += 1;
-        break;
-      case 'v':
-        coords[1] -= 1;
-        break;
-    }
+    coords = getRelativeCoord(...coords, input[i]);
     houses.add(coords.join(','));
   }
   return houses.size;
-};
-
-const getNewCoords = (coords, direction) => {
-  switch (direction) {
-    case '>':
-      return [coords[0] + 1, coords[1]];
-    case '<':
-      return [coords[0] - 1, coords[1]];
-    case '^':
-      return [coords[0], coords[1] + 1];
-    case 'v':
-      return [coords[0], coords[1] - 1];
-    default:
-      return coords;
-  }
 };
 
 export const part2 = input => {
@@ -45,8 +19,8 @@ export const part2 = input => {
   const houses = new Set([coords.join(',')]);
 
   for (let i = 0, l = input.length; i < l; i += 2) {
-    coords = getNewCoords(coords, input[i]);
-    coordsRobot = getNewCoords(coordsRobot, input[i + 1]);
+    coords = getRelativeCoord(...coords, dirMap[input[i]]);
+    coordsRobot = getRelativeCoord(...coordsRobot, dirMap[input[i + 1]]);
     houses.add(coords.join(','));
     houses.add(coordsRobot.join(','));
   }

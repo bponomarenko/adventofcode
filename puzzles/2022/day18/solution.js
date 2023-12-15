@@ -1,17 +1,16 @@
-import { sum, combinations } from '../../utils/collections.js';
 import { getStraightAdjacent3d, isStraightAdjacent3d } from '../../utils/grid.js';
 
 export const formatInput = input => input.split('\n').map(row => row.split(',').map(Number));
 
 export const part1 = input => {
   const openSides = new Map(input.map(cube => [cube.join(','), 6]));
-  for (let [c1, c2] of combinations(input, 2)) {
+  for (let [c1, c2] of input.combinations(2)) {
     if (isStraightAdjacent3d(c1, c2)) {
       openSides.set(c1.join(','), openSides.get(c1.join(',')) - 1);
       openSides.set(c2.join(','), openSides.get(c2.join(',')) - 1);
     }
   }
-  return sum(Array.from(openSides.values()));
+  return Array.from(openSides.values()).sum();
 };
 
 const getLimits = input => {
@@ -49,6 +48,5 @@ export const part2 = cubes => {
     });
   } while (queue.length);
   // Count sides of each cube that does touch only open air
-  const openAirSides = cubes.map(cube => getStraightAdjacent3d(...cube).filter(adjCube => openAir.has(adjCube.join(','))).length);
-  return sum(openAirSides);
+  return cubes.sum(cube => getStraightAdjacent3d(...cube).filter(adjCube => openAir.has(adjCube.join(','))).length);
 };

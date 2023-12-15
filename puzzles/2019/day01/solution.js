@@ -9,4 +9,4 @@ const getFuel2 = mass => {
   return res > 0 ? res + getFuel2(res) : 0;
 };
 
-export const part2 = input => input.reduce((acc, n) => acc + getFuel2(n), 0);
+export const part2 = input => input.sum(getFuel2);

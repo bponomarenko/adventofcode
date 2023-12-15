@@ -36,7 +36,7 @@ const countLineCrosses = lines => {
       }
     }
   });
-  return Array.from(map.values()).reduce((acc, cross) => (cross > 1 ? acc + 1 : acc), 0);
+  return Array.from(map.values()).sum(cross => +(cross > 1));
 };
 
 export const part1 = input => countLineCrosses(input.filter(([x1, y1, x2, y2]) => x1 === x2 || y1 === y2));

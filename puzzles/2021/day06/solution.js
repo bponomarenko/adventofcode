@@ -18,7 +18,7 @@ const countFish = (input, steps) => {
     }
     groups = changes;
   }
-  return Array.from(groups.values()).reduce((acc, count) => acc + count, 0);
+  return Array.from(groups.values()).sum();
 };
 
 export const part1 = input => countFish(input, 80);

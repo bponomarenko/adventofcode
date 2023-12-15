@@ -1,4 +1,4 @@
-export const formatInput = input => input.split('\n').map(value => +value);
+export const formatInput = input => input.split('\n').map(Number);
 
 export const part1 = input => {
   const interrupt = Array.from(input);

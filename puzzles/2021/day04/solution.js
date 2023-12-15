@@ -38,7 +38,7 @@ const isWinningBoard = board => {
   return false;
 };
 
-const getBoardSum = board => board.flat().reduce((acc, num) => (num === '*' ? acc : acc + num), 0);
+const getBoardSum = board => board.flat().sum(num => (num === '*' ? 0 : num));
 
 export const part1 = ({ nums, boards }) => {
   let winner;

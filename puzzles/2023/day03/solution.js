@@ -1,5 +1,4 @@
 import { getAdjacent } from '../../utils/grid.js';
-import { sum, power } from '../../utils/collections.js';
 
 export const formatInput = input => input.split('\n');
 
@@ -41,9 +40,7 @@ function* parts(schema, partType) {
   }
 }
 
-export const part1 = input => sum(Array.from(parts(input)).flat());
+export const part1 = input => Array.from(parts(input)).flat().sum();
 
-export const part2 = input => {
-  const nums = Array.from(parts(input, '*')).map(partNums => (partNums.length === 2 ? power(partNums) : 0));
-  return sum(nums);
-};
+export const part2 = input => Array.from(parts(input, '*'))
+  .sum(partNums => (partNums.length === 2 ? partNums.power() : 0));

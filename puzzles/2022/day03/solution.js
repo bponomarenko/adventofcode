@@ -1,5 +1,3 @@
-import { sum } from '../../utils/collections.js';
-
 export const formatInput = input => input.split('\n');
 
 const getPriority = badge => {
@@ -8,15 +6,12 @@ const getPriority = badge => {
   return code >= 97 ? code - 96 : code - 38;
 };
 
-export const part1 = input => {
-  const priorities = input.map(line => {
-    const middle = line.length / 2;
-    const firstPart = new Set(line.slice(0, middle).split(''));
-    const badge = line.slice(middle).split('').find(item => firstPart.has(item));
-    return getPriority(badge);
-  });
-  return sum(priorities);
-};
+export const part1 = input => input.sum(line => {
+  const middle = line.length / 2;
+  const firstPart = new Set(line.slice(0, middle).split(''));
+  const badge = line.slice(middle).split('').find(item => firstPart.has(item));
+  return getPriority(badge);
+});
 
 export const part2 = input => {
   let result = 0;

@@ -1,22 +1,16 @@
-import { sum } from '../../utils/collections.js';
-import { rotate, flip } from '../../utils/grid.js';
-
-const toString = grid => grid.map(line => line.join('')).join('/');
-const toGrid = pattern => pattern.split('/').map(line => line.split(''));
-
 export const formatInput = input => {
   const rules = new Map();
   input.split('\n').forEach(rule => {
     const [pattern, enhancement] = rule.split(' => ');
     // Generated various flipped and rotated patterns to match
-    const patternGrid = toGrid(pattern);
-    [patternGrid, flip(patternGrid), flip(patternGrid, true)].forEach(g => {
+    const patternGrid = pattern.toGrid('/');
+    [patternGrid, patternGrid.flipGrid(), patternGrid.flipGrid(true)].forEach(g => {
       let grid = g;
       for (let i = 0; i < 4; i += 1) {
         if (i > 0) {
-          grid = rotate(grid);
+          grid = grid.rotateGrid();
         }
-        rules.set(toString(grid), enhancement);
+        rules.set(grid.stringifyGrid('/'), enhancement);
       }
     });
   });
@@ -53,7 +47,7 @@ const enhanceGridTimes = (input, iterations) => {
       grid = enhanceGrid(grid, input, 3);
     }
   }
-  return sum(grid.map(row => row.split('').filter(cell => cell === '#').length));
+  return grid.map(row => row.split('').filter(cell => cell === '#').length).sum();
 };
 
 export const part1 = input => enhanceGridTimes(input, 5);

@@ -7,7 +7,7 @@ const countOrbits = (map, leaf) => (map.has(leaf) ? 1 + countOrbits(map, map.get
 
 export const part1 = input => {
   const orbitMap = new Map(input);
-  return Array.from(orbitMap.keys()).reduce((acc, leaf) => acc + countOrbits(orbitMap, leaf), 0);
+  return Array.from(orbitMap.keys()).sum(leaf => countOrbits(orbitMap, leaf));
 };
 
 const getPathToCenter = (map, node) => (map.has(node) ? [node, ...getPathToCenter(map, map.get(node))] : []);

@@ -38,7 +38,7 @@ const computeInRounds = (listInput, lengths, listSize, roundsCount) => {
 export const part1 = ([size, lengths]) => {
   const listSize = +size;
   // Array with numbers 0 - listSize
-  const list = new Array(listSize).fill(0).map((_, i) => i);
+  const list = Array.from(new Array(listSize), (_, i) => i);
   const [first, second] = computeInRounds(list, lengths.split(/,\s?/).map(num => +num), listSize, 1);
   return first * second;
 };
@@ -57,10 +57,10 @@ const pad = (value, count) => (value.length > count ? value : `${new Array(count
 
 export const getKnotHash = input => {
   // Array with numbers 0 - 255
-  const list = new Array(256).fill(0).map((_, i) => i);
+  const list = Array.from(new Array(256), (_, i) => i);
   const sequence = stringToHexArray(input).concat(17, 31, 73, 47, 23);
   const hash = computeInRounds(list, sequence, 256, 64);
-  const denseHash = new Array(16).fill(0).map((_, index) => xor(hash.slice(index * 16, (index + 1) * 16)));
+  const denseHash = Array.from(new Array(16), (_, index) => xor(hash.slice(index * 16, (index + 1) * 16)));
   // Get final hex string
   return denseHash.map(code => pad(code.toString(16), 2)).join('');
 };

@@ -1,3 +1,5 @@
+import { getRelativeCoord } from '../../utils/grid.js';
+
 export const formatInput = input => input.split('\n');
 
 const findCodePos = (moves, start) => {
@@ -34,29 +36,14 @@ export const part1 = input => {
 };
 
 const findCodePos2 = (moves, start, keypad) => {
-  let pos = start;
-  let newPos;
+  let pos = start.toReversed();
   moves.forEach(move => {
-    switch (move) {
-      case 'R':
-        newPos = [pos[0], pos[1] + 1];
-        break;
-      case 'L':
-        newPos = [pos[0], pos[1] - 1];
-        break;
-      case 'U':
-        newPos = [pos[0] - 1, pos[1]];
-        break;
-      case 'D':
-        newPos = [pos[0] + 1, pos[1]];
-        break;
-    }
-
-    if (keypad[newPos[0]]?.[newPos[1]]) {
+    const newPos = getRelativeCoord(...pos, move);
+    if (keypad[newPos[1]]?.[newPos[0]]) {
       pos = newPos;
     }
   });
-  return pos;
+  return pos.toReversed();
 };
 
 export const part2 = input => {

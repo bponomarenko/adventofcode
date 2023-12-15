@@ -19,7 +19,7 @@ export const part1 = input => {
   let presents = 0;
   let house = 2;
   while (presents <= input) {
-    presents = getAllDivisors(house).reduce((acc, divisor) => acc + divisor * 10, 0);
+    presents = getAllDivisors(house).sum(divisor => divisor * 10);
     house += 1;
   }
   return house - 1;
@@ -36,7 +36,7 @@ export const part2 = input => {
         visited.set(divisor, (visited.get(divisor) ?? 0) + 1);
         return visited.get(divisor) <= 50;
       })
-      .reduce((acc, divisor) => acc + divisor * 11, 0);
+      .sum(divisor => divisor * 11);
     house += 1;
   }
   return house - 1;

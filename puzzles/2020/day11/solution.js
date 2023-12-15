@@ -1,34 +1,29 @@
-export const formatInput = input => input.split('\n').map(line => line.split(''));
+import { getAdjacent, getRelativeCoord } from '../../utils/grid.js';
 
-const countAdjacentSeats = (seats, row, i) => (
-  (seats[row - 1]?.[i - 1] === '#' ? 1 : 0)
-  + (seats[row - 1]?.[i] === '#' ? 1 : 0)
-  + (seats[row - 1]?.[i + 1] === '#' ? 1 : 0)
-  + (seats[row][i - 1] === '#' ? 1 : 0)
-  + (seats[row][i + 1] === '#' ? 1 : 0)
-  + (seats[row + 1]?.[i - 1] === '#' ? 1 : 0)
-  + (seats[row + 1]?.[i] === '#' ? 1 : 0)
-  + (seats[row + 1]?.[i + 1] === '#' ? 1 : 0)
-);
+export const formatInput = input => input.toGrid();
+
+const countAdjacentSeats = (seats, x, y, limits) => getAdjacent(x, y, ...limits).sum(([dx, dy]) => +(seats[dy][dx] === '#'));
 
 const doRound = seats => {
-  const prevSeats = seats.map(row => [...row]);
+  const prevSeats = Array.from(seats, row => Array.from(row));
+  const limits = [[0, seats[0].length - 1], [0, seats.length - 1]];
   let res = true;
 
-  for (let row = 0; row < seats.length; row += 1) {
-    for (let i = 0; i < seats[row].length; i += 1) {
-      if (seats[row][i] === '.') {
+  for (let y = 0; y <= limits[1][1]; y += 1) {
+    for (let x = 0; x <= limits[0][1]; x += 1) {
+      const seat = seats[y][x];
+      if (seat === '.') {
         continue;
       }
 
-      if (seats[row][i] === 'L') {
-        if (countAdjacentSeats(prevSeats, row, i) === 0) {
-          seats[row][i] = '#';
+      if (seat === 'L') {
+        if (countAdjacentSeats(prevSeats, x, y, limits) === 0) {
+          seats[y][x] = '#';
           res = false;
         }
-      } else if (seats[row][i] === '#') {
-        if (countAdjacentSeats(prevSeats, row, i) >= 4) {
-          seats[row][i] = 'L';
+      } else if (seat === '#') {
+        if (countAdjacentSeats(prevSeats, x, y, limits) >= 4) {
+          seats[y][x] = 'L';
           res = false;
         }
       }
@@ -37,7 +32,7 @@ const doRound = seats => {
   return res;
 };
 
-const countOccupiedSeats = seats => seats.reduce((acc, row) => acc + row.reduce((acc2, seat) => acc2 + (seat === '#' ? 1 : 0), 0), 0);
+const countOccupiedSeats = seats => seats.sum(row => row.sum(seat => +(seat === '#')));
 
 export const part1 = input => {
   while (!doRound(input)) {
@@ -61,35 +56,29 @@ const lookupDirection = (seats, row, i, getNextPos) => {
   } while (true);
 };
 
-const countVisibleSeats = (seats, row, i) => (
-  lookupDirection(seats, row, i, (r, s) => [r - 1, s])
-  + lookupDirection(seats, row, i, (r, s) => [r - 1, s + 1])
-  + lookupDirection(seats, row, i, (r, s) => [r, s + 1])
-  + lookupDirection(seats, row, i, (r, s) => [r + 1, s + 1])
-  + lookupDirection(seats, row, i, (r, s) => [r + 1, s])
-  + lookupDirection(seats, row, i, (r, s) => [r + 1, s - 1])
-  + lookupDirection(seats, row, i, (r, s) => [r, s - 1])
-  + lookupDirection(seats, row, i, (r, s) => [r - 1, s - 1])
-);
+const adjacentDirections = ['w', 'e', 'n', 's', 'nw', 'ne', 'sw', 'se'];
+const countVisibleSeats = (seats, x, y) => adjacentDirections
+  .sum(dir => lookupDirection(seats, y, x, (r, s) => getRelativeCoord(r, s, dir)));
 
 const doRound2 = seats => {
-  const prevSeats = seats.map(row => [...row]);
+  const prevSeats = Array.from(seats, row => Array.from(row));
   let res = true;
 
-  for (let row = 0; row < seats.length; row += 1) {
-    for (let i = 0; i < seats[row].length; i += 1) {
-      if (seats[row][i] === '.') {
+  for (let y = 0, maxY = seats.length; y < maxY; y += 1) {
+    for (let x = 0, maxX = seats[0].length; x < maxX; x += 1) {
+      const seat = seats[y][x];
+      if (seat === '.') {
         continue;
       }
 
-      if (seats[row][i] === 'L') {
-        if (countVisibleSeats(prevSeats, row, i) === 0) {
-          seats[row][i] = '#';
+      if (seat === 'L') {
+        if (countVisibleSeats(prevSeats, x, y) === 0) {
+          seats[y][x] = '#';
           res = false;
         }
-      } else if (seats[row][i] === '#') {
-        if (countVisibleSeats(prevSeats, row, i) >= 5) {
-          seats[row][i] = 'L';
+      } else if (seat === '#') {
+        if (countVisibleSeats(prevSeats, x, y) >= 5) {
+          seats[y][x] = 'L';
           res = false;
         }
       }

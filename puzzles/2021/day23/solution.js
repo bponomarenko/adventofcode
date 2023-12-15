@@ -2,7 +2,7 @@ import { getStraightAdjacent } from '../../utils/grid.js';
 import BinaryHeap from '../../utils/binary-heap.js';
 
 export const formatInput = input => {
-  let map = input.split('\n').map(line => line.split(''));
+  let map = input.toGrid();
   // Trim the map - remove first line
   map.splice(0, 1);
   // remove last line

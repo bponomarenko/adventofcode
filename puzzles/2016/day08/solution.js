@@ -3,7 +3,7 @@ const rotateColRe = /^rotate column x=(\d+) by (\d+)$/;
 const rotateRowRe = /^rotate row y=(\d+) by (\d+)$/;
 
 export const formatInput = input => {
-  const screen = new Array(6).fill(0).map(() => new Array(50).fill(false));
+  const screen = Array.from(new Array(6), () => new Array(50).fill(false));
 
   input.split('\n').forEach(instruction => {
     let match;

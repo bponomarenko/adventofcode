@@ -1,19 +1,7 @@
+import { getRelativeCoord } from '../../utils/grid.js';
+
 export const formatInput = input => input.split('\n');
 formatInput.doNotTrim = true;
-
-const nextPos = (x, y, dir) => {
-  switch (dir) {
-    case 'd':
-      return [x + 1, y];
-    case 'u':
-      return [x - 1, y];
-    case 'l':
-      return [x, y - 1];
-    case 'r':
-      return [x, y + 1];
-  }
-  throw new Error(`Not expected direction: ${dir}`);
-};
 
 const pipes = ['-', '|', '+', ' '];
 const horizontalPipes = ['#', '+', '-'];
@@ -44,16 +32,16 @@ const walkPath = (input, pipeCallback) => {
       case '+':
         // Path makes a turn
         if (dir === 'd' || dir === 'u') {
-          const [lx, ly] = nextPos(x, y, 'l');
+          const [ly, lx] = getRelativeCoord(y, x, 'l');
           const lScore = inRange(lx, ly) ? horizontalPipes.indexOf(getValue(lx, ly)) : -1;
-          const [rx, ry] = nextPos(x, y, 'r');
+          const [ry, rx] = getRelativeCoord(y, x, 'r');
           const rScore = inRange(rx, ry) ? horizontalPipes.indexOf(getValue(rx, ry)) : -1;
           // change direction
           dir = lScore > rScore ? 'l' : 'r';
         } else {
-          const [ux, uy] = nextPos(x, y, 'u');
+          const [uy, ux] = getRelativeCoord(y, x, 'u');
           const uScore = inRange(ux, uy) ? verticalPipes.indexOf(getValue(ux, uy)) : -1;
-          const [dx, dy] = nextPos(x, y, 'd');
+          const [dy, dx] = getRelativeCoord(y, x, 'd');
           const dScore = inRange(dx, dy) ? verticalPipes.indexOf(getValue(dx, dy)) : -1;
           // change direction
           dir = uScore > dScore ? 'u' : 'd';
@@ -63,9 +51,8 @@ const walkPath = (input, pipeCallback) => {
         // end of the path
         return;
     }
-
     // Go to the next position
-    [x, y] = nextPos(x, y, dir);
+    [y, x] = getRelativeCoord(y, x, dir);
   }
 };
 

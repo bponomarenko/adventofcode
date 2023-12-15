@@ -1,4 +1,5 @@
 import { createHash } from 'crypto';
+import { getRelativeCoord } from '../../utils/grid.js';
 
 export const formatInput = input => input;
 
@@ -7,20 +8,6 @@ const openRe = /[^0-9a]/;
 
 const getMoves = (pos, hash) => ['U', 'D', 'L', 'R']
   .filter((move, i) => (i % 2 === 0 ? pos[i > 1 ? 1 : 0] > 0 : pos[i > 1 ? 1 : 0] < gridSize) && openRe.test(hash[i]));
-
-const getNextPos = (pos, move) => {
-  switch (move) {
-    case 'D':
-      return [pos[0] + 1, pos[1]];
-    case 'U':
-      return [pos[0] - 1, pos[1]];
-    case 'L':
-      return [pos[0], pos[1] - 1];
-    case 'R':
-      return [pos[0], pos[1] + 1];
-  }
-  throw new Error(`Unexpected move: ${move}`);
-};
 
 export const part1 = input => {
   const queue = [{ path: '', pos: [0, 0] }];
@@ -45,7 +32,7 @@ export const part1 = input => {
 
     const hash = createHash('md5').update(`${input}${path}`).digest('hex').slice(0, 4);
     getMoves(pos, hash).forEach(move => {
-      queue.push({ path: `${path}${move}`, pos: getNextPos(pos, move) });
+      queue.push({ path: `${path}${move}`, pos: getRelativeCoord(...pos.toReversed(), move).toReversed() });
     });
   }
   return shortestPath;
@@ -68,7 +55,7 @@ export const part2 = input => {
 
     const hash = createHash('md5').update(`${input}${path}`).digest('hex').slice(0, 4);
     getMoves(pos, hash).forEach(move => {
-      queue.push({ path: `${path}${move}`, pos: getNextPos(pos, move) });
+      queue.push({ path: `${path}${move}`, pos: getRelativeCoord(...pos.toReversed(), move).toReversed() });
     });
   }
   return longestPathLength;

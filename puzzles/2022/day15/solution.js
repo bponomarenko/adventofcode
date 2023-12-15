@@ -32,7 +32,7 @@ export const part1 = input => {
     ranges.push(range);
   });
   // For the result just add values in the ranges
-  return ranges.reduce((acc, [x1, x2]) => acc + x2 - x1, 0);
+  return ranges.sum(([x1, x2]) => x2 - x1);
 };
 
 const isEmptySpot = (input, [x, y], maxRange) => {

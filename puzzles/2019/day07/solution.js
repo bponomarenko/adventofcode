@@ -1,4 +1,3 @@
-import { permutations } from '../../utils/collections.js';
 import Intcode from '../intcode.js';
 
 export const formatInput = input => input;
@@ -8,7 +7,7 @@ const runSetting = (sequence, phaseSetting) => phaseSetting
 
 export const part1 = input => {
   let maxSignal = 0;
-  for (const combo of permutations([0, 1, 2, 3, 4], 5)) {
+  for (const combo of [0, 1, 2, 3, 4].permutations(5)) {
     maxSignal = Math.max(runSetting(input, combo), maxSignal);
   }
   return maxSignal;
@@ -21,7 +20,7 @@ const runLoop = (amplifiers, firstInput) => amplifiers.reduce((input, amplifier)
 
 export const part2 = input => {
   let maxSignal = 0;
-  for (const combo of permutations([5, 6, 7, 8, 9], 5)) {
+  for (const combo of [5, 6, 7, 8, 9].permutations(5)) {
     let loopInput = 0;
     const amplifiers = generateAmplifiers(input, combo);
     do {

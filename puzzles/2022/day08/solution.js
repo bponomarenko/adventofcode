@@ -57,7 +57,7 @@ export const part2 = input => {
   let totalScore = 0;
   input.forEach((row, y) => {
     for (let x = 0, mx = row.length; x < mx; x += 1) {
-      const score = directions.reduce((sum, inc) => sum * checkDirection(input, x, y, inc)[1], 1);
+      const score = directions.power(inc => checkDirection(input, x, y, inc)[1]);
       totalScore = Math.max(totalScore, score);
     }
   });

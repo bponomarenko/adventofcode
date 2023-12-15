@@ -1,15 +1,13 @@
-import { sum } from '../../utils/collections.js';
-
 export const formatInput = input => input.split('\n');
 
-const toDecimal = snafu => snafu.split('').reverse().reduce((acc, value, i) => {
+const toDecimal = snafu => snafu.split('').reverse().sum((value, i) => {
   if (value === '-') {
     value = -1;
   } else if (value === '=') {
     value = -2;
   }
-  return acc + (value * 5 ** i);
-}, 0);
+  return value * 5 ** i;
+});
 
 const toSNAFU = num => {
   let pow = 0;
@@ -43,7 +41,7 @@ const toSNAFU = num => {
   return snafu.join('');
 };
 
-export const part1 = input => toSNAFU(sum(input.map(toDecimal)));
+export const part1 = input => toSNAFU(input.sum(toDecimal));
 
 // There is no coding challenge for the part 2, yay :)
 export const part2 = input => part1(input);

@@ -1,5 +1,3 @@
-import { sum } from '../../utils/collections.js';
-
 export const formatInput = input => {
   const commands = [];
   let activeCommand;
@@ -18,8 +16,7 @@ export const formatInput = input => {
 
 // Calculcates size for each directory in the filesystem
 const calcSize = root => {
-  const dirSizes = Object.values(root.dirs).map(calcSize);
-  root.size = sum(Object.values(root.files)) + sum(dirSizes);
+  root.size = Object.values(root.files).sum() + Object.values(root.dirs).sum(calcSize);
   return root.size;
 };
 
@@ -64,7 +61,7 @@ const runCommands = commands => {
 };
 
 // Calculates total filesystem size (with directories at most 100000 in size)
-const getTotalSize = root => (root.size <= 100000 ? root.size : 0) + sum(Object.values(root.dirs).map(getTotalSize));
+const getTotalSize = root => (root.size <= 100000 ? root.size : 0) + Object.values(root.dirs).sum(getTotalSize);
 
 export const part1 = input => getTotalSize(runCommands(input));
 

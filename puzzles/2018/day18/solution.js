@@ -1,7 +1,6 @@
 import { getAdjacent } from '../../utils/grid.js';
-import { sum } from '../../utils/collections.js';
 
-export const formatInput = input => input.split('\n').map(row => row.split(''));
+export const formatInput = input => input.toGrid();
 
 const countTreesAfterGenerations = async (grid, count) => {
   const memory = new Map();
@@ -28,8 +27,8 @@ const countTreesAfterGenerations = async (grid, count) => {
       count -= 1;
     }
   }
-  const countTrees = sum(grid.flatMap(row => row.map(acre => +(acre === '|'))));
-  const countLumberyards = sum(grid.flatMap(row => row.map(acre => +(acre === '#'))));
+  const countTrees = grid.flatMap(row => row.map(acre => +(acre === '|'))).sum();
+  const countLumberyards = grid.flatMap(row => row.map(acre => +(acre === '#'))).sum();
   return countTrees * countLumberyards;
 };
 

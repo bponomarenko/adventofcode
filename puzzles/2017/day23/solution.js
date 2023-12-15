@@ -1,4 +1,4 @@
-export const formatInput = input => input.split('\n').map(line => line.split(' '));
+export const formatInput = input => input.toGrid('\n', ' ');
 
 export const part1 = input => {
   const registers = {
@@ -29,7 +29,7 @@ export const part1 = input => {
   return countMul;
 };
 
-export const part2 = input => {
+export const part2 = () => {
   const registers = {
     a: 1, b: 81, c: 81, d: 0, e: 0, f: 0, g: 0, h: 0,
   };

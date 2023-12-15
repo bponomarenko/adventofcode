@@ -1,6 +1,6 @@
 import { getDistance } from '../../utils/grid.js';
 
-export const formatInput = input => input.split('\n').map(row => row.split(''));
+export const formatInput = input => input.toGrid();
 
 const findStationVisibleAsteroids = input => {
   const asteroids = input.flatMap((row, y) => row.map((char, x) => (char === '#' ? [x, y] : null)).filter(Boolean));

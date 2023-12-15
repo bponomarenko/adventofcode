@@ -1,4 +1,4 @@
-import { getStraightAdjacent } from '../../utils/grid.js';
+import { getStraightAdjacent, getRelativeCoord } from '../../utils/grid.js';
 
 const oppositeDirs = { n: 's', s: 'n', e: 'w', w: 'e' };
 const connections = {
@@ -11,23 +11,8 @@ const connections = {
   '.': [],
 };
 
-const getAdjacentDir = (x, y, dir) => {
-  switch (dir) {
-    case 'w':
-      return [x - 1, y];
-    case 'e':
-      return [x + 1, y];
-    case 'n':
-      return [x, y - 1];
-    case 's':
-      return [x, y + 1];
-    default:
-      return null;
-  }
-};
-
 export const formatInput = input => {
-  const grid = input.split('\n').map(line => line.split(''));
+  const grid = input.toGrid();
   let start;
 
   // Find start position and replace it with the correct pipe
@@ -36,7 +21,7 @@ export const formatInput = input => {
       const x = line.indexOf('S');
       start = [x, y];
 
-      const adjacent = Object.fromEntries(Object.keys(oppositeDirs).map(dir => [dir, getAdjacentDir(x, y, dir)]));
+      const adjacent = Object.fromEntries(Object.keys(oppositeDirs).map(dir => [dir, getRelativeCoord(x, y, dir)]));
       [grid[y][x]] = Object.entries(connections).find(([, steps]) => steps.every(step => {
         const [ax, ay] = adjacent[step];
         return connections[grid[ay][ax]].includes(oppositeDirs[step]);
@@ -54,7 +39,7 @@ export const part1 = ({ grid, start }) => {
     visited.add(hash);
 
     connections[grid[y][x]].forEach(dir => {
-      const next = getAdjacentDir(x, y, dir);
+      const next = getRelativeCoord(x, y, dir);
       const nextHash = next.join(',');
       if (!visited.has(nextHash)) {
         queue.push([next, nextHash]);
@@ -86,13 +71,13 @@ export const part2 = ({ grid, start }) => {
     visited.add(hash);
 
     connections[expandedGrid[y][x]].forEach(dir => {
-      let next = getAdjacentDir(x, y, dir);
+      let next = getRelativeCoord(x, y, dir);
       let nextHash = next.join(',');
       if (!visited.has(nextHash)) {
         visited.add(nextHash);
         const [nx, ny] = next;
         expandedGrid[ny][nx] = dir === 's' || dir === 'n' ? '|' : '-';
-        next = getAdjacentDir(nx, ny, dir);
+        next = getRelativeCoord(nx, ny, dir);
         queue.push([next, next.join(',')]);
       }
     });
@@ -116,8 +101,8 @@ export const part2 = ({ grid, start }) => {
   }
 
   // Go through the original grid and check for every point if it is inner or outer based on the expanded grid data
-  return grid.reduce((total, line, y) => total + line.reduce((sum, _, x) => {
+  return grid.sum((line, y) => line.sum((_, x) => {
     const hash = `${x * 2 + 1},${y * 2 + 1}`;
-    return sum + (outer.has(hash) ? 0 : 1);
-  }, 0), 0);
+    return (outer.has(hash) ? 0 : 1);
+  }));
 };

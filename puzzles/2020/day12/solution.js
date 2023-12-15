@@ -1,32 +1,23 @@
-export const formatInput = input => input.split('\n');
+import { changeDirection } from '../../utils/grid.js';
 
-const getNewDirection = (directions, shipDirection, degrees) => {
-  let index = directions.indexOf(shipDirection) + (degrees / 90);
-  if (index < 0) {
-    index += directions.length;
-  }
-  if (index >= directions.length) {
-    index -= directions.length;
-  }
-  return directions[index];
-};
+export const formatInput = input => input.split('\n');
 
 export const part1 = input => {
   const coord = [0, 0];
-  let shipDirection = 'E';
+  let shipDirection = 'e';
 
   const move = (direction, value) => {
     switch (direction) {
-      case 'E':
+      case 'e':
         coord[0] += value;
         break;
-      case 'W':
+      case 'w':
         coord[0] -= value;
         break;
-      case 'N':
+      case 'n':
         coord[1] += value;
         break;
-      case 'S':
+      case 's':
         coord[1] -= value;
         break;
       default:
@@ -35,19 +26,18 @@ export const part1 = input => {
   };
 
   input.forEach(str => {
-    const directions = ['E', 'S', 'W', 'N'];
-    const instr = str.slice(0, 1);
+    const instr = str.slice(0, 1).toLowerCase();
     const value = +str.slice(1);
 
     switch (instr) {
-      case 'F':
+      case 'f':
         move(shipDirection, value);
         break;
-      case 'L':
-        shipDirection = getNewDirection([...directions].reverse(), shipDirection, value);
+      case 'l':
+        shipDirection = changeDirection(shipDirection, -value);
         break;
-      case 'R':
-        shipDirection = getNewDirection(directions, shipDirection, value);
+      case 'r':
+        shipDirection = changeDirection(shipDirection, value);
         break;
       default:
         move(instr, value);
@@ -61,11 +51,11 @@ export const part1 = input => {
 const rotate = (direction, degrees, [x, y]) => {
   switch (degrees) {
     case 90:
-      return direction === 'R' ? [y, -x] : [-y, x];
+      return direction === 'r' ? [y, -x] : [-y, x];
     case 180:
       return [-x, -y];
     case 270:
-      return direction === 'R' ? [-y, x] : [y, -x];
+      return direction === 'r' ? [-y, x] : [y, -x];
     default:
       throw new Error('not expected');
   }
@@ -77,16 +67,16 @@ export const part2 = input => {
 
   const move = (direction, value) => {
     switch (direction) {
-      case 'E':
+      case 'e':
         waypoint[0] += value;
         break;
-      case 'W':
+      case 'w':
         waypoint[0] -= value;
         break;
-      case 'N':
+      case 'n':
         waypoint[1] += value;
         break;
-      case 'S':
+      case 's':
         waypoint[1] -= value;
         break;
       default:
@@ -95,16 +85,16 @@ export const part2 = input => {
   };
 
   input.forEach(str => {
-    const instr = str.slice(0, 1);
+    const instr = str.slice(0, 1).toLowerCase();
     const value = +str.slice(1);
 
     switch (instr) {
-      case 'F':
+      case 'f':
         ship[0] += value * waypoint[0];
         ship[1] += value * waypoint[1];
         break;
-      case 'R':
-      case 'L':
+      case 'r':
+      case 'l':
         waypoint = rotate(instr, value, waypoint);
         break;
       default:

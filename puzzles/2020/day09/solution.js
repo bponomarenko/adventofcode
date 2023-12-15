@@ -1,5 +1,3 @@
-import { sum } from '../../utils/collections.js';
-
 export const formatInput = input => input.split('\n').map(Number);
 
 const preamble = 25;
@@ -27,7 +25,7 @@ const findEncryptionWeakness = (sequence, num) => {
   for (let i = 0, l = sequence.length; i < l - 1; i += 1) {
     for (let j = i + 1; j < l; j += 1) {
       const set = sequence.slice(i, j);
-      if (sum(set) === num) {
+      if (set.sum() === num) {
         return Math.min(...set) + Math.max(...set);
       }
     }
