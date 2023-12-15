@@ -31,5 +31,5 @@ export const part2 = grid => {
   const graph = new aStar.Graph(extendedGrid);
   return aStar.astar
     .search(graph, graph.grid[0][0], graph.grid[size - 1][size - 1])
-    .sun(node => extendedGrid[node.x][node.y]);
+    .sum(node => extendedGrid[node.x][node.y]);
 };

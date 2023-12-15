@@ -10,7 +10,7 @@ export const formatInput = input => {
         if (i > 0) {
           grid = grid.rotateGrid();
         }
-        rules.set(grid.stringifyGrid('/'), enhancement);
+        rules.set(grid.toGridString('/'), enhancement);
       }
     });
   });

@@ -62,7 +62,7 @@ export const part2 = async input => {
     rollRocks(input, 'e');
 
     // check if we seen state like this before
-    const hash = input.stringifyGrid('');
+    const hash = input.toGridString('');
     if (memory.has(hash) && i % (memory.get(hash) - i) === 1) {
       break;
     }

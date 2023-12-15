@@ -34,7 +34,7 @@ const runCommand = async ({ name, args }) => {
   try {
     let response;
     runningProcess = execaNode(`./lib/${name}.js`, args, {
-      stdio: process.stdio,
+      stdin: process.stdin,
       stdout: process.stdout,
       nodeOptions: ['--no-deprecation'],
     }).on('message', msg => { response = msg; }); // Actual response would be sent as a message
