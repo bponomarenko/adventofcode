@@ -2,74 +2,77 @@ export const formatInput = input => {
   const [positions, steps] = input.split('\n\n');
   return {
     steps: +steps,
-    moons: positions.split('\n').flatMap(position => position
-      .slice(1, -1)
-      .split(', ')
-      .map(coord => +coord.split('=')[1])
-      .concat([0, 0, 0])),
+    moons: positions.split('\n').map(position => ({
+      pos: position.slice(1, -1).split(', ').map(coord => +coord.split('=')[1]),
+      vel: [0, 0, 0],
+    })),
   };
 };
 
-// There are always 4 of them
-const countMoons = 4;
-// Size is always 6 – three coordinates and three velocity values
-const moonSize = 6;
-// Total size of the array
-const size = countMoons * moonSize;
-
-const updateCoordVelocity = (moons, coordA, coordB) => {
-  const a = moons[coordA];
-  const b = moons[coordB];
-  if (a !== b) {
-    const delta = a > b ? -1 : 1;
-    moons[coordA + 3] += delta;
-    moons[coordB + 3] += -delta;
+const getDelta = (value1, value2) => {
+  if (value1 === value2) {
+    return 0;
   }
+  return value1 < value2 ? 1 : -1;
 };
 
-const updateVelocity = (moons, aIndex, bIndex) => {
-  // Update x coordinate velocity
-  updateCoordVelocity(moons, aIndex, bIndex);
-  // Update y coordinate velocity
-  updateCoordVelocity(moons, aIndex + 1, bIndex + 1);
-  // Update z coordinate velocity
-  updateCoordVelocity(moons, aIndex + 2, bIndex + 2);
-};
-
-const applyVelocity = moon => {
-  for (let i = 0; i < size; i += moonSize) {
-    moon[i] += moon[i + 3];
-    moon[i + 1] += moon[i + 4];
-    moon[i + 2] += moon[i + 5];
-  }
-};
-
-const getMoonEnergy = moon => {
-  moon = moon.map(value => Math.abs(value));
-  return moon.slice(0, 3).sum() * moon.slice(3).sum();
+const applyGravity = (m1, m2) => {
+  m1.pos.forEach((p1, i) => {
+    const delta = getDelta(p1, m2.pos[i]);
+    m1.vel[i] += delta;
+    m2.vel[i] -= delta;
+  });
 };
 
 export const part1 = ({ steps, moons }, isTest) => {
+  const count = moons.length;
   steps = isTest ? steps : 1000;
   for (let s = 0; s < steps; s += 1) {
-    // 1. Update velocity
-    for (let i = 0; i < size - moonSize; i += moonSize) {
-      for (let j = i + moonSize; j < size; j += moonSize) {
-        updateVelocity(moons, i, j);
+    for (let i1 = 0; i1 < count; i1 += 1) {
+      // 1. Update velocity
+      for (let i2 = i1 + 1; i2 < count; i2 += 1) {
+        applyGravity(moons[i1], moons[i2]);
       }
+      // 2. Apply velocity
+      moons[i1].pos = moons[i1].pos.map((value, p) => value + moons[i1].vel[p]);
     }
-    // 2. Apply velocity
-    applyVelocity(moons);
   }
-
-  let totalEnergy = 0;
-  for (let i = 0; i < size; i += moonSize) {
-    totalEnergy += getMoonEnergy(moons.slice(i, i + moonSize));
-  }
-  return totalEnergy;
+  return moons.sum(({ pos, vel }) => pos.sum(Math.abs) * vel.sum(Math.abs));
 };
 
-export const part2 = ({ moons }) => {
-  console.log(moons);
-  return null;
+const getVelocityDiff = (positions, size) => {
+  const result = new Array(size).fill(0);
+  positions.forEach((p1, i1) => {
+    for (let i2 = i1 + 1; i2 < size; i2 += 1) {
+      const p2 = positions[i2];
+      result[i1] += getDelta(p1, p2);
+      result[i2] += getDelta(p2, p1);
+    }
+  });
+  return result;
 };
+
+const findStepsAxis = positions => {
+  const size = positions.length;
+  const velocities = new Array(size).fill(0);
+  const finish = velocities.join(',');
+
+  let steps = 0;
+  do {
+    getVelocityDiff(positions, size).forEach((diff, i) => {
+      velocities[i] += diff;
+    });
+    velocities.forEach((vel, i) => {
+      positions[i] += vel;
+    });
+
+    steps += 1;
+  } while (velocities.join(',') !== finish);
+  return steps * 2;
+};
+
+export const part2 = ({ moons }) => [
+  findStepsAxis(moons.map(({ pos }) => pos[0])),
+  findStepsAxis(moons.map(({ pos }) => pos[1])),
+  findStepsAxis(moons.map(({ pos }) => pos[2])),
+].lcm();
