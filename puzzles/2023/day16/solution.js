@@ -17,7 +17,7 @@ const countEnergizedTiles = (input, startBeam, limits) => {
   };
 
   do {
-    beams.forEach((beam, index) => {
+    beams.forEach(beam => {
       const [x, y] = getRelativeCoord(beam.x, beam.y, beam.dir);
       if (isOutOfBounds(x, y, limits)) {
         beam.exited = true;
