@@ -1,9 +1,9 @@
 ## Advent of Code solutions
 
-![](https://img.shields.io/badge/stars%20⭐-411%2F450-brightgreen)
+![](https://img.shields.io/badge/stars%20⭐-415%2F450-brightgreen)
 [![](https://badgen.net/badge/icon/Open%20in%20codespaces?icon=github&label)](https://codespaces.new/bponomarenko/adventofcode?quickstart=1)
 
-Small project to keep all my solutions for the [Advent of Code](https://adventofcode.com/) puzzles and automation tools to solve them.
+Small project to keep all my solutions for the Advent of Code[^aoc] puzzles and automation tools to solve them.
 
 Automation framework consists of CLI with the following commands:
 
@@ -30,9 +30,17 @@ This project requires `.env` file in the root folder with the session cookie: `S
 
 #### GitHub Codespaces
 
-You can [easily start a new dev container](https://codespaces.new/bponomarenko/adventofcode) for this repository (or for your clonned repository) which will have all necessary configurations to run puzzle solutions upon launching. For GituHb Codespaces, aternatively to `.env` file, you can manage your session cookie value in the [Codespaces secrets](https://docs.github.com/en/codespaces/managing-your-codespaces/managing-secrets-for-your-codespaces). You will be asked to fill it in upon creating a new codespace or you can do it manually by creating a new secret with the name `AOC_SESSION_ID` and session cookie from AOC website as a value. In case of manual creation you would also need to associate this secret with the codespace repository.
+You can [easily start a new dev container](https://codespaces.new/bponomarenko/adventofcode) for this repository (or for your clonned repository) which will have all necessary configurations to run puzzle solutions upon launching. For GituHb Codespaces, aternatively to `.env` file, you can manage your session cookie value in the [Codespaces secrets][secrets]. You will be asked to fill it in upon creating a new codespace or you can do it manually by creating a new secret with the name `AOC_SESSION_ID` and session cookie from AOC website as a value. In case of manual creation you would also need to associate this secret with the codespace repository.
 
 ### Extensions
 
 A lot of puzzle solutions does rely on the extended native objects – for example, `Array.prototype.sum()`. Usually it is not recommended to do this, but in this project it helps to eliminate writing additional import statements for competetive programming.
 See full list of the extended prototype methods in the `/lib/prototype-extensions.js` file.
+
+[^aoc]:
+    [Advent of Code][aoc] – an annual event of Christmas-oriented programming challenges started December 2015.
+    Every year since then, beginning on the first day of December, a programming puzzle is published every day for twenty-five days.
+    You can solve the puzzle and provide an answer using the language of your choice.
+
+[aoc]: https://adventofcode.com
+[secrets]: https://docs.github.com/en/codespaces/managing-your-codespaces/managing-secrets-for-your-codespaces
