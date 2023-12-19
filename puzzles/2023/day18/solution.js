@@ -16,7 +16,7 @@ const getPolygonArea = points => {
   for (let [[x1, y1], [x2, y2]] of points.slidingWindows(2)) {
     areaSize += (x1 * y2 - x2 * y1) / 2;
   }
-  return areaSize;
+  return Math.abs(areaSize);
 };
 
 const countInteriorPoints = (digPlan, useColor) => {
