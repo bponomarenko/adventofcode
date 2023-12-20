@@ -3,10 +3,7 @@ export const formatInput = input => {
     const [prefix, dest] = row.split(' -> ');
     return [
       prefix === 'broadcaster' ? prefix : prefix.slice(1),
-      {
-        type: prefix === 'broadcaster' ? null : prefix.slice(0, 1),
-        dest: dest.split(', '),
-      },
+      { type: prefix.slice(0, 1), dest: dest.split(', ') },
     ];
   });
 
@@ -28,18 +25,22 @@ const runMachine = (machine, counterLimit, onSignal) => {
   let counter = 0;
 
   const sendSignals = (dest, signal, from) => dest.forEach(name => {
-    onSignal(signal);
+    if (onSignal(signal, from, counter)) {
+      counterLimit = 0;
+    }
     queue.push([name, signal, from]);
   });
 
   while (counter < counterLimit) {
-    onSignal(false);
-    sendSignals(machine.broadcaster.dest, false, 'broadcaster');
+    sendSignals(['broadcaster'], false, 'button');
 
     while (queue.length) {
       const [name, signal, from] = queue.shift();
       const mod = machine[name];
       switch (mod?.type) {
+        case 'b':
+          sendSignals(mod.dest, false, name);
+          break;
         case '%':
           if (!signal) {
             mod.on = !mod.on;
@@ -75,6 +76,25 @@ export const part1 = input => {
 };
 
 export const part2 = input => {
-  input.rx = { type: 'finish' };
-  return runMachine(input, Infinity, () => {});
+  // Find all modules that sends signal to the rx module
+  const modules = Object.entries(input);
+  const rxSource = modules.find(([, { dest }]) => dest.includes('rx'));
+  // should be only one module of the "conjunction" type
+  if (!rxSource || rxSource[1].type !== '&') {
+    throw new Error('Not expected input');
+  }
+  const conjSources = modules.filter(([, { dest }]) => dest.includes(rxSource[0])).map(([name]) => name);
+  const loopCycles = new Array(conjSources.length).fill(0);
+
+  runMachine(input, Infinity, (signal, from, counter) => {
+    if (signal && conjSources.includes(from)) {
+      // Found the loop for one of the sources
+      loopCycles[conjSources.indexOf(from)] = counter + 1;
+      if (loopCycles.every(value => value > 0)) {
+        return true;
+      }
+    }
+    return false;
+  });
+  return loopCycles.lcm();
 };
