@@ -1,0 +1,12 @@
+[
+  {
+    "input": "broadcaster -> a\n%a -> inv, con\n&inv -> b\n%b -> con\n&con -> output",
+    "answer": "11687500",
+    "part": 1
+  },
+  {
+    "input": "broadcaster -> a, b, c\n%a -> b\n%b -> c\n%c -> inv\n&inv -> a",
+    "answer": "32000000",
+    "part": 3
+  }
+]
