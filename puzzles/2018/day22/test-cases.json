@@ -1,0 +1,12 @@
+[
+  {
+    "input": "depth: 510\ntarget: 10,10",
+    "answer": "114",
+    "part": 1
+  },
+  {
+    "input": "depth: 510\ntarget: 10,10",
+    "answer": "45",
+    "part": 2
+  }
+]
