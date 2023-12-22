@@ -6,5 +6,7 @@
   "prettier.enable": false,
   "eslint.format.enable": true,
   "editor.formatOnSave": true,
-  "editor.tabSize": 2
+  "editor.tabSize": 2,
+  "workbench.activityBar.location": "hidden",
+  "workbench.panel.defaultLocation": "right"
 }
