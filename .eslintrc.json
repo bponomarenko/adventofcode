@@ -73,7 +73,8 @@
       {
         "exceptAfterSingleLine": true
       }
-    ]
+    ],
+    "prefer-destructuring": "off"
   },
   "overrides": [
     {
