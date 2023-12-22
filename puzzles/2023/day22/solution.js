@@ -32,7 +32,7 @@ const doIntersect = (start1, end1, start2, end2) => {
     || (o4 === 0 && onSegment(start2, end1, end2));
 };
 
-export const part1 = input => {
+const stackBricks = input => {
   const heightMap = [];
   const stackedBricks = [];
 
@@ -81,7 +81,11 @@ export const part1 = input => {
       brickAbove.supportedBy.push(index);
     });
   });
+  return stackedBricks;
+};
 
+export const part1 = input => {
+  const stackedBricks = stackBricks(input);
   // find all bricks that can be disintegrated
   return stackedBricks
     .filter(({ supports }) => supports.length === 0 || supports.every(i => stackedBricks[i].supportedBy.length > 1))
@@ -89,7 +93,24 @@ export const part1 = input => {
 };
 
 export const part2 = input => {
-  const result = part1(input);
-  console.log(result);
-  return null;
+  const stackedBricks = stackBricks(input);
+  // find all bricks that can be disintegrated
+  return stackedBricks.map(({ supports }, index) => {
+    if (supports.length === 0) {
+      return 0;
+    }
+    const moved = new Set();
+    const queue = [index];
+
+    while (queue.length) {
+      const movedIndex = queue.shift();
+      moved.add(movedIndex);
+      stackedBricks[movedIndex].supports.forEach(supportIndex => {
+        if (stackedBricks[supportIndex].supportedBy.every(i => moved.has(i))) {
+          queue.push(supportIndex);
+        }
+      });
+    }
+    return moved.size - 1;
+  }).sum();
 };
