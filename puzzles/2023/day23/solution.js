@@ -82,7 +82,7 @@ const findLongestPath = (grid, withSlopes) => {
   const finish = `${grid[0].length - 2},${grid.length - 1}`;
   const lastIntersection = Object.entries(nodes).find(([, nextNodes]) => nextNodes.some(({ node }) => node === finish))[0];
   const queue = new BinaryHeap(state => allNodes - state.length, state => state.node);
-  queue.push({ node: '1,0', path: [], length: 0 });
+  queue.push({ node: '1,0', path: [], length: 0, remaining: allNodes, eliminated: new Set() });
 
   // Find the longest path through the graph
   let maxLength = 0;
@@ -96,12 +96,22 @@ const findLongestPath = (grid, withSlopes) => {
       continue;
     }
 
-    // 3. Find next states
+    let remaining = state.remaining;
+    const eliminated = new Set(state.eliminated);
     nodes[state.node].forEach(({ node, length }) => {
-      if (state.path.includes(node) || (state.node === lastIntersection && node !== finish)) {
+      if (eliminated.has(`${state.node},${node}`)) {
         return;
       }
-      queue.push({ node, path: state.path.concat(node), length: state.length + length });
+      eliminated.add(`${state.node},${node}`).add(`${node},${state.node}`);
+      remaining -= length;
+    });
+
+    // 3. Find next states
+    nodes[state.node].forEach(({ node, length }) => {
+      if (state.path.includes(node) || (state.node === lastIntersection && node !== finish) || (state.length + length + remaining) < maxLength) {
+        return;
+      }
+      queue.push({ node, path: state.path.concat(node), length: state.length + length, remaining, eliminated });
     });
   }
   return maxLength;
