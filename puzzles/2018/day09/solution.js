@@ -1,34 +1,26 @@
-export const formatInput = input => input.match(/^([0-9]+) players; last marble is worth ([0-9]+) points$/).slice(1, 3).map(Number);
+export const formatInput = input => input.match(/^(\d+) players; last marble is worth (\d+) points$/).slice(1, 3).map(Number);
 
-const getPos = (length, cur, shift) => {
-  const pos = cur + shift;
-  if (pos >= length) {
-    return length - pos;
-  }
-  return pos <= 0 ? length + pos : pos;
-};
+const getPos = (length, cur, shift) => (cur + shift + length) % length;
 
 const play = (players, maxMarble) => {
-  const scores = new Map();
+  const scores = new Array(players).fill(0);
   const marbles = [0, 2, 1];
+  let length = marbles.length;
   let pos = 1;
-  let dec = 0;
 
-  for (let i = marbles.length; i <= maxMarble; i += 1) {
+  for (let i = length; i <= maxMarble; i += 1) {
     if (i % 23 === 0) {
       // Special case
-      pos = getPos(i - dec, pos, -7);
-      const score = i + marbles[pos];
-      const player = i % players;
-      scores.set(player, (scores.get(player) ?? 0) + score);
-      marbles.splice(pos, 1);
-      dec += 2;
+      pos = getPos(length, pos, -7);
+      scores[i % players] += i + marbles.splice(pos, 1)[0];
+      length -= 1;
     } else {
-      pos = getPos(i - dec, pos, 2);
+      pos = getPos(length, pos, 2);
       marbles.splice(pos, 0, i);
+      length += 1;
     }
   }
-  return Math.max(...Array.from(scores.values()));
+  return Math.max(...scores.filter(Boolean));
 };
 
 export const part1 = ([players, maxMarble]) => play(players, maxMarble);
