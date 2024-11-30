@@ -26,14 +26,18 @@ const withDayAndYear = command => command
   .option('-d, --day <day>', 'Day of the puzzle to scaffold', Number, new Date().getDate());
 
 let runningProcess;
+let abortController;
 
 const runCommand = async ({ name, args }) => {
   // Cancel any previously running processes
-  runningProcess?.cancel();
+  abortController?.abort();
 
   try {
     let response;
+    abortController = new AbortController();
     runningProcess = execaNode(`./lib/${name}.js`, args, {
+      cancelSignal: abortController.signal,
+      gracefulCancel: true,
       stdin: process.stdin,
       stdout: process.stdout,
       nodeOptions: ['--no-deprecation'],
@@ -47,7 +51,7 @@ const runCommand = async ({ name, args }) => {
       return null;
     }
     if (error.signal === 'SIGINT') {
-      runningProcess?.cancel();
+      abortController?.abort();
       // Simply finish parent process on Cmd+C
       process.emit('SIGINT');
       return null;
@@ -132,7 +136,7 @@ const watchAndRunCommand = ({ name, onResult, onCommand, args }) => {
 
   process.on('SIGINT', () => {
     prompt.stop();
-    runningProcess?.cancel();
+    abortController?.abort();
     watcher.close();
   });
 };
