@@ -1,0 +1,13 @@
+[
+  {
+    "input": "^WNE$",
+    "answer": "3",
+    "part": 1
+  },
+  {
+
+    "input": "^ENWWW(NEEE|SSE(EE|N))$",
+    "answer": "10",
+    "part": 2
+  }
+]
