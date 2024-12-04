@@ -84,7 +84,7 @@ export const getAdjacent = (x, y, ...limits) => [
   getRelativeCoord(x, y, 'se'),
 ].filter(filterInLimits(...limits));
 
-const directions = ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw'];
+export const directions = ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw'];
 
 /**
  *
