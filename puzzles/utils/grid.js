@@ -6,25 +6,21 @@ const directionsMap = {
   // north
   n: 'n',
   u: 'n',
-  U: 'n',
   '^': 'n',
 
   // south
   s: 's',
   d: 's',
-  D: 's',
   v: 's',
 
   // east
   e: 'e',
   r: 'e',
-  R: 'e',
   '>': 'e',
 
   // west
   w: 'w',
   l: 'w',
-  L: 'w',
   '<': 'w',
 
   // north-east
@@ -43,8 +39,10 @@ const directionsMap = {
   ws: 'sw',
 };
 
+export const getNormalisedDirection = dir => directionsMap[dir.toLowerCase()];
+
 export const getRelativeCoord = (x, y, dir, step = 1) => {
-  switch (directionsMap[dir]) {
+  switch (getNormalisedDirection(dir)) {
     case 'w':
       return [x - step, y];
     case 'e':
@@ -101,8 +99,6 @@ export const changeDirection = (dir, degree) => {
   }
   return directions[index];
 };
-
-export const getNormalisedDirection = dir => directionsMap[dir];
 
 export const getStraightAdjacent3d = (x, y, z, ...limits) => [
   [x - 1, y, z],
