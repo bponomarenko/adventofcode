@@ -46,7 +46,8 @@ const getMatrix = input => {
           y += 2;
         }
         const [dx, dy] = getRelativeCoord(pos[0], pos[1], dir, 1);
-        matrix[dy][dx] = dir === 'W' || dir === 'E' ? '|' : '-';
+        // matrix[dy][dx] = dir === 'W' || dir === 'E' ? '|' : '-';
+        matrix[dy][dx] = '.';
         matrix[y][x] = '.';
         pos = [x, y];
       }
@@ -61,8 +62,7 @@ const getMatrix = input => {
 const getMoveOptions = (grid, [x, y], limits) => getStraightAdjacent(x, y, ...limits)
   .filter(([nx, ny]) => grid[ny][nx] !== '#');
 
-const findShortestPath = (grid, start, end) => {
-  const limits = [[0, grid[0].length - 1], [0, grid.length - 1]];
+const findShortestPath = (grid, limits, start, end, history) => {
   const queue = [{ path: [start], length: 1 }];
   const visited = new Set();
   let shortestPath = null;
@@ -82,22 +82,33 @@ const findShortestPath = (grid, start, end) => {
       shortestPathLength = length;
     } else {
       options.forEach(node => {
-        queue.push({ path: [...path, node], length: length + 1 });
+        const hash = node.join('-');
+        if (history.has(hash)) {
+          const pathLength = history.get(hash) + length;
+          if (pathLength < shortestPathLength) {
+            shortestPath = path;
+            shortestPathLength = pathLength;
+          }
+        } else {
+          queue.push({ path: [...path, node], length: length + 1 });
+        }
       });
     }
   }
-  return shortestPath;
+  return [shortestPath, shortestPathLength];
 };
 
 export const part1 = input => {
   const [matrix, start] = getMatrix(input);
-  const visited = new Set([start.join('-')]);
+  const limits = [[0, matrix[0].length - 1], [0, matrix.length - 1]];
+  const history = new Map();
   let longestPath = 0;
+
   matrix.forEach((row, y) => row.forEach((cell, x) => {
-    if (cell === '.' && !visited.has(`${x}-${y}`)) {
-      const path = findShortestPath(matrix, [x, y], start);
-      longestPath = Math.max(longestPath, path.length);
-      path.forEach(node => visited.add(node.join('-')));
+    if (cell === '.' && !history.has(`${x}-${y}`)) {
+      const [path, pathLength] = findShortestPath(matrix, limits, [x, y], start, history);
+      longestPath = Math.max(longestPath, pathLength);
+      path.forEach((node, i) => history.set(node.join('-'), pathLength - i));
     }
   }));
   return longestPath / 2;
