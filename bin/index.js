@@ -37,10 +37,10 @@ const runCommand = async ({ name, args }) => {
     abortController = new AbortController();
     runningProcess = execaNode(`./lib/${name}.js`, args, {
       cancelSignal: abortController.signal,
-      gracefulCancel: true,
       stdin: process.stdin,
       stdout: process.stdout,
       nodeOptions: ['--no-deprecation'],
+      timeout: 600000, // 10m
     }).on('message', msg => { response = msg; }); // Actual response would be sent as a message
 
     await runningProcess;
