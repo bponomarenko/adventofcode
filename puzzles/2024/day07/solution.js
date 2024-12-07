@@ -3,13 +3,22 @@ export const formatInput = input => input.split('\n').map(line => {
   return [+test, nums.trim().split(' ').map(Number).toReversed()];
 });
 
-function* equationResults(withConcatenation, n1, ...nums) {
+function* equationResults(test, withConcatenation, n1, ...nums) {
   if (nums.length) {
-    for (const n2 of equationResults(withConcatenation, ...nums)) {
-      yield n1 + n2;
-      yield n1 * n2;
+    for (const n2 of equationResults(test, withConcatenation, ...nums)) {
+      let res = n1 + n2;
+      if (res <= test) {
+        yield res;
+      }
+      res = n1 * n2;
+      if (res <= test) {
+        yield res;
+      }
       if (withConcatenation) {
-        yield +`${n2}${n1}`;
+        res = +`${n2}${n1}`;
+        if (res <= test) {
+          yield res;
+        }
       }
     }
   } else {
@@ -19,7 +28,7 @@ function* equationResults(withConcatenation, n1, ...nums) {
 
 const getCalibrationResult = (input, withConcatenation = false) => input
   .sum(([test, nums]) => {
-    for (let res of equationResults(withConcatenation, ...nums)) {
+    for (let res of equationResults(test, withConcatenation, ...nums)) {
       if (res === test) {
         return test;
       }
