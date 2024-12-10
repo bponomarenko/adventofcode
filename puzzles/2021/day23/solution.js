@@ -20,7 +20,7 @@ let adjacent;
 
 const populateAdjacent = map => {
   // populate adjacent elements map
-  const limits = [[0, map.length - 1], [0, map[0].length - 1]];
+  const limits = map.gridLimits().toReversed();
   adjacent = map.map((line, x) => line.map((char, y) => getStraightAdjacent(x, y, ...limits).filter(([dx, dy]) => map[dx][dy] !== '#')));
 };
 

@@ -4,7 +4,7 @@ export const formatInput = input => input.split('\n').map(line => line.split('')
 
 const getLowPoints = input => {
   const lowPoints = [];
-  const limits = [[0, input.length - 1], [0, input[0].length - 1]];
+  const limits = input.gridLimits().toReversed();
 
   for (let i = 0; i < input.length; i += 1) {
     const line = input[i];
@@ -25,7 +25,7 @@ export const part1 = input => getLowPoints(input).sum(([x, y]) => input[x][y] + 
 export const part2 = input => {
   const lowPoints = getLowPoints(input);
   const visited = new Set();
-  const limits = [[0, input.length - 1], [0, input[0].length - 1]];
+  const limits = input.gridLimits().toReversed();
 
   const isNotBorder = ([x, y]) => !visited.has(`${x}-${y}`) && input[x][y] !== 9;
 

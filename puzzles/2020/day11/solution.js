@@ -6,7 +6,7 @@ const countAdjacentSeats = (seats, x, y, limits) => getAdjacent(x, y, ...limits)
 
 const doRound = seats => {
   const prevSeats = Array.from(seats, row => Array.from(row));
-  const limits = [[0, seats[0].length - 1], [0, seats.length - 1]];
+  const limits = seats.gridLimits();
   let res = true;
 
   for (let y = 0; y <= limits[1][1]; y += 1) {

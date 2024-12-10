@@ -4,7 +4,7 @@ export const formatInput = input => input.split('\n').map(line => line.split('')
 
 const updateEnergyLevels = input => {
   const adjacent = [];
-  const limits = [[0, input[0].length - 1], [0, input.length - 1]];
+  const limits = input.gridLimits();
   let flashes = 0;
 
   input.forEach((line, x) => line.forEach((energy, y) => {

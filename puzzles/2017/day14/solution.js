@@ -24,7 +24,7 @@ export const part1 = input => defragment(input)
 export const part2 = input => {
   const grid = defragment(input).map(hash => hash.map(num => num.toString(2).padStart(4, '0')).join(''));
   const visited = new Set();
-  const limits = [[0, grid[0].length - 1], [0, grid.length - 1]];
+  const limits = grid.gridLimits();
 
   const isNotEdge = ([x, y]) => !visited.has(`${x}-${y}`) && grid[x][y] !== '0';
 

@@ -23,8 +23,7 @@ const getHappinessChange = (map, guest, nextGuest, prevGuest) => {
 };
 
 export const part1 = happinessMap => {
-  const guests = Array.from(new Set(happinessMap.map(({ n1 }) => n1)));
-  const projectedHappinessLevels = getSeatingPlans(guests)
+  const projectedHappinessLevels = getSeatingPlans(happinessMap.map(({ n1 }) => n1).unique())
     .map(plan => plan.reduce((acc, guest, index) => {
       const nextIndex = index + 1 === plan.length ? 0 : index + 1;
       const prevIndex = index - 1 < 0 ? plan.length - 1 : index - 1;
@@ -34,13 +33,12 @@ export const part1 = happinessMap => {
 };
 
 export const part2 = happinessMap => {
-  const guests = Array.from(new Set(happinessMap.map(({ n1 }) => n1)));
+  const guests = happinessMap.map(({ n1 }) => n1).unique();
 
   guests.forEach(guest => {
     happinessMap.push({ n1: 'myself', n2: guest, change: 0 }, { n1: guest, n2: 'myself', change: 0 });
   });
   guests.push('myself');
-  // return getSeatingPlans(guests)
 
   return getSeatingPlans(guests)
     .reduce((max, plan) => {

@@ -100,7 +100,7 @@ const findShortestPath = (grid, limits, start, end, history) => {
 
 export const part1 = input => {
   const [matrix, start] = getMatrix(input);
-  const limits = [[0, matrix[0].length - 1], [0, matrix.length - 1]];
+  const limits = matrix.gridLimits();
   const history = new Map();
   let longestPath = 0;
 

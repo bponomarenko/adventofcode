@@ -4,7 +4,7 @@ export const formatInput = input => input.toGrid();
 
 const countTreesAfterGenerations = async (grid, count) => {
   const memory = new Map();
-  const limits = [[0, grid[0].length - 1], [0, grid.length - 1]];
+  const limits = grid.gridLimits();
   let jumped = false;
   while (count > 0) {
     grid = Array.from(grid, (row, y) => Array.from(row, (acre, x) => {
