@@ -1,53 +1,53 @@
-export const formatInput = input => input.split('').map((num, index) => (index % 2 ? { size: +num } : { id: index / 2, size: +num }));
+export const formatInput = input => {
+  const disk = input.split('').map((num, index) => ({ size: +num, free: index % 2 === 1, id: index / 2 }));
+  return [disk, disk.filter(block => block.free)];
+};
 
-export const part1 = disk => {
-  const freeBlocks = disk.map(block => (block.id == null ? block : null)).filter(Boolean);
+const getChecksum = disk => disk.flatMap(({ size, id, free }) => new Array(size).fill(free ? 0 : id)).sum((num, i) => num * i);
+
+export const part1 = ([disk, freeBlocks]) => {
   while (freeBlocks.length) {
     const block = disk.pop();
-    if (block.id == null) {
+    if (block.free) {
+      // free blocks are in the same order as disk
       freeBlocks.pop();
       continue;
     }
     const free = freeBlocks[0];
-    const freeIndex = disk.indexOf(free);
-    if (block.size <= free.size) {
-      const sameSize = block.size === free.size;
-      disk.splice(freeIndex, sameSize ? 1 : 0, block);
-      if (sameSize) {
-        freeBlocks.shift();
-      } else {
-        free.size -= block.size;
+    if (block.size >= free.size) {
+      if (block.size !== free.size) {
+        disk.push({ id: block.id, size: block.size - free.size });
       }
-    } else {
-      disk.splice(freeIndex, 1, { id: block.id, size: free.size });
+      free.free = false;
+      free.id = block.id;
       freeBlocks.shift();
-      disk.push({ id: block.id, size: block.size - free.size });
+    } else {
+      disk.splice(disk.indexOf(free), 0, block);
+      free.size -= block.size;
     }
   }
-  return disk.flatMap(({ size, id }) => new Array(size).fill(id ?? 0)).sum((num, i) => num * i);
+  return getChecksum(disk);
 };
 
-export const part2 = disk => {
-  let blockIndex;
-  do {
-    blockIndex = disk.findLastIndex(({ id, skip }) => id != null && !skip);
-    if (blockIndex >= 0) {
-      const block = disk.at(blockIndex);
-      const freeIndex = disk.findIndex(({ id, size }, i) => id == null && size >= block.size && i < blockIndex);
-      if (freeIndex >= 0) {
-        disk.splice(blockIndex, 1, { size: block.size });
-        const free = disk.at(freeIndex);
-        const sameSize = block.size === free.size;
-        disk.splice(freeIndex, sameSize ? 1 : 0, block);
-        free.size -= block.size;
-      } else {
-        block.skip = true;
-        // No more space even for the smallest block – finish early
-        if (block.size === 1) {
-          blockIndex = -1;
-        }
-      }
+export const part2 = ([disk, freeBlocks]) => {
+  let index = disk.length - 1;
+  while (freeBlocks.length && index > 1) {
+    const block = disk[index];
+    index -= 1;
+    if (block.moved) {
+      continue;
     }
-  } while (blockIndex !== -1);
-  return disk.flatMap(({ size, id }) => new Array(size).fill(id ?? 0)).sum((num, i) => num * i);
+
+    const freeIndex = freeBlocks.findIndex(({ size }) => block.size <= size);
+    if (freeIndex >= 0) {
+      const free = freeBlocks[freeIndex];
+      disk.splice(disk.indexOf(free), 0, { ...block, moved: true });
+      free.size -= block.size;
+      block.free = true;
+    } else {
+      index -= 1;
+    }
+    freeBlocks.pop();
+  }
+  return getChecksum(disk);
 };
