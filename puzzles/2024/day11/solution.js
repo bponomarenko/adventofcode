@@ -5,19 +5,18 @@ const applyRules = num => {
     return ['1'];
   }
   const len = num.length;
-  if (num.length % 2 === 0) {
-    return [num.slice(0, len / 2), `${+num.slice(len / 2)}`];
-  }
-  return [`${num * 2024}`];
+  return num.length % 2 === 0 ? [num.slice(0, len / 2), `${+num.slice(len / 2)}`] : [`${num * 2024}`];
 };
 
 const blinkNum = (num, count, history) => {
-  let arr = history.get(num);
-  if (!arr) {
-    arr = applyRules(num);
-    history.set(num, arr);
+  const hash = `${num}-${count}`;
+  if (history.has(hash)) {
+    return history.get(hash);
   }
-  return count === 1 ? arr.length : arr.sum(n => blinkNum(n, count - 1, history));
+  const arr = applyRules(num);
+  const res = count === 1 ? arr.length : arr.sum(n => blinkNum(n, count - 1, history));
+  history.set(hash, res);
+  return res;
 };
 
 const blink = (nums, count = 25) => {
