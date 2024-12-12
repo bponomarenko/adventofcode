@@ -1,0 +1,42 @@
+[
+  {
+    "input": "AAAA\nBBCD\nBBCC\nEEEC",
+    "answer": "140",
+    "part": 1
+  },
+  {
+    "input": "OOOOO\nOXOXO\nOOOOO\nOXOXO\nOOOOO",
+    "answer": "772",
+    "part": 1
+  },
+  {
+    "input": "RRRRIICCFF\nRRRRIICCCF\nVVRRRCCFFF\nVVRCCCJFFF\nVVVVCJJCFE\nVVIVCCJJEE\nVVIIICJJEE\nMIIIIIJJEE\nMIIISIJEEE\nMMMISSJEEE",
+    "answer": "1930",
+    "part": 1
+  },
+  {
+    "input": "AAAA\nBBCD\nBBCC\nEEEC",
+    "answer": "80",
+    "part": 3
+  },
+  {
+    "input": "OOOOO\nOXOXO\nOOOOO\nOXOXO\nOOOOO",
+    "answer": "436",
+    "part": 3
+  },
+  {
+    "input": "EEEEE\nEXXXX\nEEEEE\nEXXXX\nEEEEE",
+    "answer": "236",
+    "part": 2
+  },
+  {
+    "input": "AAAAAA\nAAABBA\nAAABBA\nABBAAA\nABBAAA\nAAAAAA",
+    "answer": "368",
+    "part": 3
+  },
+  {
+    "input": "RRRRIICCFF\nRRRRIICCCF\nVVRRRCCFFF\nVVRCCCJFFF\nVVVVCJJCFE\nVVIVCCJJEE\nVVIIICJJEE\nMIIIIIJJEE\nMIIISIJEEE\nMMMISSJEEE",
+    "answer": "1206",
+    "part": 3
+  }
+]
