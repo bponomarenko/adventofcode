@@ -1,4 +1,4 @@
-import { getStraightAdjacent, getAdjacent, getRelativeCoord, changeDirection, directions } from '../../utils/grid.js';
+import { getStraightAdjacent, getAdjacent, getRelativeCoord, changeDirection } from '../../utils/grid.js';
 
 export const formatInput = input => input.toGrid();
 
@@ -31,6 +31,7 @@ export const part1 = input => {
 };
 
 const getArea = (grid, limits, start, visited) => {
+  const areaObj = { area: 0 };
   const char = grid[start[1]][start[0]];
   const queue = [start];
   let area = 0;
@@ -42,7 +43,7 @@ const getArea = (grid, limits, start, visited) => {
     if (visited.has(hash)) {
       continue;
     }
-    visited.set(hash);
+    visited.set(hash, areaObj);
     area += 1;
 
     const adjacent = getStraightAdjacent(x, y, ...limits).filter(([nx, ny]) => grid[ny][nx] === char);
@@ -53,10 +54,11 @@ const getArea = (grid, limits, start, visited) => {
       inside = adj.length === 8 && adj.map(([ax, ay]) => grid[ay][ax]).unique().length <= 2;
     }
   }
+  areaObj.area = area;
   return [area, inside];
 };
 
-const getSides = (grid, start, visited, area) => {
+const getSides = (grid, start) => {
   const char = grid[start[1]][start[0]];
   const sideDir = ['n', 'e', 's', 'w'].find(d => {
     const [x, y] = getRelativeCoord(...start, d);
@@ -67,19 +69,18 @@ const getSides = (grid, start, visited, area) => {
     return 4;
   }
   let dir = sideDir;
-  let sides = 1;
+  let sides = 0;
   let pos = start;
 
   do {
-    visited.set(pos.join('-'), area);
     let [x, y] = getRelativeCoord(...pos, dir);
     if (grid[y]?.[x] === char) {
       pos = [x, y];
 
-      const rdir = changeDirection(dir, -90);
-      [x, y] = getRelativeCoord(...pos, rdir);
+      const ldir = changeDirection(dir, -90);
+      [x, y] = getRelativeCoord(...pos, ldir);
       if (grid[y]?.[x] === char) {
-        dir = rdir;
+        dir = ldir;
         sides += 1;
       }
       continue;
@@ -87,8 +88,8 @@ const getSides = (grid, start, visited, area) => {
 
     sides += 1;
     dir = changeDirection(dir, 90);
-  } while (pos[0] !== start[0] || pos[1] !== start[1]);
-  return sides + (changeDirection(dir, 90) !== sideDir);
+  } while (pos[0] !== start[0] || pos[1] !== start[1] || dir !== sideDir);
+  return sides;
 };
 
 export const part2 = input => {
@@ -99,17 +100,7 @@ export const part2 = input => {
       return 0;
     }
     const [area, inside] = getArea(input, limits, [x, y], visited);
-    let delta = 0;
-    if (inside) {
-      const dir = directions.find(d => {
-        const [dx, dy] = getRelativeCoord(x, y, d);
-        return input[dy]?.[dx] !== char && visited.get(`${dx}-${dy}`) != null;
-      });
-      const pos = getRelativeCoord(x, y, dir);
-      delta = visited.get(pos.join('-')) ?? 0;
-    }
-    const sides = getSides(input, [x, y], visited, area);
-    console.log(x, y, inside, area, sides);
-    return area * sides + delta * sides;
+    const outerArea = inside ? visited.get(getRelativeCoord(x, y, 'n').join('-')).area : 0;
+    return (area + outerArea) * getSides(input, [x, y]);
   }));
 };
