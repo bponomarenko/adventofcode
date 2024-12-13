@@ -1,12 +1,12 @@
-import { getStraightAdjacent, getAdjacent, getRelativeCoord, changeDirection } from '../../utils/grid.js';
+import { getStraightAdjacent, getRelativeCoord, changeDirection } from '../../utils/grid.js';
 
 export const formatInput = input => input.toGrid();
 
-const getRegionPrice = (grid, limits, start, visited) => {
+const getAreaAndPerimeter = (grid, limits, start, visited) => {
+  const area = { area: 0 };
   const char = grid[start[1]][start[0]];
   const queue = [start];
-  let perimetr = 0;
-  let area = 0;
+  let perimeter = 0;
 
   while (queue.length) {
     const [x, y] = queue.shift();
@@ -14,93 +14,79 @@ const getRegionPrice = (grid, limits, start, visited) => {
     if (visited.has(hash)) {
       continue;
     }
-    visited.add(hash);
-    area += 1;
+    visited.set(hash, area);
+    area.area += 1;
 
-    const adjacent = getStraightAdjacent(x, y, ...limits).filter(([nx, ny]) => grid[ny][nx] === char);
-    perimetr += 4 - adjacent.length;
-    queue.push(...adjacent);
+    const sadj = getStraightAdjacent(x, y, ...limits);
+    let adj = sadj.filter(([nx, ny]) => grid[ny][nx] === char);
+    perimeter += 4 - adj.length;
+    queue.push(...adj);
   }
-  return area * perimetr;
+  return [area.area, perimeter];
 };
 
-export const part1 = input => {
-  const visited = new Set();
-  const limits = input.gridLimits();
-  return input.sum((row, y) => row.sum((_, x) => (visited.has(`${x}-${y}`) ? 0 : getRegionPrice(input, limits, [x, y], visited))));
-};
-
-const getArea = (grid, limits, start, visited) => {
-  const areaObj = { area: 0 };
-  const char = grid[start[1]][start[0]];
-  const queue = [start];
-  let area = 0;
-  let inside = true;
-
-  while (queue.length) {
-    const [x, y] = queue.shift();
-    const hash = `${x}-${y}`;
-    if (visited.has(hash)) {
-      continue;
+const getTotalPrice = (grid, cb) => {
+  const visited = new Map();
+  const limits = grid.gridLimits();
+  return grid.sum((row, y) => row.sum((char, x) => {
+    if (visited.has(`${x}-${y}`)) {
+      return 0;
     }
-    visited.set(hash, areaObj);
-    area += 1;
-
-    const adjacent = getStraightAdjacent(x, y, ...limits).filter(([nx, ny]) => grid[ny][nx] === char);
-    queue.push(...adjacent);
-
-    if (inside) {
-      const adj = getAdjacent(x, y, ...limits);
-      inside = adj.length === 8 && adj.map(([ax, ay]) => grid[ay][ax]).unique().length <= 2;
-    }
-  }
-  areaObj.area = area;
-  return [area, inside];
+    return cb(x, y, char, limits, visited);
+  }));
 };
 
-const getSides = (grid, start) => {
-  const char = grid[start[1]][start[0]];
-  const sideDir = ['n', 'e', 's', 'w'].find(d => {
+export const part1 = input => getTotalPrice(input, (x, y, _, limits, visited) => {
+  const [area, perimeter] = getAreaAndPerimeter(input, limits, [x, y], visited);
+  return area * perimeter;
+});
+
+const getLeftChar = (grid, dir, x, y) => {
+  const [lx, ly] = getRelativeCoord(x, y, changeDirection(dir, -90));
+  return grid[ly]?.[lx];
+};
+
+const getSides = (grid, start, char, limits) => {
+  const startDir = ['e', 's'].find(d => {
     const [x, y] = getRelativeCoord(...start, d);
-    const [lx, ly] = getRelativeCoord(...start, changeDirection(d, -90));
-    return grid[y]?.[x] === char && grid[ly]?.[lx] !== char;
+    return grid[y]?.[x] === char && getLeftChar(grid, d, ...start) !== char;
   });
-  if (!sideDir) {
-    return 4;
+  if (!startDir) {
+    const adj = getStraightAdjacent(...start, ...limits);
+    return [4, adj.length === 4 && adj.unique(([x, y]) => grid[y][x]).length === 1];
   }
-  let dir = sideDir;
+  const eChar = getLeftChar(grid, startDir, ...start);
+  let dir = startDir;
   let sides = 0;
   let pos = start;
+  let enclave = !!eChar;
 
   do {
-    let [x, y] = getRelativeCoord(...pos, dir);
+    const [x, y] = getRelativeCoord(...pos, dir);
     if (grid[y]?.[x] === char) {
       pos = [x, y];
 
-      const ldir = changeDirection(dir, -90);
-      [x, y] = getRelativeCoord(...pos, ldir);
-      if (grid[y]?.[x] === char) {
-        dir = ldir;
+      const lChar = getLeftChar(grid, dir, x, y);
+      if (lChar === char) {
+        dir = changeDirection(dir, -90);
         sides += 1;
+      } else {
+        enclave = enclave && lChar === eChar;
       }
       continue;
     }
 
     sides += 1;
     dir = changeDirection(dir, 90);
-  } while (pos[0] !== start[0] || pos[1] !== start[1] || dir !== sideDir);
-  return sides;
+    enclave = enclave && getLeftChar(grid, dir, x, y) === eChar;
+  } while (pos[0] !== start[0] || pos[1] !== start[1] || dir !== startDir);
+  console.log(start, char, sides, enclave, eChar);
+  return [sides, enclave];
 };
 
-export const part2 = input => {
-  const visited = new Map();
-  const limits = input.gridLimits();
-  return input.sum((row, y) => row.sum((char, x) => {
-    if (visited.has(`${x}-${y}`)) {
-      return 0;
-    }
-    const [area, inside] = getArea(input, limits, [x, y], visited);
-    const outerArea = inside ? visited.get(getRelativeCoord(x, y, 'n').join('-')).area : 0;
-    return (area + outerArea) * getSides(input, [x, y]);
-  }));
-};
+export const part2 = input => getTotalPrice(input, (x, y, char, limits, visited) => {
+  const [area] = getAreaAndPerimeter(input, limits, [x, y], visited);
+  const [sides, enclave] = getSides(input, [x, y], char, limits);
+  const outerArea = enclave ? visited.get(getRelativeCoord(x, y, 'n').join('-'))?.area ?? 0 : 0;
+  return (area + outerArea) * sides;
+});
