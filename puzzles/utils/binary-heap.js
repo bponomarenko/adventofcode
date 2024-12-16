@@ -1,3 +1,46 @@
+/**
+ * Example of a simple search algo with the goal of finding solution with the minimum score
+ *
+const findShortestPath = (grid, start, finish) => {
+  const visited = new Set();
+  const queue = new BinaryHeap(state => state.score, state => state.hash);
+  queue.push({ pos: start, score: 0, hash: start.join('-') });
+
+  while (queue.size) {
+    // 1. Get next state
+    const state = queue.pop();
+
+    // 2. Check if we got to the exit
+    if (state.pos === finish) {
+     return state.score;
+    }
+
+    // 3. Mark it as visited
+    visited.add(state.hash);
+
+    // 3. Find next states
+    for (...) {
+      const newPos = ...;
+      const hash = newPos.join('-');
+      if (visited.has(hash)) {
+        return;
+      }
+      const score = state.score + scoreChange;
+      if (queue.has({ hash })) {
+        const queuedItem = queue.get({ hash });
+        if (score < queuedItem.score) {
+          queuedItem.score = score;
+          queue.reposition(queuedItem);
+        }
+      } else {
+        queue.push({ pos: newPos, score, hash });
+      }
+    }
+  }
+  return null;
+};
+*/
+
 export default class BinaryHeap {
   #getValue;
   #getHash;
