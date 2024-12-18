@@ -1,6 +1,6 @@
 ## Advent of Code solutions
 
-![](https://img.shields.io/badge/stars%20⭐-469%2F500-brightgreen)
+![](https://img.shields.io/badge/stars%20⭐-473%2F500-brightgreen)
 [![](https://badgen.net/badge/icon/Open%20in%20codespaces?icon=github&label)](https://codespaces.new/bponomarenko/adventofcode?quickstart=1)
 
 Small project to keep all my solutions for the Advent of Code[^aoc] puzzles and automation tools to solve them.
