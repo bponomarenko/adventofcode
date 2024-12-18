@@ -11,7 +11,7 @@ const findShortestPath = (grid, [sx, sy], [ex, ey]) => {
   const limits = grid.gridLimits();
   const visited = new Set();
   const queue = new BinaryHeap(state => state.length, state => state.hash);
-  queue.push({ x: sx, y: sy, hash: `${sx},${sy}`, path: new Set([`${sx},${sy}`]) });
+  queue.push({ x: sx, y: sy, hash: `${sx},${sy}`, path: [`${sx},${sy}`] });
 
   while (queue.size) {
     // 1. Get next state
@@ -31,12 +31,10 @@ const findShortestPath = (grid, [sx, sy], [ex, ey]) => {
       if (visited.has(hash) || grid[y][x] === '#') {
         return;
       }
-      const path = new Set(state.path);
-      path.add(hash);
-
+      const path = [...state.path, hash];
       if (queue.has({ hash })) {
         const queuedItem = queue.get({ hash });
-        if (path.size < queuedItem.path.size) {
+        if (path.length < queuedItem.path.length) {
           queuedItem.path = path;
           queue.reposition(queuedItem);
         }
@@ -64,10 +62,13 @@ export const part2 = ([bytes, grid]) => {
     const [x, y] = bytes.shift();
     grid[y][x] = '#';
     const hash = `${x},${y}`;
-    if (path?.has(hash)) {
-      path = null;
-    }
-    if (!path) {
+    if (path) {
+      if (path.includes(hash)) {
+        const index = path.indexOf(hash) - 1;
+        const subPath = findShortestPath(grid, path[index].split(',').map(Number), params[1]);
+        path = subPath ? path.slice(0, index).concat(...subPath) : null;
+      }
+    } else {
       path = findShortestPath(grid, ...params);
     }
     if (!path) {
