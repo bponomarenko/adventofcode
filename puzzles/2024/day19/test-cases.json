@@ -1,0 +1,12 @@
+[
+  {
+    "input": "r, wr, b, g, bwu, rb, gb, br\n\nbrwrr\nbggr\ngbbr\nrrbgbr\nubwu\nbwurrg\nbrgr\nbbrgwb",
+    "answer": "6",
+    "part": 1
+  },
+  {
+    "input": "r, wr, b, g, bwu, rb, gb, br\n\nbrwrr\nbggr\ngbbr\nrrbgbr\nubwu\nbwurrg\nbrgr\nbbrgwb",
+    "answer": "16",
+    "part": 2
+  }
+]
