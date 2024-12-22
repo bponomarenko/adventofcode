@@ -1,4 +1,7 @@
+import { join } from 'node:path';
 import { getStraightAdjacent } from '../../utils/grid.js';
+import WorkerPool from '../../utils/worker-pool.js';
+import runWorker from './cheats-worker.js';
 
 export const formatInput = input => {
   const grid = input.toGrid();
@@ -29,32 +32,32 @@ const getPath = (grid, limits, start, finish) => {
   return path.concat(finish.join('-'));
 };
 
-function cheats(grid, limits, pos, path, indexDelta, cheatCount) {
-  const delta = indexDelta - cheatCount;
-  const adj = getStraightAdjacent(...pos, ...limits);
-  let sum = 0;
-  for (let i = 0; i < adj.length; i += 1) {
-    const [x, y] = adj[i];
-    if (grid[y][x] === '#') {
-      if (cheatCount > 0) {
-        sum += cheats(grid, limits, [x, y], path, indexDelta, cheatCount - 1);
-      }
-    } else {
-      const saved = path.indexOf(`${x}-${y}`) - delta;
-      if (saved >= 100) {
-        sum += 1;
-      }
-    }
-  }
-  return sum;
-}
-
-const countCheats = (grid, start, finish, cheatSize) => {
+const countCheatsInParallel = (grid, start, finish, cheatSize) => new Promise(resolve => {
+  const pool = new WorkerPool({ workerPath: join(import.meta.dirname, 'cheats-worker.js') });
   const limits = grid.gridLimits();
   const path = getPath(grid, limits, start, finish);
-  return path.sum((pos, i) => cheats(grid, limits, pos.split('-').map(Number), path, i + cheatSize, cheatSize - 1));
+  let sum = 0;
+
+  pool.on('done', () => {
+    resolve(sum);
+  });
+
+  path.slice(0, -100).forEach((_, startIndex) => {
+    pool.runTask({ path, startIndex, cheatSize, limits }, res => {
+      sum += res;
+    });
+  });
+});
+
+export const part1 = ([grid, start, finish]) => {
+  const limits = grid.gridLimits();
+  const path = getPath(grid, limits, start, finish);
+  let sum = 0;
+  // Use worker function directy, since on part1 it is faster than multi-thread approach
+  path.forEach((_, startIndex) => runWorker(res => {
+    sum += res;
+  }, { path, startIndex, cheatSize: 2, limits }));
+  return sum;
 };
 
-export const part1 = input => countCheats(...input, 2);
-
-export const part2 = input => countCheats(...input, 20);
+export const part2 = input => countCheatsInParallel(...input, 20);
