@@ -32,7 +32,19 @@ const getPath = (grid, limits, start, finish) => {
   return path.concat(finish.join('-'));
 };
 
-const countCheatsInParallel = (grid, start, finish, cheatSize) => new Promise(resolve => {
+export const part1 = ([grid, start, finish]) => {
+  const limits = grid.gridLimits();
+  const path = getPath(grid, limits, start, finish);
+  let sum = 0;
+  const collect = res => {
+    sum += res;
+  };
+  // Use worker function directy, since on part1 it is faster than multi-thread approach
+  path.forEach((_, startIndex) => runWorker(collect, { path, startIndex, cheatSize: 2, limits }));
+  return sum;
+};
+
+export const part2 = ([grid, start, finish]) => new Promise(resolve => {
   const pool = new WorkerPool({ workerPath: join(import.meta.dirname, 'cheats-worker.js') });
   const limits = grid.gridLimits();
   const path = getPath(grid, limits, start, finish);
@@ -43,21 +55,8 @@ const countCheatsInParallel = (grid, start, finish, cheatSize) => new Promise(re
   });
 
   path.slice(0, -100).forEach((_, startIndex) => {
-    pool.runTask({ path, startIndex, cheatSize, limits }, res => {
+    pool.runTask({ path, startIndex, cheatSize: 20, limits }, res => {
       sum += res;
     });
   });
 });
-
-export const part1 = ([grid, start, finish]) => {
-  const limits = grid.gridLimits();
-  const path = getPath(grid, limits, start, finish);
-  let sum = 0;
-  // Use worker function directy, since on part1 it is faster than multi-thread approach
-  path.forEach((_, startIndex) => runWorker(res => {
-    sum += res;
-  }, { path, startIndex, cheatSize: 2, limits }));
-  return sum;
-};
-
-export const part2 = input => countCheatsInParallel(...input, 20);
