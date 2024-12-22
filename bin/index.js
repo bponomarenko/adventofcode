@@ -40,7 +40,7 @@ const runCommand = async ({ name, args }) => {
       stdin: process.stdin,
       stdout: process.stdout,
       nodeOptions: ['--no-deprecation'],
-      timeout: 600000, // 10m
+      timeout: 3600000, // 10m
     }).on('message', msg => { response = msg; }); // Actual response would be sent as a message
 
     await runningProcess;
