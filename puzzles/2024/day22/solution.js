@@ -20,19 +20,18 @@ const evolve = secret => {
 export const part1 = input => input.sum(secret => evolve(secret)[0]);
 
 export const part2 = input => {
-  const allSequences = new Set();
-  const sequences = input.map(secret => {
+  const totals = new Map();
+  input.forEach(secret => {
     const changes = evolve(secret)[1];
-    const memory = new Map();
-    for (let i = 3; i < changes.length; i += 1) {
-      const sequence = `${changes[i - 3][1]},${changes[i - 2][1]},${changes[i - 1][1]},${changes[i][1]}`;
-      if (memory.has(sequence)) {
-        continue;
+    const sequences = new Set();
+    changes.slice(3).forEach(([price, change], i) => {
+      const sequence = `${changes[i][1]},${changes[i + 1][1]},${changes[i + 2][1]},${change}`;
+      if (sequences.has(sequence)) {
+        return;
       }
-      memory.set(sequence, changes[i][0]);
-      allSequences.add(sequence);
-    }
-    return memory;
+      sequences.add(sequence);
+      totals.set(sequence, (totals.get(sequence) ?? 0) + price);
+    });
   });
-  return Math.max(...Array.from(allSequences).map(sequence => sequences.sum(memory => (memory.has(sequence) ? memory.get(sequence) : 0))));
+  return Math.max(...totals.values());
 };
