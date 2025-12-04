@@ -8,5 +8,6 @@
   "editor.formatOnSave": true,
   "editor.tabSize": 2,
   "workbench.activityBar.location": "hidden",
-  "workbench.panel.defaultLocation": "right"
+  "workbench.panel.defaultLocation": "right",
+  "editor.minimap.enabled": false
 }
