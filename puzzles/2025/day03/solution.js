@@ -1,4 +1,4 @@
-export const formatInput = input => input.split('\n').map(line => line.split('').map(Number));
+export const formatInput = input => input.toGrid('\n', '', Number);
 
 const findMax = (arr, start, end) => {
   const max = Math.max(...arr.slice(start, end));

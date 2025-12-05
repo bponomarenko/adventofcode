@@ -1,6 +1,6 @@
 import { getAdjacent } from '../../utils/grid.js';
 
-export const formatInput = input => input.split('\n').map(line => line.split(''));
+export const formatInput = input => input.toGrid();
 
 const getAdjacentRolls = (grid, limits) => grid.flatMap((row, y) => row.map((cell, x) => {
   if (cell === '@') {

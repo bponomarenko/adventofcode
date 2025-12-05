@@ -1,4 +1,4 @@
-export const formatInput = input => input.split(',').map(range => range.split('-').map(Number));
+export const formatInput = input => input.split(',').map(range => range.toNumArray('-'));
 
 const filterInvalidIDs = (input, multiple = false) => {
   const reg = new RegExp(`^(.+)\\1${multiple ? '+' : ''}$`);

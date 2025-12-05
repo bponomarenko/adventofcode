@@ -1,8 +1,8 @@
 export const formatInput = input => {
   const [ranges, ids] = input.split('\n\n');
   return [
-    ranges.split('\n').map(line => line.split('-').map(Number)),
-    ids.split('\n').map(Number),
+    ranges.split('\n').map(line => line.toNumArray('-')),
+    ids.toNumArray('\n'),
   ];
 };
 
