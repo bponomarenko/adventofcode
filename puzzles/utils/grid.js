@@ -112,3 +112,5 @@ export const getStraightAdjacent3d = (x, y, z, ...limits) => [
 export const isStraightAdjacent3d = ([x1, y1, z1], [x2, y2, z2]) => Math.abs(x1 - x2) + Math.abs(y1 - y2) + Math.abs(z1 - z2) === 1;
 
 export const getDistance = ([x1, y1, z1], [x2, y2, z2]) => Math.abs(x1 - x2) + Math.abs(y1 - y2) + Math.abs((z1 || 0) - (z2 || 0));
+
+export const getEuclideanDistance = ([x1, y1, z1], [x2, y2, z2]) => Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2 + ((z1 || 0) - (z2 || 0)) ** 2);
